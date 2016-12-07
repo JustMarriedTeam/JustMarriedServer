@@ -88,14 +88,6 @@
     "validate-commit-msg": "^2.6.1"
   },
   "license": "MIT",
-  "config": {
-    "ghooks": {
-      "pre-commit": "npm run lint && npm test"
-    },
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "babel": {
     "presets": [
       "es2015",

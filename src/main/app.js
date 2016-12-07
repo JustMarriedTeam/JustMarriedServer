@@ -9,13 +9,12 @@ import httpStatus from 'http-status';
 import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
-import winstonInstance from './winston';
-import routes from '../routes/index.route';
-import APIError from '../helpers/APIError';
+import winstonInstance from './config/winston';
+import routes from './routes/index.route';
+import APIError from './helpers/APIError';
 
 const app = express();
 const env = process.env.env;
-
 
 if (env === 'development') {
   app.use(logger('dev'));

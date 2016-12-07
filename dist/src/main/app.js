@@ -48,15 +48,15 @@ var _helmet = require('helmet');
 
 var _helmet2 = _interopRequireDefault(_helmet);
 
-var _winston = require('./winston');
+var _winston = require('./config/winston');
 
 var _winston2 = _interopRequireDefault(_winston);
 
-var _index = require('../routes/index.route');
+var _index = require('./routes/index.route');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _APIError = require('../helpers/APIError');
+var _APIError = require('./helpers/APIError');
 
 var _APIError2 = _interopRequireDefault(_APIError);
 
@@ -139,4 +139,4 @@ app.use(function (err, req, res, next) {
 
 exports.default = app;
 module.exports = exports['default'];
-//# sourceMappingURL=express.js.map
+//# sourceMappingURL=app.js.map
