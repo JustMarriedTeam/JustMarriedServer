@@ -12,7 +12,7 @@ var _expressValidation = require('express-validation');
 
 var _expressValidation2 = _interopRequireDefault(_expressValidation);
 
-var _paramValidation = require('../../config/param-validation');
+var _paramValidation = require('../config/param-validation');
 
 var _paramValidation2 = _interopRequireDefault(_paramValidation);
 

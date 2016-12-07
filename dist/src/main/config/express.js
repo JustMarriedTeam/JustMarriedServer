@@ -56,10 +56,6 @@ var _index = require('../routes/index.route');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _env = require('./env');
-
-var _env2 = _interopRequireDefault(_env);
-
 var _APIError = require('../helpers/APIError');
 
 var _APIError2 = _interopRequireDefault(_APIError);
@@ -67,8 +63,9 @@ var _APIError2 = _interopRequireDefault(_APIError);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var app = (0, _express2.default)();
+var env = process.env.env;
 
-if (_env2.default.env === 'development') {
+if (env === 'development') {
   app.use((0, _morgan2.default)('dev'));
 }
 
@@ -87,7 +84,7 @@ app.use((0, _helmet2.default)());
 app.use((0, _cors2.default)());
 
 // enable detailed API logging in dev env
-if (_env2.default.env === 'development') {
+if (env === 'development') {
   _expressWinston2.default.requestWhitelist.push('body');
   _expressWinston2.default.responseWhitelist.push('body');
   app.use(_expressWinston2.default.logger({
@@ -124,7 +121,7 @@ app.use(function (req, res, next) {
 });
 
 // log error in winston transports except when executing test suite
-if (_env2.default.env !== 'test') {
+if (env !== 'test') {
   app.use(_expressWinston2.default.errorLogger({
     winstonInstance: _winston2.default
   }));
@@ -135,7 +132,7 @@ app.use(function (err, req, res, next) {
   return (// eslint-disable-line no-unused-vars
     res.status(err.status).json({
       message: err.isPublic ? err.message : _httpStatus2.default[err.status],
-      stack: _env2.default.env === 'development' ? err.stack : {}
+      stack: config.env === 'development' ? err.stack : {}
     })
   );
 });

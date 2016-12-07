@@ -10,13 +10,14 @@ import expressWinston from 'express-winston';
 import expressValidation from 'express-validation';
 import helmet from 'helmet';
 import winstonInstance from './winston';
-import routes from '../server/routes/index.route';
-import config from './env';
-import APIError from '../server/helpers/APIError';
+import routes from '../routes/index.route';
+import APIError from '../helpers/APIError';
 
 const app = express();
+const env = process.env.env;
 
-if (config.env === 'development') {
+
+if (env === 'development') {
   app.use(logger('dev'));
 }
 
@@ -35,7 +36,7 @@ app.use(helmet());
 app.use(cors());
 
 // enable detailed API logging in dev env
-if (config.env === 'development') {
+if (env === 'development') {
   expressWinston.requestWhitelist.push('body');
   expressWinston.responseWhitelist.push('body');
   app.use(expressWinston.logger({
@@ -70,7 +71,7 @@ app.use((req, res, next) => {
 });
 
 // log error in winston transports except when executing test suite
-if (config.env !== 'test') {
+if (env !== 'test') {
   app.use(expressWinston.errorLogger({
     winstonInstance
   }));

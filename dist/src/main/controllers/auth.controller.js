@@ -18,8 +18,6 @@ var _APIError2 = _interopRequireDefault(_APIError);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var config = require('../../config/env');
-
 // sample user, used for authentication
 var user = {
   username: 'react',
@@ -39,7 +37,7 @@ function login(req, res, next) {
   if (req.body.username === user.username && req.body.password === user.password) {
     var token = _jsonwebtoken2.default.sign({
       username: user.username
-    }, config.jwtSecret);
+    }, process.env.jwtSecret);
     return res.json({
       token: token,
       username: user.username

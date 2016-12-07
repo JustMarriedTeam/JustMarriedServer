@@ -16,17 +16,13 @@ var _expressJwt = require('express-jwt');
 
 var _expressJwt2 = _interopRequireDefault(_expressJwt);
 
-var _paramValidation = require('../../config/param-validation');
+var _paramValidation = require('../config/param-validation');
 
 var _paramValidation2 = _interopRequireDefault(_paramValidation);
 
 var _auth = require('../controllers/auth.controller');
 
 var _auth2 = _interopRequireDefault(_auth);
-
-var _env = require('../../config/env');
-
-var _env2 = _interopRequireDefault(_env);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -37,7 +33,7 @@ router.route('/login').post((0, _expressValidation2.default)(_paramValidation2.d
 
 /** GET /api/auth/random-number - Protected route,
  * needs token returned by the above as header. Authorization: Bearer {token} */
-router.route('/random-number').get((0, _expressJwt2.default)({ secret: _env2.default.jwtSecret }), _auth2.default.getRandomNumber);
+router.route('/random-number').get((0, _expressJwt2.default)({ secret: process.env.jwtSecret }), _auth2.default.getRandomNumber);
 
 exports.default = router;
 module.exports = exports['default'];
