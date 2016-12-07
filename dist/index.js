@@ -16,7 +16,7 @@ var _env = require('./config/env');
 
 var _env2 = _interopRequireDefault(_env);
 
-var _express = require('./config/express');
+var _express = require('./src/main/config/express');
 
 var _express2 = _interopRequireDefault(_express);
 

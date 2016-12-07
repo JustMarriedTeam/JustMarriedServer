@@ -52,7 +52,7 @@ var _winston = require('./winston');
 
 var _winston2 = _interopRequireDefault(_winston);
 
-var _index = require('../src/main/routes/index.route');
+var _index = require('../routes/index.route');
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -60,7 +60,7 @@ var _env = require('./env');
 
 var _env2 = _interopRequireDefault(_env);
 
-var _APIError = require('../src/main/helpers/APIError');
+var _APIError = require('../helpers/APIError');
 
 var _APIError2 = _interopRequireDefault(_APIError);
 

@@ -7,9 +7,9 @@ import runSequence from 'run-sequence';
 const plugins = gulpLoadPlugins();
 
 const paths = {
-  js: ['./**/*.js', '!dist/**', '!node_modules/**', '!coverage/**'],
+  js: ['./src/main/**/*.js', './config/**/*.js', 'index.js'],
   nonJs: ['./package.json', './.gitignore'],
-  tests: './server/tests/*.js'
+  tests: './src/main/test/**/*.js'
 };
 
 // Clean up dist and coverage directory

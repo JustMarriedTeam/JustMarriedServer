@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import util from 'util';
 import config from './config/env';
-import app from './config/express';
+import app from './src/main/config/express';
 
 const debug = require('debug')('express-mongoose-es6-rest-api:index');
 
