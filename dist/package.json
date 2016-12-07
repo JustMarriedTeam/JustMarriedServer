@@ -1,10 +1,10 @@
 {
-  "name": "express-mongoose-es6-rest-api",
+  "name": "JustMarried",
   "version": "1.0.0",
-  "description": "A Boilerplate application for building REST APIs using express, mongoose in ES6 with code coverage",
-  "author": "Kunal Kapadia <kunalkapadia12@gmail.com>",
+  "description": "Application to support Wedding Planning",
+  "author": "Grzegorz Gurgul <gurgul.grzegorz@gmail.com>",
   "main": "index.js",
-  "private": false,
+  "private": true,
   "engines": {
     "node": ">=4.6.x",
     "npm": ">=2.15.x"
