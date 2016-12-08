@@ -1,14 +1,22 @@
 import mongoose from 'mongoose';
 import util from 'util';
+import envFile from 'node-env-file';
 
 const debug = require('debug')('express-mongoose-es6-rest-api:index');
+
+var app;
 
 setUpEnvironment();
 connectDatabase();
 launchServer();
 
 function setUpEnvironment() {
-    require("./config/envloader")();
+    const configFile = process.env.configFile;
+    envFile(__dirname + '/env.properties');
+    envFile(`${configFile}`, {overwrite: true, raise: false});
+
+    console.log("jwtToken", process.env.jwtToken);
+
     // make bluebird default Promise
     Promise = require('bluebird'); // eslint-disable-line no-global-assign
 }
@@ -32,11 +40,12 @@ function connectDatabase() {
 }
 
 function launchServer() {
-    var app = require("./app.js");
+    app = require("./app.js");
     if (!module.parent) {
         app.listen(process.env.port, () => {
             debug(`server started on port ${config.port} (${config.env})`);
         });
     }
-    export default app;
 }
+
+export default app;
