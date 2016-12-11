@@ -1,19 +1,30 @@
 swagger: '2.0'
-
+basePath: /api
 info:
   version: "1.0.0"
   title: JustMarried API
 
 paths:
+  /users:
+    post:
+      description: |
+        Creates a new `User`.
+      parameters:
+        - name: login
+          in: body
+          required: true
+          type: string
+        - name: password
+          in: body
+          required: true
+          type: string
+
   /users/{userId}:
     get:
       description: |
-        Gets `Person` objects.
-        Optional query param of **size** determines
-        size of returned array
+        Gets a `User` by `userId`
       parameters:
-        - 
-          name: userId
+        - name: userId
           in: path
           required: true
           type: string

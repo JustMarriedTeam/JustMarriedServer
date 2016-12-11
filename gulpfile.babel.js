@@ -77,7 +77,7 @@ gulp.task('dist', ['build'], () =>
 gulp.task('nodemon', ['copyResources', 'compile'], () =>
     plugins.nodemon({
         script: path.join(config.build.mainDir, 'index.js'),
-        ext: 'js',
+        ext: 'js yaml',
         delay: 2500,
         watch: config.src.main.baseDir,
         tasks: ['copyResources', 'compile']
