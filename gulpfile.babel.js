@@ -16,11 +16,11 @@ const options = commandLineArgs([
 const config = {
     src: {
         main: {
-            baseDir: './src/main',
+            baseDir: 'src/main',
             dirName: 'main'
         },
         test: {
-            baseDir: './src/test',
+            baseDir: 'src/test',
             dirName: 'test'
         },
         baseDir: 'src',
@@ -73,6 +73,7 @@ gulp.task('nodemon', ['copyResources', 'compile'], () =>
     plugins.nodemon({
         script: path.join(config.build.mainDir, 'index.js'),
         ext: 'js',
+        delay: 2500,
         tasks: ['copyResources', 'compile']
     })
 );

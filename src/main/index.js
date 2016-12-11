@@ -11,11 +11,8 @@ connectDatabase();
 launchServer();
 
 function setUpEnvironment() {
-    const configFile = process.env.configFile;
-    envFile(__dirname + '/env.properties');
-    envFile(`${configFile}`, {overwrite: true, raise: false});
-
-    console.log("jwtToken", process.env.jwtToken);
+    envFile(`${__dirname}/env.properties`);
+    envFile(`${process.env.configFile}`, {overwrite: true, raise: false});
 
     // make bluebird default Promise
     Promise = require('bluebird'); // eslint-disable-line no-global-assign
