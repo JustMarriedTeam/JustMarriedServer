@@ -8,7 +8,7 @@ const jwtOptions = {
 };
 
 passport.use(new JwtStrategy(jwtOptions, function (payload, done) {
-    Account.findOne({id: payload.sub}, function (err, user) {
+    Account.findOne({id: payload.userId}, function (err, user) {
         if (err) return done(err, false);
         else if (user) done(null, user);
         else done(null, false);

@@ -2,6 +2,10 @@ import mongoose from "mongoose";
 import bcrypt from 'bcrypt-nodejs'
 
 const AccountSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        required: true
+    },
     login: {
         type: String,
         required: true
