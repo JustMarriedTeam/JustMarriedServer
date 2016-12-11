@@ -13,6 +13,7 @@ import winstonInstance from "./config/winston";
 import routes from "./routes/index.route";
 import APIError from "./helpers/APIError";
 import swaggerizeExpress from 'swaggerize-express';
+import passport from 'passport'
 
 const app = express();
 const env = process.env.env;
@@ -20,10 +21,15 @@ const env = process.env.env;
 
 initializeLogging();
 configureOthers();
+setupAuth();
 mountApi();
 swaggerize();
 configureErrorHandling();
 configureNotFoundBehaviour();
+
+function setupAuth() {
+    app.use(passport.initialize());
+}
 
 function swaggerize() {
     app.use(swaggerizeExpress({

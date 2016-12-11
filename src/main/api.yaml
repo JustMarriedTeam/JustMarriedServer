@@ -5,6 +5,32 @@ info:
   title: JustMarried API
 
 paths:
+  /auth:
+    /local:
+      post:
+        description: |
+          Authenticates a user locally using login and password
+          returning a valid token if authenticated positively.
+        parameters:
+          - name: login
+            in: body
+            required: true
+            type: string
+          - name: password
+            in: body
+            required: true
+            type: string
+
+    /facebook:
+      get:
+        description: |
+          Tries to get a authentication response from Facebook
+          resulting in returning a response with authentication token.
+      post:
+        description: |
+          Internal authentication callback to use for Facebook when authentity is verified.
+
+
   /users:
     post:
       description: |

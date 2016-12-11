@@ -1,5 +1,10 @@
+import jwtAuthenticator from "../../security/jwtAuthenticator";
+
 module.exports = {
-    get: function(req, res) {
-        return res.json({'a': 'b'});
-    }
+    get: [
+        jwtAuthenticator.isAuthenticated,
+        function (req, res) {
+            return res.json({'a': 'b'});
+        }
+    ]
 };
