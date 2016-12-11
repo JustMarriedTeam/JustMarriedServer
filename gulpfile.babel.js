@@ -28,7 +28,6 @@ const config = {
     },
     coverageDir: './coverage',
     distDir: './dist',
-
     build: {
         baseDir: 'build',
         mainDir: 'build/main',
@@ -64,6 +63,11 @@ gulp.task('testCompile', () =>
         .pipe(gulp.dest(config.build.baseDir))
 );
 
+gulp.task('dist', ['build'], () =>
+    gulp.src(`${config.build.mainDir}/**/*`)
+        .pipe(gulp.dest(config.distDir))
+);
+
 gulp.task('nodemon', ['copyResources', 'compile'], () =>
     plugins.nodemon({
         script: path.join(config.build.mainDir, 'index.js'),
@@ -76,9 +80,8 @@ gulp.task('nodemon', ['copyResources', 'compile'], () =>
 
 gulp.task('compile', ['mainCompile', 'testCompile']);
 gulp.task('copyResources', ['copyNonJs', 'copyEnvProps']);
+gulp.task('build', ['copyResources', 'compile']);
 gulp.task('serve', ['clean'], () => runSequence('nodemon'));
 gulp.task('default', ['clean'], () =>
-    runSequence(
-        ['copyResources', 'compile']
-    )
+    runSequence(['build'])
 );
