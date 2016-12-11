@@ -24,7 +24,7 @@ const config = {
             dirName: 'test'
         },
         baseDir: 'src',
-        nonJs: '**/*.{json}'
+        nonJs: '**/*.json'
     },
     coverageDir: './coverage',
     distDir: './dist',
@@ -40,8 +40,7 @@ gulp.task('clean', () =>
 );
 
 gulp.task('copyNonJs', () =>
-    gulp.src(config.src.nonJs)
-        .pipe(plugins.newer(config.src.baseDir))
+    gulp.src(`${config.src.baseDir}/${config.src.nonJs}`)
         .pipe(gulp.dest(config.build.baseDir))
 );
 

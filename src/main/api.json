@@ -1,0 +1,31 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "JustMarried API"
+  },
+  "paths": {
+    "/users/{userId}": {
+      "get": {
+        "description": "Gets `Person` objects.\nOptional query param of **size** determines\nsize of returned array\n",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "title": "User",
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -12,7 +12,7 @@ import helmet from "helmet";
 import winstonInstance from "./config/winston";
 import routes from "./routes/index.route";
 import APIError from "./helpers/APIError";
-import swaggerDoc from 'swagger-jsdoc'
+import swaggerizeExpress from 'swaggerize-express'
 
 const app = express();
 const env = process.env.env;
@@ -21,32 +21,16 @@ const env = process.env.env;
 initializeLogging();
 configureOthers();
 mountApi();
-mountDocs();
+swaggerize();
 configureErrorHandling();
 configureNotFoundBehaviour();
 
-function mountDocs() {
-    var swaggerDefinition = {
-        info: {
-            title: 'JustMarried API',
-            version: '1.0.0'
-        },
-        host: `localhost:${process.env.port}`,
-        basePath: '/api',
-    };
-
-    var options = {
-        swaggerDefinition: swaggerDefinition,
-        apis: ['./routes/**/*.js'],
-    };
-
-    var swaggerSpec = swaggerDoc(options);
-
-    const router = express.Router();
-    router.route('/swagger.json').get(function(req, res) {
-        res.json(swaggerSpec);
-    });
-    app.use('/docs', router);
+function swaggerize() {
+    app.use(swaggerizeExpress({
+        api: require('./api.json'),
+        docspath: '/api-docs',
+        handlers: './handlers'
+    }));
 }
 
 function configureOthers() {
@@ -107,7 +91,7 @@ function initializeLogging() {
 }
 
 function mountApi() {
-    app.use('/api', routes);
+    // app.use('/api', routes);
 }
 
 export default app;
