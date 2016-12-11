@@ -46,4 +46,3 @@ router.param('userId', _user2.default.load);
 
 exports.default = router;
 module.exports = exports['default'];
-//# sourceMappingURL=user.route.js.map

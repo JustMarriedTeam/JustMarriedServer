@@ -33,4 +33,3 @@ router.use('/auth', _auth2.default);
 
 exports.default = router;
 module.exports = exports['default'];
-//# sourceMappingURL=index.route.js.map

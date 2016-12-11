@@ -14,59 +14,58 @@ const options = commandLineArgs([
 ]);
 
 const paths = {
-    js: ['./src/main/**/*.js', './config/**/*.js', 'index.js'],
-    nonJs: ['./package.json'],
-    tests: './src/main/test/**/*.js'
+    main: {
+        baseDir: 'main'
+    },
+    test : {
+        baseDir: 'test',
+    },
+    coverageDir: './coverage',
+    buildDir: './build',
+    distDir: './dist'
 };
 
-// Clean up dist and coverage directory
 gulp.task('clean', () =>
-    del(['dist/**', 'coverage/**', '!dist', '!coverage'])
+    del([`${paths.buildDir}/**`, `${paths.coverageDir}/**`, `!${paths.buildDir}`, `!${paths.coverageDir}`])
 );
 
-// Copy non-js files to dist
 gulp.task('copy', () =>
     gulp.src(paths.nonJs)
         .pipe(plugins.newer('dist'))
         .pipe(gulp.dest('dist'))
 );
 
-// Copy non-js files to dist
 gulp.task('copyEnvProps', () =>
     gulp.src(!!options.env ? `./config/${options.env}.properties` : '.env.properties')
         .pipe(rename('env.properties'))
         .pipe(gulp.dest('dist'))
 );
 
-// Compile ES6 to ES5 and copy to dist
-gulp.task('babel', () =>
-    gulp.src([...paths.js, '!gulpfile.babel.js'], {base: '.'})
-        .pipe(plugins.newer('dist'))
-        .pipe(plugins.sourcemaps.init())
+gulp.task('mainCompile', () =>
+    gulp.src(`./src/${paths.main.baseDir}/**/*.js`, {base: './src'})
         .pipe(plugins.babel())
-        .pipe(plugins.sourcemaps.write('.', {
-            includeContent: false,
-            sourceRoot(file) {
-                return path.relative(file.path, __dirname);
-            }
-        }))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest(paths.buildDir))
 );
 
-// Start server with restart on file changes
-gulp.task('nodemon', ['copy', 'copyEnvProps', 'babel'], () =>
+gulp.task('testCompile', () =>
+    gulp.src(`./src/${paths.test.baseDir}/**/*.js`, {base: './src'})
+        .pipe(plugins.babel())
+        .pipe(gulp.dest(paths.buildDir))
+);
+
+gulp.task('compile', ['mainCompile', 'testCompile']);
+
+gulp.task('nodemon', ['copy', 'copyEnvProps', 'mainCompile'], () =>
     plugins.nodemon({
         script: path.join('dist', 'index.js'),
         ext: 'js',
         ignore: ['node_modules/**/*.js', 'dist/**/*.js'],
-        tasks: ['copy', 'babel']
+        tasks: ['copy', 'copyEnvProps', 'babel']
     })
 );
 
-// gulp serve for development
 gulp.task('serve', ['clean'], () => runSequence('nodemon'));
 
-// default task: clean dist, compile js files and copy non-js files.
 gulp.task('default', ['clean'], () => {
     runSequence(
         ['copy', 'copyEnvProps', 'babel']

@@ -19,4 +19,3 @@ var logger = new _winston2.default.Logger({
 
 exports.default = logger;
 module.exports = exports['default'];
-//# sourceMappingURL=winston.js.map

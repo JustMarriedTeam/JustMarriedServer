@@ -64,4 +64,3 @@ function getRandomNumber(req, res) {
 
 exports.default = { login: login, getRandomNumber: getRandomNumber };
 module.exports = exports['default'];
-//# sourceMappingURL=auth.controller.js.map

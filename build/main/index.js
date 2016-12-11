@@ -66,4 +66,3 @@ function launchServer() {
 
 exports.default = app;
 module.exports = exports['default'];
-//# sourceMappingURL=index.js.map

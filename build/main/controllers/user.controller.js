@@ -102,4 +102,3 @@ function remove(req, res, next) {
 
 exports.default = { load: load, get: get, create: create, update: update, list: list, remove: remove };
 module.exports = exports['default'];
-//# sourceMappingURL=user.controller.js.map

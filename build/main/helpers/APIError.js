@@ -68,4 +68,3 @@ var APIError = function (_ExtendableError) {
 
 exports.default = APIError;
 module.exports = exports['default'];
-//# sourceMappingURL=APIError.js.map

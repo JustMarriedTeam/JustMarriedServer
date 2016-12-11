@@ -37,4 +37,3 @@ router.route('/random-number').get((0, _expressJwt2.default)({ secret: process.e
 
 exports.default = router;
 module.exports = exports['default'];
-//# sourceMappingURL=auth.route.js.map
