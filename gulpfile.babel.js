@@ -64,22 +64,21 @@ gulp.task('testCompile', () =>
         .pipe(gulp.dest(config.build.baseDir))
 );
 
-gulp.task('compile', ['mainCompile', 'testCompile']);
-gulp.task('copyResources', ['copyNonJs', 'copyEnvProps']);
-gulp.task('serve', ['clean'], () => runSequence('nodemon'));
-
-
 gulp.task('nodemon', ['copyResources', 'compile'], () =>
     plugins.nodemon({
         script: path.join(config.build.mainDir, 'index.js'),
         ext: 'js',
         delay: 2500,
+        watch: config.src.main.baseDir,
         tasks: ['copyResources', 'compile']
     })
 );
 
-gulp.task('default', ['clean'], () => {
+gulp.task('compile', ['mainCompile', 'testCompile']);
+gulp.task('copyResources', ['copyNonJs', 'copyEnvProps']);
+gulp.task('serve', ['clean'], () => runSequence('nodemon'));
+gulp.task('default', ['clean'], () =>
     runSequence(
         ['copyResources', 'compile']
-    );
-});
+    )
+);
