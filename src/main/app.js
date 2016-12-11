@@ -80,7 +80,7 @@ if (env !== 'test') {
 app.use((err, req, res, next) => // eslint-disable-line no-unused-vars
   res.status(err.status).json({
     message: err.isPublic ? err.message : httpStatus[err.status],
-    stack: config.env === 'development' ? err.stack : {}
+    stack: process.env.env === 'development' ? err.stack : {}
   })
 );
 

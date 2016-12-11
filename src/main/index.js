@@ -43,7 +43,7 @@ function launchServer() {
     app = require("./app.js");
     if (!module.parent) {
         app.listen(process.env.port, () => {
-            debug(`server started on port ${config.port} (${config.env})`);
+            debug(`server started on port ${process.env.port} (${process.env.env})`);
         });
     }
 }

@@ -13,61 +13,72 @@ const options = commandLineArgs([
     {name: 'env', type: String}
 ]);
 
-const paths = {
-    main: {
-        baseDir: 'main'
-    },
-    test : {
-        baseDir: 'test',
+const config = {
+    src: {
+        main: {
+            baseDir: './src/main',
+            dirName: 'main'
+        },
+        test: {
+            baseDir: './src/test',
+            dirName: 'test'
+        },
+        baseDir: 'src',
+        nonJs: '**/*.{json}'
     },
     coverageDir: './coverage',
-    buildDir: './build',
-    distDir: './dist'
+    distDir: './dist',
+
+    build: {
+        baseDir: 'build',
+        mainDir: 'build/main',
+        testDir: 'build/test'
+    }
 };
 
 gulp.task('clean', () =>
-    del([`${paths.buildDir}/**`, `${paths.coverageDir}/**`, `!${paths.buildDir}`, `!${paths.coverageDir}`])
+    del([`${config.build.baseDir}/**`, `${config.coverageDir}/**`, `!${config.build.baseDir}`, `!${config.coverageDir}`])
 );
 
-gulp.task('copy', () =>
-    gulp.src(paths.nonJs)
-        .pipe(plugins.newer('dist'))
-        .pipe(gulp.dest('dist'))
+gulp.task('copyNonJs', () =>
+    gulp.src(config.src.nonJs)
+        .pipe(plugins.newer(config.src.baseDir))
+        .pipe(gulp.dest(config.build.baseDir))
 );
 
 gulp.task('copyEnvProps', () =>
     gulp.src(!!options.env ? `./config/${options.env}.properties` : '.env.properties')
         .pipe(rename('env.properties'))
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest(config.build.mainDir))
 );
 
 gulp.task('mainCompile', () =>
-    gulp.src(`./src/${paths.main.baseDir}/**/*.js`, {base: './src'})
+    gulp.src(`${config.src.main.baseDir}/**/*.js`, {base: './src'})
         .pipe(plugins.babel())
-        .pipe(gulp.dest(paths.buildDir))
+        .pipe(gulp.dest(config.build.baseDir))
 );
 
 gulp.task('testCompile', () =>
-    gulp.src(`./src/${paths.test.baseDir}/**/*.js`, {base: './src'})
+    gulp.src(`${config.src.test.baseDir}/**/*.js`, {base: './src'})
         .pipe(plugins.babel())
-        .pipe(gulp.dest(paths.buildDir))
+        .pipe(gulp.dest(config.build.baseDir))
 );
 
 gulp.task('compile', ['mainCompile', 'testCompile']);
+gulp.task('copyResources', ['copyNonJs', 'copyEnvProps']);
+gulp.task('serve', ['clean'], () => runSequence('nodemon'));
 
-gulp.task('nodemon', ['copy', 'copyEnvProps', 'mainCompile'], () =>
+
+gulp.task('nodemon', ['copyResources', 'compile'], () =>
     plugins.nodemon({
-        script: path.join('dist', 'index.js'),
+        script: path.join(config.build.mainDir, 'index.js'),
         ext: 'js',
-        ignore: ['node_modules/**/*.js', 'dist/**/*.js'],
-        tasks: ['copy', 'copyEnvProps', 'babel']
+        tasks: ['copyResources', 'compile']
     })
 );
 
-gulp.task('serve', ['clean'], () => runSequence('nodemon'));
-
 gulp.task('default', ['clean'], () => {
     runSequence(
-        ['copy', 'copyEnvProps', 'babel']
+        ['copyResources', 'compile']
     );
 });
