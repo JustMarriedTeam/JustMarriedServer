@@ -12,7 +12,7 @@ import helmet from "helmet";
 import winstonInstance from "./config/winston";
 import routes from "./routes/index.route";
 import APIError from "./helpers/APIError";
-import swaggerizeExpress from 'swaggerize-express'
+import swaggerizeExpress from 'swaggerize-express';
 
 const app = express();
 const env = process.env.env;

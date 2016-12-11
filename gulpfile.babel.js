@@ -5,6 +5,7 @@ import path from 'path';
 import del from 'del';
 import runSequence from 'run-sequence';
 import commandLineArgs from 'command-line-args';
+import yaml from 'gulp-yaml'
 
 
 const plugins = gulpLoadPlugins();
@@ -24,7 +25,7 @@ const config = {
             dirName: 'test'
         },
         baseDir: 'src',
-        nonJs: '**/*.json'
+        nonJs: '**/*.{json}'
     },
     coverageDir: './coverage',
     distDir: './dist',
@@ -41,6 +42,12 @@ gulp.task('clean', () =>
 
 gulp.task('copyNonJs', () =>
     gulp.src(`${config.src.baseDir}/${config.src.nonJs}`)
+        .pipe(gulp.dest(config.build.baseDir))
+);
+
+gulp.task('yamlToJson', () =>
+    gulp.src(`${config.src.baseDir}/**/*.yaml`)
+        .pipe(yaml({}))
         .pipe(gulp.dest(config.build.baseDir))
 );
 
@@ -78,7 +85,7 @@ gulp.task('nodemon', ['copyResources', 'compile'], () =>
 );
 
 gulp.task('compile', ['mainCompile', 'testCompile']);
-gulp.task('copyResources', ['copyNonJs', 'copyEnvProps']);
+gulp.task('copyResources', ['copyNonJs', 'copyEnvProps', 'yamlToJson']);
 gulp.task('build', ['copyResources', 'compile']);
 gulp.task('serve', ['clean'], () => runSequence('nodemon'));
 gulp.task('default', ['clean'], () =>

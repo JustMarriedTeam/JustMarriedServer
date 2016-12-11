@@ -1,0 +1,25 @@
+swagger: '2.0'
+
+info:
+  version: "1.0.0"
+  title: JustMarried API
+
+paths:
+  /users/{userId}:
+    get:
+      description: |
+        Gets `Person` objects.
+        Optional query param of **size** determines
+        size of returned array
+      parameters:
+        - 
+          name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: User
+            type: object
