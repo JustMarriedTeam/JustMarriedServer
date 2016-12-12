@@ -1,9 +1,9 @@
 import passport from "passport";
-import JwtStrategy from "passport-jwt";
-import Account from "../models/account.model.js";
+import {Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import Account from "../../models/account.model.js";
 
 const jwtOptions = {
-    jwtFromRequest: JwtStrategy.ExtractJwt.fromHeader('Token'),
+    jwtFromRequest: ExtractJwt.fromHeader('Token'),
     secretOrKey: 'secret'
 };
 

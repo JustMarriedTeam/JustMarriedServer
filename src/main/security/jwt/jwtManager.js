@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import jwtAuthenticator from "../authenticators/jwtAuthenticator"
 import Account from "../../models/account.model";
 
 function generateToken(userId) {
@@ -20,6 +21,7 @@ function serialize(type, rawId) {
     }
 }
 
+module.exports.isAuthenticated = jwtAuthenticator.isAuthenticated;
 module.exports.releaseToken = function (type) {
     return function (req, res) {
         const userId = serialize(type, req.id);

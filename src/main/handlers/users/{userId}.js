@@ -1,4 +1,4 @@
-import jwtAuthenticator from "../../security/jwtAuthenticator";
+import jwtAuthenticator from "../../security/jwt/jwtManager";
 
 module.exports = {
     get: [

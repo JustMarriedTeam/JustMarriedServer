@@ -1,6 +1,6 @@
 import passport from 'passport'
 import LocalStrategy from 'passport-local'
-import Account from '../models/account.model.js'
+import Account from '../../models/account.model.js'
 
 passport.use(new LocalStrategy(
     function (login, password, callback) {
