@@ -60,7 +60,12 @@ gulp.task('copyEnvProps', () =>
 
 gulp.task('mainCompile', () =>
     gulp.src(`${config.src.main.baseDir}/**/*.js`, {base: './src'})
+        .pipe(plugins.sourcemaps.init())
         .pipe(plugins.babel())
+        .pipe(plugins.sourcemaps.write('.', {
+            includeContent: false,
+            sourceRoot: './src'
+        }))
         .pipe(gulp.dest(config.build.baseDir))
 );
 
@@ -77,9 +82,14 @@ gulp.task('dist', ['build'], () =>
 
 gulp.task('nodemon', ['copyResources', 'compile'], () =>
     plugins.nodemon({
+        execMap: {
+            js: 'node-inspector & node --debug'
+        },
         script: path.join(config.build.mainDir, 'index.js'),
         ext: 'js yaml',
         delay: 2500,
+        debug: true,
+        verbose: true,
         watch: config.src.main.baseDir,
         tasks: ['copyResources', 'compile']
     })

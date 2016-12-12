@@ -1,7 +1,6 @@
 import passport from "passport";
 import FacebookStrategy from "passport-facebook";
 import Account from '../../models/account.model'
-import bind from 'lodash/bind'
 
 passport.use(new FacebookStrategy({
         clientID: '1806015219657884',
