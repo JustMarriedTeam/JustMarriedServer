@@ -11,6 +11,7 @@ passport.use(new FacebookStrategy({
     },
     function (accessToken, refreshToken, profile, done) {
         Account.findOne({'external.facebook.id': profile.id}, function (err, account) {
+            console.log("Finding existing user");
             if (err) {
                 return done(err);
             } else {
@@ -34,11 +35,11 @@ passport.use(new FacebookStrategy({
 ));
 
 exports.issueFacebookAuthenticationRequest = passport.authenticate('facebook', {
-    session: false,
-    scope: 'email'
+    scope: 'email',
+    session: false
 });
 
 exports.recoverFacebookAuthenticationResponse = passport.authenticate('facebook', {
-    successRedirect: '/profile',
-    failureRedirect: '/'
+    failureRedirect: '/api/error',
+    session: false
 });

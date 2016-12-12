@@ -24,6 +24,7 @@ function serialize(type, rawId) {
 module.exports.isAuthenticated = jwtAuthenticator.isAuthenticated;
 module.exports.releaseToken = function (type) {
     return function (req, res) {
+        console.log('Releasing token');
         const userId = serialize(type, req.id);
         let token = generateToken(userId);
         res.status(200).json({

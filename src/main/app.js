@@ -10,7 +10,6 @@ import expressWinston from "express-winston";
 import expressValidation from "express-validation";
 import helmet from "helmet";
 import winstonInstance from "./config/winston";
-import routes from "./routes/index.route";
 import APIError from "./helpers/APIError";
 import swaggerizeExpress from 'swaggerize-express';
 import passport from 'passport'
@@ -68,12 +67,12 @@ function configureErrorHandling() {
         }
         return next(err);
     });
-    app.use((err, req, res, next) =>
+    app.use((err, req, res) => {
         res.status(err.status).json({
             message: err.isPublic ? err.message : httpStatus[err.status],
             stack: process.env.env === 'development' ? err.stack : {}
-        })
-    );
+        });
+    });
 }
 
 function initializeLogging() {

@@ -6,6 +6,11 @@ info:
 
 paths:
 
+  /auth/token:
+      get:
+        description: |
+          Returns a new authentication token for an authorized user.
+
   /auth/local:
       post:
         description: |

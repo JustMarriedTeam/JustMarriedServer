@@ -2,17 +2,9 @@ import mongoose from "mongoose";
 import bcrypt from 'bcrypt-nodejs'
 
 const AccountSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
-    login: {
-        type: String,
-        required: true
-    },
+    login: String,
     password: {
         type: String,
-        required: true,
         match: [/^.*$/, 'The value of path {PATH} ({VALUE}) is not a valid password!']
     },
     external: {
@@ -37,11 +29,11 @@ const AccountSchema = new mongoose.Schema({
     }
 });
 
-AccountSchema.methods.generatePasswordHash = function(password) {
+AccountSchema.methods.generatePasswordHash = function (password) {
     return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-AccountSchema.methods.isPasswordValid = function(password) {
+AccountSchema.methods.isPasswordValid = function (password) {
     return bcrypt.compareSync(password, this.local.password);
 };
 
