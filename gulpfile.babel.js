@@ -6,13 +6,14 @@ import del from 'del';
 import runSequence from 'run-sequence';
 import commandLineArgs from 'command-line-args';
 import yaml from 'gulp-yaml'
+import pick from 'lodash/pick'
 
 
 const plugins = gulpLoadPlugins();
 
 const options = commandLineArgs([
     {name: 'env', type: String}
-]);
+], pick(process.argv, 'name'));
 
 const config = {
     src: {

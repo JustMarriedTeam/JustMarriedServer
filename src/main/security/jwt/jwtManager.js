@@ -1,35 +1,34 @@
 import jwt from "jsonwebtoken";
-import jwtAuthenticator from "../authenticators/jwtAuthenticator"
+import jwtAuthenticator from "../authenticators/jwtAuthenticator";
 import Account from "../../models/account.model";
 
 function generateToken(userId) {
-    return jwt.sign({
-        id: userId,
-    }, 'server secret', {
-        expiresInMinutes: 120
-    });
+    return jwt.sign({id: userId}, 'serversecret', {expiresIn: 3600});
 }
 
-function serialize(type, rawId) {
+function findAccountFor(type, rawId, done) {
     switch (type) {
         case 'local':
-            return Account.findOne({'login': rawId}, 'id');
+            Account.findOne({'login': rawId}, 'id').exec().then(done);
+            break;
         case 'facebook':
-            return Account.findOne({'external.facebook.id': rawId}, 'id');
+            Account.findOne({'external.facebook.id': rawId}, 'id').exec().then(done);
+            break;
         default:
             throw `Authentication method ${type} is not supported`;
+            done();
     }
 }
 
 module.exports.isAuthenticated = jwtAuthenticator.isAuthenticated;
 module.exports.releaseToken = function (type) {
     return function (req, res) {
-        console.log('Releasing token');
-        const userId = serialize(type, req.id);
-        let token = generateToken(userId);
-        res.status(200).json({
-            login: userId,
-            token: token
+        console.log(`Releasing token for ${req}`);
+        findAccountFor(type, req.id, function (account) {
+            let token = generateToken(account.id);
+            res.status(200).json({
+                token: token
+            });
         });
     }
 };

@@ -19,8 +19,8 @@ function setUpEnvironment() {
 }
 
 function connectDatabase() {
-    // plugin bluebird promise in mongoose
     mongoose.Promise = Promise;
+    Promise.promisifyAll(mongoose);
 
     // connect to mongo db
     mongoose.connect(process.env.db, {server: {socketOptions: {keepAlive: 1}}});
