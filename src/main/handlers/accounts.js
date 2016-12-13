@@ -1,5 +1,5 @@
+import { postAccount } from '../controllers/account.controller'
+
 module.exports = {
-    post: function(req, res) {
-        res.json({'created' : true});
-    }
+    post: postAccount
 };
