@@ -8,12 +8,10 @@ function createAccount(credentials) {
         .then(() => {
             var account = new Account();
             account.login = credentials.login;
-            account.password = credentials.password;
+            account.setPassword(credentials.password);
             return account.saveAsync().then(() => account);
         });
 }
 
 export {createAccount}
-
-//https://mtcasey.com/blog/how-to-add-nodejs-promises-bluebird
 
