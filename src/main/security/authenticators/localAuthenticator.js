@@ -1,6 +1,6 @@
-import passport from 'passport'
-import LocalStrategy from 'passport-local'
-import Account from '../../models/account.model.js'
+import passport from "passport";
+import LocalStrategy from "passport-local";
+import Account from "../../models/account.model.js";
 
 passport.use(new LocalStrategy({
         usernameField: 'login',
@@ -8,12 +8,12 @@ passport.use(new LocalStrategy({
         session: false
     },
     function (login, password, done) {
-        Account.findOne({login: login}, function (err, account) {
-            if (err) return done(err);
-            if (!account) return done(null, false);
-            if (!account.isPasswordValid(password)) return done(null, false);
-            return done(null, account);
-        });
+        Account.findOneAsync({login: login})
+            .then((account) => {
+                if (!account) return done(null, false);
+                else if (!account.isPasswordValid(password)) return done(null, false);
+                else done(null, account);
+            }).catch((err) => done(err));
     }
 ));
 
