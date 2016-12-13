@@ -10,6 +10,11 @@ paths:
       get:
         description: |
           Returns a new authentication token for an authorized user.
+        responses:
+          200:
+              description: Successful response
+              schema:
+                $ref: '#/definitions/User'
 
   /auth/local:
       post:
@@ -17,39 +22,37 @@ paths:
           Authenticates a user locally using login and password
           returning a valid token if authenticated positively.
         parameters:
-          - name: login
+          - name: credentials
             in: body
+            description: Credentials to use in login attempt.
             required: true
-            type: string
-          - name: password
-            in: body
-            required: true
-            type: string
+            schema:
+              $ref: '#/definitions/Credentials'
+        responses:
+          200:
+              description: Successful response
+              schema:
+                $ref: '#/definitions/User'
 
   /auth/facebook:
       get:
         description: |
           Tries to get a authentication response from Facebook
           resulting in returning a response with authentication token.
+        responses:
+          200:
+              description: Successful response
 
   /auth/facebook/callback:
       get:
         description: |
-          Internal authentication callback to use for Facebook when authentity is verified.
+          Authentication callback to use for Facebook when authentity is verified.
+        responses:
+          200:
+              description: Successful response
+              schema:
+                $ref: '#/definitions/User'
 
-  /users:
-    post:
-      description: |
-        Creates a new `User`.
-      parameters:
-        - name: login
-          in: body
-          required: true
-          type: string
-        - name: password
-          in: body
-          required: true
-          type: string
 
   /users/{userId}:
     get:
@@ -66,3 +69,26 @@ paths:
           schema:
             title: User
             type: object
+
+
+definitions:
+
+  Credentials:
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+
+  User:
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+      password:
+        type: string
