@@ -7,14 +7,16 @@ passport.use(new LocalStrategy({
         passwordField: 'password',
         session: false
     },
-    function (login, password, callback) {
+    function (login, password, done) {
         Account.findOne({login: login}, function (err, account) {
             if (err) return done(err);
             if (!account) return done(null, false);
             if (!account.isPasswordValid(password)) return done(null, false);
-            return callback(null, account);
+            return done(null, account);
         });
     }
 ));
 
-exports.authenticateLocally = passport.authenticate('local', {session: false});
+exports.authenticateLocally = passport.authenticate('local', {
+    session: false
+});

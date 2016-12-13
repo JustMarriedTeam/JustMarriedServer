@@ -12,9 +12,9 @@ paths:
           Returns a new authentication token for an authorized user.
         responses:
           200:
-              description: Successful response
+              description: Account with token to use in the header
               schema:
-                $ref: '#/definitions/User'
+                $ref: '#/definitions/Account'
 
   /auth/local:
       post:
@@ -30,9 +30,9 @@ paths:
               $ref: '#/definitions/Credentials'
         responses:
           200:
-              description: Successful response
+              description: Account with token to use in the header
               schema:
-                $ref: '#/definitions/User'
+                $ref: '#/definitions/Account'
 
   /auth/facebook:
       get:
@@ -49,10 +49,25 @@ paths:
           Authentication callback to use for Facebook when authentity is verified.
         responses:
           200:
-              description: Successful response
+              description: Account with token to use in the header
               schema:
-                $ref: '#/definitions/User'
+                $ref: '#/definitions/Account'
 
+  /accounts:
+    post:
+      description: |
+        Creates a new local account
+      parameters:
+        - name: account
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Account'
+      responses:
+          200:
+              description: Newly created account with token to use in the header
+              schema:
+                $ref: '#/definitions/Account'
 
   /users/{userId}:
     get:
@@ -65,10 +80,9 @@ paths:
           type: string
       responses:
         200:
-          description: Successful response
+          description: User with given `userId`
           schema:
-            title: User
-            type: object
+              $ref: '#/definitions/User'
 
 
 definitions:
@@ -83,7 +97,7 @@ definitions:
       password:
         type: string
 
-  User:
+  Account:
     required:
       - login
       - password
@@ -92,3 +106,11 @@ definitions:
         type: string
       password:
         type: string
+
+  User:
+    properties:
+      username:
+        type: string
+
+
+
