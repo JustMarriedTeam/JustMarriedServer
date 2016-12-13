@@ -1,6 +1,7 @@
 import passport from "passport";
 import FacebookStrategy from "passport-facebook";
 import Account from '../../models/account.model'
+import jwtManager from '../jwt/jwtManager'
 
 passport.use(new FacebookStrategy({
         clientID: '1806015219657884',

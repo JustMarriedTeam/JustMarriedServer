@@ -1,36 +1,17 @@
 import jwt from "jsonwebtoken";
 import jwtAuthenticator from "../authenticators/jwtAuthenticator";
-import Account from "../../models/account.model";
 
 function generateToken(userId) {
     return jwt.sign({id: userId}, 'serversecret', {expiresIn: 3600});
 }
 
-function findAccountFor(type, rawId, done) {
-    switch (type) {
-        case 'local':
-            Account.findOne({'login': rawId}, 'id').exec().then(done);
-            break;
-        case 'facebook':
-            Account.findOne({'external.facebook.id': rawId}, 'id').exec().then(done);
-            break;
-        default:
-            throw `Authentication method ${type} is not supported`;
-            done();
-    }
-}
-
 module.exports.isAuthenticated = jwtAuthenticator.isAuthenticated;
-module.exports.releaseToken = function (type) {
-    return function (req, res) {
-        console.log(`Releasing token for ${req}`);
-        findAccountFor(type, req.id, function (account) {
-            let token = generateToken(account.id);
-            res.status(200).json({
-                token: token
-            });
-        });
-    }
+module.exports.releaseToken = function (req, res) {
+    let account = req.user;
+    let token = generateToken(account.id);
+    res.status(200).json({
+        token: token
+    });
 };
 
 //http://mongoosejs.com/docs/queries.html
