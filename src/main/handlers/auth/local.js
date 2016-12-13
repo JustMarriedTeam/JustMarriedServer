@@ -1,9 +1,9 @@
 import localAuthenticator from "../../security/authenticators/localAuthenticator";
-import jwtManager from "../../security/jwt/jwtManager";
+import { getReleasedToken } from "../../controllers/auth.controller";
 
 module.exports = {
     post: [
         localAuthenticator.authenticateLocally,
-        jwtManager.releaseToken
+        getReleasedToken
     ]
 };

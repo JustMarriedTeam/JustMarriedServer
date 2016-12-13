@@ -1,9 +1,9 @@
 import facebookAuthenticator from "../../../security/authenticators/facebookAuthenticator";
-import jwtManager from '../../../security/jwt/jwtManager'
+import {getReleasedToken} from "../../../controllers/auth.controller";
 
 module.exports = {
     get: [
         facebookAuthenticator.recoverFacebookAuthenticationResponse,
-        jwtManager.releaseToken
+        getReleasedToken
     ]
 };

@@ -6,12 +6,11 @@ function generateToken(userId) {
 }
 
 module.exports.isAuthenticated = jwtAuthenticator.isAuthenticated;
-module.exports.releaseToken = function (req, res) {
-    let account = req.user;
+module.exports.releaseToken = function (account) {
     let token = generateToken(account.id);
-    res.status(200).json({
+    return {
         token: token
-    });
+    }
 };
 
 //http://mongoosejs.com/docs/queries.html
