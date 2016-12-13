@@ -2,15 +2,14 @@ import Account from "../models/account.model";
 
 function createAccount(credentials) {
     return Account.findOneAsync({'login': credentials.login})
-        .then((err, account) => !!account)
-        .then((accountExists) => {
-            if (accountExists) return undefined;
-            else {
-                var account = new Account();
-                account.login = credentials.login;
-                account.password = credentials.password;
-                return account.saveAsync().then(() => account);
-            }
+        .then((account) => {
+            if (!!account) throw 'Account already exists';
+        })
+        .then(() => {
+            var account = new Account();
+            account.login = credentials.login;
+            account.password = credentials.password;
+            return account.saveAsync().then(() => account);
         });
 }
 
