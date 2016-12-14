@@ -1,19 +1,18 @@
 import passport from "passport";
-import {Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import {Strategy as JwtStrategy, ExtractJwt} from "passport-jwt";
 import Account from "../../models/account.model.js";
 
 const jwtOptions = {
-    jwtFromRequest: ExtractJwt.fromHeader('Token'),
-    secretOrKey: 'secret'
+    jwtFromRequest: ExtractJwt.fromHeader('token'),
+    secretOrKey: 'serversecret'
 };
 
 passport.use(new JwtStrategy(jwtOptions, function (payload, done) {
-    Account.findOne({id: payload.userId}, function (err, user) {
-        if (err) return done(err, false);
-        else if (user) done(null, user);
-        else done(null, false);
-
-    });
+    Account.findOneAsync({_id: payload.id})
+        .then((account) => {
+            if (!account) done(null, false);
+            else done(null, account);
+        }).catch((err) => done(err, false));
 }));
 
 exports.isAuthenticated = passport.authenticate('jwt', {session: false});

@@ -1,11 +1,9 @@
 import jwt from "jsonwebtoken";
-import jwtAuthenticator from "../authenticators/jwtAuthenticator";
 
 function generateToken(userId) {
     return jwt.sign({id: userId}, 'serversecret', {expiresIn: 3600});
 }
 
-module.exports.isAuthenticated = jwtAuthenticator.isAuthenticated;
 module.exports.releaseToken = function (account) {
     let token = generateToken(account.id);
     return {

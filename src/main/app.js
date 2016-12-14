@@ -1,4 +1,5 @@
 import express from "express";
+import path from 'path'
 import logger from "morgan";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -32,9 +33,10 @@ function setupAuth() {
 
 function swaggerize() {
     app.use(swaggerizeExpress({
-        api: require('./api.json'),
+        api: require('./api.json'), // can change it to yaml and it would work, get rid of that plugin...
         docspath: '/api-docs',
-        handlers: './handlers'
+        handlers: './handlers',
+        security: './security'
     }));
 }
 

@@ -1,8 +1,16 @@
 swagger: '2.0'
 basePath: /api
+schemes:
+  - http
 info:
   version: "1.0.0"
   title: JustMarried API
+
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: token
+    in: header
 
 paths:
 
@@ -10,6 +18,8 @@ paths:
       get:
         description: |
           Returns a new authentication token for an authorized user.
+        security:
+          - bearer: []
         responses:
           200:
               description: Account with token to use in the header
