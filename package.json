@@ -10,6 +10,7 @@
     "npm": ">=2.15.x"
   },
   "scripts": {
+    "debug": "DEBUG=express* gulp nodemon",
     "start": "gulp serve",
     "build": "gulp",
     "lint": "esw *.js server config --color",
@@ -37,6 +38,7 @@
     "boilerplate"
   ],
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "bluebird": "3.4.6",
     "body-parser": "1.15.2",
     "compression": "1.6.2",
@@ -51,10 +53,18 @@
     "http-status": "^0.2.0",
     "joi": "9.2.0",
     "jsonwebtoken": "7.1.9",
+    "lodash": "^4.17.2",
     "method-override": "^2.3.5",
     "mongoose": "4.6.8",
     "morgan": "1.7.0",
     "node-env-file": "^0.1.8",
+    "passport": "^0.3.2",
+    "passport-facebook": "^2.1.1",
+    "passport-google-oauth": "^1.0.0",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
+    "swaggerize-express": "^4.0.5",
     "winston": "2.3.0"
   },
   "devDependencies": {
@@ -82,8 +92,10 @@
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",
+    "gulp-yaml": "^1.0.1",
     "isparta": "4.0.0",
     "mocha": "3.1.2",
+    "node-inspector": "^0.12.8",
     "run-sequence": "^1.1.5",
     "supertest": "2.0.1",
     "supertest-as-promised": "4.0.2",

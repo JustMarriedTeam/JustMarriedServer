@@ -1,0 +1,160 @@
+swagger: '2.0'
+basePath: /api
+schemes:
+  - http
+info:
+  version: "1.0.0"
+  title: JustMarried API
+
+securityDefinitions:
+  bearer:
+    type: apiKey
+    name: token
+    in: header
+
+paths:
+
+  /auth/token:
+      get:
+        description: |
+          Returns a new authentication token for an authorized user.
+        security:
+          - bearer: []
+        responses:
+          200:
+              description: Account with token to use in the header
+              schema:
+                $ref: '#/definitions/Account'
+
+  /auth/local:
+      post:
+        description: |
+          Authenticates a user locally using login and password
+          returning a valid token if authenticated positively.
+        parameters:
+          - name: credentials
+            in: body
+            description: Credentials to use in login attempt.
+            required: true
+            schema:
+              $ref: '#/definitions/Credentials'
+        responses:
+          200:
+              description: Account with token to use in the header
+              schema:
+                $ref: '#/definitions/Account'
+
+  /auth/facebook:
+      get:
+        description: |
+          Tries to get a authentication response from Facebook
+          resulting in returning a response with authentication token.
+        responses:
+          200:
+              description: Successful response
+
+  /auth/facebook/callback:
+      get:
+        description: |
+          Authentication callback to use for Facebook when authentity is verified.
+        responses:
+          200:
+              description: Account with token to use in the header
+              schema:
+                $ref: '#/definitions/Account'
+
+  /accounts:
+    post:
+      description: |
+        Creates a new local account
+      parameters:
+        - name: account
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Account'
+      responses:
+          200:
+              description: Newly created account with token to use in the header
+              schema:
+                $ref: '#/definitions/Account'
+
+  /users/{userId}:
+    get:
+      description: |
+        Gets a `User` by `userId`
+      security:
+          - bearer: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: User with given `userId`
+          schema:
+            $ref: '#/definitions/User'
+
+  /tasks:
+    get:
+      description: |
+        Gets list of `Task`s matching given query parameters.
+      security:
+          - bearer: []
+      parameters:
+        - name: limit
+          in: query
+          type: string
+        - name: offset
+          in: query
+          type: string
+        - name: state
+          in: query
+          type: string
+      responses:
+        200:
+          description: List of `Task`s matching the criteria specified
+          schema:
+            $ref: '#/definitions/Tasks'
+
+
+definitions:
+
+  Credentials:
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+
+  Account:
+    required:
+      - login
+      - password
+    properties:
+      login:
+        type: string
+      password:
+        type: string
+
+  User:
+    properties:
+      username:
+        type: string
+
+  Task:
+    properties:
+      name:
+        type: string
+
+  Tasks:
+    type: array
+    items:
+      - $ref: '#/definitions/Task'
+
+
+
