@@ -83,6 +83,8 @@ paths:
     get:
       description: |
         Gets a `User` by `userId`
+      security:
+          - bearer: []
       parameters:
         - name: userId
           in: path
@@ -92,7 +94,29 @@ paths:
         200:
           description: User with given `userId`
           schema:
-              $ref: '#/definitions/User'
+            $ref: '#/definitions/User'
+
+  /tasks:
+    get:
+      description: |
+        Gets list of `Task`s matching given query parameters.
+      security:
+          - bearer: []
+      parameters:
+        - name: limit
+          in: query
+          type: string
+        - name: offset
+          in: query
+          type: string
+        - name: state
+          in: query
+          type: string
+      responses:
+        200:
+          description: List of `Task`s matching the criteria specified
+          schema:
+            $ref: '#/definitions/Tasks'
 
 
 definitions:
@@ -121,6 +145,16 @@ definitions:
     properties:
       username:
         type: string
+
+  Task:
+    properties:
+      name:
+        type: string
+
+  Tasks:
+    type: array
+    items:
+      - $ref: '#/definitions/Task'
 
 
 
