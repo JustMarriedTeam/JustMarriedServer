@@ -167,6 +167,11 @@ definitions:
     properties:
       name:
         type: string
+      status:
+        type: string
+      description:
+        type: string
+
 
   Tasks:
     type: array
