@@ -6,4 +6,10 @@ function getTasks(req, res, done) {
     }]);
 }
 
-export {getTasks};
+function postTask(req, res, done) {
+    res.status(200).json([{
+        name: 'x'
+    }]);
+}
+
+export {getTasks, postTask};
