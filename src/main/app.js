@@ -69,12 +69,12 @@ function configureErrorHandling() {
         }
         return next(err);
     });
-    app.use((err, req, res) => {
-        res.status(err.status).json({
-            message: err.isPublic ? err.message : httpStatus[err.status],
-            stack: process.env.env === 'development' ? err.stack : {}
-        });
-    });
+    // app.use((err, req, res) => {
+    //     res.status(err.status).json({
+    //         message: err.isPublic ? err.message : httpStatus[err.status],
+    //         stack: process.env.env === 'development' ? err.stack : {}
+    //     });
+    // });
 }
 
 function initializeLogging() {
