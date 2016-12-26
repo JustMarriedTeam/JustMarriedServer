@@ -72,6 +72,25 @@ paths:
               schema:
                 $ref: '#/definitions/Account'
 
+  /auth/google:
+      get:
+        description: |
+          Tries to get a authentication response from Google
+          resulting in returning a response with authentication token.
+        responses:
+          200:
+              description: Successful response
+
+  /auth/google/callback:
+      get:
+        description: |
+          Authentication callback to use for Google when authentity is verified.
+        responses:
+          200:
+              description: Account with token to use in the header
+              schema:
+                $ref: '#/definitions/Account'
+
   /accounts:
     post:
       description: |
