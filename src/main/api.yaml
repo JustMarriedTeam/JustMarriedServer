@@ -14,6 +14,15 @@ securityDefinitions:
 
 paths:
 
+  /ping:
+      get:
+        description: |
+          An easiest call to the server.
+        responses:
+          200:
+              description: Successfully communicated with the server.
+
+
   /auth/token:
       get:
         description: |
@@ -57,6 +66,25 @@ paths:
       get:
         description: |
           Authentication callback to use for Facebook when authentity is verified.
+        responses:
+          200:
+              description: Account with token to use in the header
+              schema:
+                $ref: '#/definitions/Account'
+
+  /auth/google:
+      get:
+        description: |
+          Tries to get a authentication response from Google
+          resulting in returning a response with authentication token.
+        responses:
+          200:
+              description: Successful response
+
+  /auth/google/callback:
+      get:
+        description: |
+          Authentication callback to use for Google when authentity is verified.
         responses:
           200:
               description: Account with token to use in the header
@@ -118,6 +146,23 @@ paths:
           schema:
             $ref: '#/definitions/Tasks'
 
+    post:
+      description: |
+        Creates a new `Task`
+      security:
+        - bearer: []
+      parameters:
+        - name: task
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        200:
+          description: The newly created `Task`
+          schema:
+            $ref: '#/definitions/Task'
+
 
 definitions:
 
@@ -150,6 +195,11 @@ definitions:
     properties:
       name:
         type: string
+      status:
+        type: string
+      description:
+        type: string
+
 
   Tasks:
     type: array

@@ -1,7 +1,6 @@
 import passport from "passport";
 import FacebookStrategy from "passport-facebook";
-import Account from '../../models/account.model'
-import jwtManager from '../jwt/jwtManager'
+import Account from "../../models/account.model";
 
 passport.use(new FacebookStrategy({
         clientID: '1806015219657884',
@@ -36,7 +35,8 @@ passport.use(new FacebookStrategy({
 
 exports.issueFacebookAuthenticationRequest = passport.authenticate('facebook', {
     scope: 'email',
-    session: false
+    session: false,
+    display: 'popup'
 });
 
 exports.recoverFacebookAuthenticationResponse = passport.authenticate('facebook', {

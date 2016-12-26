@@ -1,5 +1,4 @@
 import express from "express";
-import path from 'path'
 import logger from "morgan";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -12,8 +11,8 @@ import expressValidation from "express-validation";
 import helmet from "helmet";
 import winstonInstance from "./config/winston";
 import APIError from "./helpers/APIError";
-import swaggerizeExpress from 'swaggerize-express';
-import passport from 'passport'
+import swaggerizeExpress from "swaggerize-express";
+import passport from "passport";
 
 const app = express();
 const env = process.env.env;
@@ -69,12 +68,12 @@ function configureErrorHandling() {
         }
         return next(err);
     });
-    app.use((err, req, res) => {
-        res.status(err.status).json({
-            message: err.isPublic ? err.message : httpStatus[err.status],
-            stack: process.env.env === 'development' ? err.stack : {}
-        });
-    });
+    // app.use((err, req, res) => {
+    //     res.status(err.status).json({
+    //         message: err.isPublic ? err.message : httpStatus[err.status],
+    //         stack: process.env.env === 'development' ? err.stack : {}
+    //     });
+    // });
 }
 
 function initializeLogging() {
