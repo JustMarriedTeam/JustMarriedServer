@@ -11,7 +11,7 @@
   },
   "scripts": {
     "postinstall": "gulp dist",
-    "start": "node index",
+    "start": "node dist/index.js",
     "debug": "DEBUG=express* gulp nodemon",
     "build": "gulp",
     "lint": "esw *.js server config --color",
