@@ -10,7 +10,6 @@ import yaml from "gulp-yaml";
 
 
 const plugins = gulpLoadPlugins();
-console.log(JSON.stringify(process.argv));
 const options = commandLineArgs([
     {name: 'env', type: String, defaultValue: 'production'}
 ]);
@@ -36,7 +35,7 @@ const config = {
         testDir: 'build/test'
     },
     env: {
-        file: !!options.env ? `./config/${options.env}.properties` : '.env.properties'
+        file: options.env != 'local' ? `./config/${options.env}.properties` : '.env.properties'
     }
 };
 

@@ -13,12 +13,16 @@ connectDatabase();
 launchServer();
 
 function setUpEnvironment() {
-    const passedEnvVariables = extend(process.env, pick(process.env, 'dbUrl', 'jwtSecret'));
+    const passedEnvVariables = pick(process.env, 'envPropsFile', 'dbUrl', 'jwtSecret');
     envFile(`${__dirname}/env.properties`);
-    envFile(`${process.env.configFile}`, {overwrite: true, raise: false});
+    const envPropsFile = passedEnvVariables['envPropsFile'];
+    if(!!envPropsFile) {
+        debug(`Reading custom config from file ${envPropsFile}.`);
+        envFile(envPropsFile, {overwrite: true, raise: false});
+    }
     extend(process.env, passedEnvVariables);
 
-    console.log(JSON.stringify(process.env));
+    debug(`Environment variables: ${JSON.stringify(process.env)}`);
 
     // make bluebird default Promise
     Promise = require('bluebird'); // eslint-disable-line no-global-assign
