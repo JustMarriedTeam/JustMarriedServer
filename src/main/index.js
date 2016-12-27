@@ -49,6 +49,7 @@ function connectDatabase() {
 function launchServer() {
     app = require("./app.js");
     if (!module.parent) {
+        debug(`Starting server on ${process.env.port} port`);
         app.listen(process.env.port, () => {
             debug(`server started on port ${process.env.port} (${process.env.env})`);
         });
