@@ -77,6 +77,13 @@ gulp.task('testCompile', () =>
 
 gulp.task('dist', ['build'], () =>
     gulp.src(`${config.build.mainDir}/**/*`)
+        .pipe(plugins.minify({
+            ext:{
+                src:'.js',
+                min:'.js'
+            },
+            noSource: true
+        }))
         .pipe(gulp.dest(config.distDir))
 );
 

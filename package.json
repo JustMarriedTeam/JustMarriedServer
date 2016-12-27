@@ -10,8 +10,9 @@
     "npm": ">=2.15.x"
   },
   "scripts": {
+    "postinstall": "gulp dist",
+    "start": "node index",
     "debug": "DEBUG=express* gulp nodemon",
-    "start": "gulp serve",
     "build": "gulp",
     "lint": "esw *.js server config --color",
     "lint:watch": "npm run lint -- --watch",
@@ -87,6 +88,7 @@
     "gulp": "3.9.1",
     "gulp-babel": "6.1.2",
     "gulp-load-plugins": "^1.2.0",
+    "gulp-minify": "0.0.14",
     "gulp-newer": "^1.1.0",
     "gulp-nodemon": "^2.0.6",
     "gulp-rename": "^1.2.2",
