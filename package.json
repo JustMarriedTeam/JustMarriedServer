@@ -12,12 +12,12 @@
   "scripts": {
     "postinstall": "gulp dist",
     "start": "node dist/index.js",
-    "debug": "DEBUG=express* gulp nodemon",
+    "debug": "DEBUG=express* gulp nodemon --env=development",
     "build": "gulp",
     "lint": "esw *.js server config --color",
     "lint:watch": "npm run lint -- --watch",
-    "test": "NODE_ENV=test babel-node node_modules/.bin/isparta cover _mocha -- --ui bdd --reporter spec --colors --compilers js:babel-core/register ./server/**/*.test.js",
-    "test:watch": "npm run test -- --watch",
+    "test": "NODE_ENV=test babel-node node_modules/.bin/isparta cover _mocha -- --ui bdd --reporter spec --colors --compilers js:babel-core/register ./server/**/*.test.js --env=test",
+    "test:watch": "npm run test -- --watch --env=test",
     "test:check-coverage": "npm run test && istanbul check-coverage",
     "report-coverage": "coveralls < ./coverage/lcov.info"
   },
