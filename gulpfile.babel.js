@@ -110,5 +110,5 @@ gulp.task('copyResources', ['copyNonJs', 'copyEnvProps', 'yamlToJson']);
 gulp.task('build', ['copyResources', 'compile']);
 gulp.task('serve', ['clean'], () => runSequence('nodemon'));
 gulp.task('default', ['clean'], () =>
-    runSequence(['build'])
+    runSequence(['dist'])
 );

@@ -10,9 +10,9 @@
     "npm": ">=2.15.x"
   },
   "scripts": {
-    "postinstall": "gulp dist",
+    "postinstall": "gulp",
     "start": "node dist/index.js",
-    "debug": "DEBUG=express* gulp nodemon --env=development",
+    "debug": "DEBUG=* gulp nodemon --env=development",
     "build": "gulp",
     "lint": "esw *.js server config --color",
     "lint:watch": "npm run lint -- --watch",

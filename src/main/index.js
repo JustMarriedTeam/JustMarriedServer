@@ -4,9 +4,14 @@ import envFile from 'node-env-file';
 import extend from 'lodash/extend';
 import pick from 'lodash/pick';
 
-const debug = require('debug')('express-mongoose-es6-rest-api:index');
+const err = require('debug')('index:error');
+const log = require('debug')('index:log');
+log.log = console.log.bind(console);
 
 let app;
+
+log('xyz');
+err('dupa');
 
 setUpEnvironment();
 connectDatabase();
@@ -17,12 +22,12 @@ function setUpEnvironment() {
     envFile(`${__dirname}/env.properties`);
     const envPropsFile = passedEnvVariables['envPropsFile'];
     if(!!envPropsFile) {
-        debug(`Reading custom config from file ${envPropsFile}.`);
+        log(`Reading custom config from file ${envPropsFile}.`);
         envFile(envPropsFile, {overwrite: true, raise: false});
     }
     extend(process.env, passedEnvVariables);
 
-    debug(`Environment variables: ${JSON.stringify(process.env)}`);
+    log(`Environment variables: ${JSON.stringify(process.env)}`);
 
     // make bluebird default Promise
     Promise = require('bluebird'); // eslint-disable-line no-global-assign
@@ -40,8 +45,8 @@ function connectDatabase() {
 
     // print mongoose logs in dev env
     if (process.env.MONGOOSE_DEBUG) {
-        mongoose.set('debug', (collectionName, method, query, doc) => {
-            debug(`${collectionName}.${method}`, util.inspect(query, false, 20), doc);
+        mongoose.set('err', (collectionName, method, query, doc) => {
+            err(`${collectionName}.${method}`, util.inspect(query, false, 20), doc);
         });
     }
 }
@@ -49,9 +54,9 @@ function connectDatabase() {
 function launchServer() {
     app = require("./app.js");
     if (!module.parent) {
-        debug(`Starting server on ${process.env.port} port`);
+        log(`Starting server on ${process.env.port} port`);
         app.listen(process.env.port, () => {
-            debug(`server started on port ${process.env.port} (${process.env.env})`);
+            err(`server started on port ${process.env.port} (${process.env.env})`);
         });
     }
 }
