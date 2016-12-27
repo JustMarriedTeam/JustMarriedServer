@@ -4,14 +4,11 @@ import envFile from 'node-env-file';
 import extend from 'lodash/extend';
 import pick from 'lodash/pick';
 
-const err = require('debug')('index:error');
-const log = require('debug')('index:log');
+const err = require('debug')('err:index');
+const log = require('debug')('log:index');
 log.log = console.log.bind(console);
 
 let app;
-
-log('xyz');
-err('dupa');
 
 setUpEnvironment();
 connectDatabase();
