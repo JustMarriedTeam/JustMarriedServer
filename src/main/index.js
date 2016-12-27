@@ -1,18 +1,24 @@
 import mongoose from 'mongoose';
 import util from 'util';
 import envFile from 'node-env-file';
+import extend from 'lodash/extend';
+import pick from 'lodash/pick';
 
 const debug = require('debug')('express-mongoose-es6-rest-api:index');
 
-var app;
+let app;
 
 setUpEnvironment();
 connectDatabase();
 launchServer();
 
 function setUpEnvironment() {
+    const passedEnvVariables = extend(process.env, pick(process.env, 'dbUrl', 'jwtSecret'));
     envFile(`${__dirname}/env.properties`);
     envFile(`${process.env.configFile}`, {overwrite: true, raise: false});
+    extend(process.env, passedEnvVariables);
+
+    console.log(JSON.stringify(process.env));
 
     // make bluebird default Promise
     Promise = require('bluebird'); // eslint-disable-line no-global-assign
@@ -23,9 +29,9 @@ function connectDatabase() {
     Promise.promisifyAll(mongoose);
 
     // connect to mongo db
-    mongoose.connect(process.env.db, {server: {socketOptions: {keepAlive: 1}}});
+    mongoose.connect(process.env.dbUrl, {server: {socketOptions: {keepAlive: 1}}});
     mongoose.connection.on('error', () => {
-        throw new Error(`unable to connect to database: ${process.env.db}`);
+        throw new Error(`unable to connect to database: ${process.env.dbUrl}`);
     });
 
     // print mongoose logs in dev env

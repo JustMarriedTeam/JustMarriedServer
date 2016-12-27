@@ -1,19 +1,19 @@
-import gulp from 'gulp';
-import rename from 'gulp-rename';
-import gulpLoadPlugins from 'gulp-load-plugins';
-import path from 'path';
-import del from 'del';
-import runSequence from 'run-sequence';
-import commandLineArgs from 'command-line-args';
-import yaml from 'gulp-yaml'
-import pick from 'lodash/pick'
+import gulp from "gulp";
+import rename from "gulp-rename";
+import {log} from "gulp-util";
+import gulpLoadPlugins from "gulp-load-plugins";
+import path from "path";
+import del from "del";
+import runSequence from "run-sequence";
+import commandLineArgs from "command-line-args";
+import yaml from "gulp-yaml";
 
 
 const plugins = gulpLoadPlugins();
-
+console.log(JSON.stringify(process.argv));
 const options = commandLineArgs([
-    {name: 'env', type: String}
-], pick(process.argv, 'name'));
+    {name: 'env', type: String, defaultValue: 'production'}
+]);
 
 const config = {
     src: {
@@ -34,6 +34,9 @@ const config = {
         baseDir: 'build',
         mainDir: 'build/main',
         testDir: 'build/test'
+    },
+    env: {
+        file: !!options.env ? `./config/${options.env}.properties` : '.env.properties'
     }
 };
 
@@ -53,7 +56,8 @@ gulp.task('yamlToJson', () =>
 );
 
 gulp.task('copyEnvProps', () =>
-    gulp.src(!!options.env ? `./config/${options.env}.properties` : '.env.properties')
+    gulp.src(config.env.file)
+        .on('data', () => log(`Copying property file ${config.env.file}`))
         .pipe(rename('env.properties'))
         .pipe(gulp.dest(config.build.mainDir))
 );
@@ -78,9 +82,9 @@ gulp.task('testCompile', () =>
 gulp.task('dist', ['build'], () =>
     gulp.src(`${config.build.mainDir}/**/*`)
         .pipe(plugins.minify({
-            ext:{
-                src:'.js',
-                min:'.js'
+            ext: {
+                src: '.js',
+                min: '.js'
             },
             noSource: true
         }))
