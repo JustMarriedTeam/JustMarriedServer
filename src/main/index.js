@@ -15,7 +15,7 @@ connectDatabase();
 launchServer();
 
 function setUpEnvironment() {
-    const passedEnvVariables = pick(process.env, 'DEBUG', 'protocol', 'host', 'port', 'envPropsFile', 'dbUrl', 'jwtSecret');
+    const passedEnvVariables = pick(process.env, 'DEBUG', 'protocol', 'host', 'port', 'domain', 'envPropsFile', 'dbUrl', 'jwtSecret');
     envFile(`${__dirname}/env.properties`);
     const envPropsFile = passedEnvVariables['envPropsFile'];
     if(!!envPropsFile) {
