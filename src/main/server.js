@@ -1,0 +1,1 @@
+export const SERVER_URI=`${process.env.protocol}://${process.env.host}:${process.env.port}`;

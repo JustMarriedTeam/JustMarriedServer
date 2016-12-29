@@ -11,6 +11,7 @@
   },
   "scripts": {
     "postinstall": "gulp",
+    "serve": "gulp nodemon --env=development",
     "start": "node dist/index.js",
     "debug": "DEBUG=* gulp nodemon --env=development",
     "build": "gulp",

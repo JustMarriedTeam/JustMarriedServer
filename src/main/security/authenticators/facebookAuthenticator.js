@@ -1,11 +1,12 @@
 import passport from "passport";
 import FacebookStrategy from "passport-facebook";
 import Account from "../../models/account.model";
+import { SERVER_URI } from "../../server";
 
 passport.use(new FacebookStrategy({
         clientID: '1806015219657884',
         clientSecret: '1e9d67e72737902cce62420e268d5a82',
-        callbackURL: 'http://localhost:2701/api/auth/facebook/callback',
+        callbackURL: `${SERVER_URI}/api/auth/facebook/callback`,
         profileFields: ["emails", "displayName", "name"]
     },
     function (accessToken, refreshToken, profile, done) {

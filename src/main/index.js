@@ -4,8 +4,8 @@ import envFile from 'node-env-file';
 import extend from 'lodash/extend';
 import pick from 'lodash/pick';
 
-const err = require('debug')('err:index');
-const log = require('debug')('log:index');
+const err = require('debug')('app:err:index');
+const log = require('debug')('app:log:index');
 log.log = console.log.bind(console);
 
 let app;
@@ -15,7 +15,7 @@ connectDatabase();
 launchServer();
 
 function setUpEnvironment() {
-    const passedEnvVariables = pick(process.env, 'port', 'envPropsFile', 'dbUrl', 'jwtSecret');
+    const passedEnvVariables = pick(process.env, 'DEBUG', 'protocol', 'host', 'port', 'envPropsFile', 'dbUrl', 'jwtSecret');
     envFile(`${__dirname}/env.properties`);
     const envPropsFile = passedEnvVariables['envPropsFile'];
     if(!!envPropsFile) {
