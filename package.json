@@ -13,7 +13,7 @@
     "postinstall": "gulp",
     "serve": "gulp nodemon --env=development",
     "start": "node dist/index.js",
-    "debug": "DEBUG=* gulp nodemon --env=development",
+    "debug": "DEBUG=app:* gulp nodemon --env=development",
     "build": "gulp",
     "lint": "esw *.js server config --color",
     "lint:watch": "npm run lint -- --watch",
