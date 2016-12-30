@@ -1,12 +1,7 @@
-import mongoose from 'mongoose';
-import util from 'util';
-import envFile from 'node-env-file';
-import extend from 'lodash/extend';
-import pick from 'lodash/pick';
-
-const err = require('debug')('app:err:index');
-const log = require('debug')('app:log:index');
-log.log = console.log.bind(console);
+import mongoose from "mongoose";
+import util from "util";
+import logger from "./logger";
+import properties from "./properties";
 
 let app;
 
@@ -15,19 +10,8 @@ connectDatabase();
 launchServer();
 
 function setUpEnvironment() {
-    const passedEnvVariables = pick(process.env, 'DEBUG', 'protocol', 'host', 'port', 'domain', 'envPropsFile', 'dbUrl', 'jwtSecret');
-    envFile(`${__dirname}/env.properties`);
-    const envPropsFile = passedEnvVariables['envPropsFile'];
-    if(!!envPropsFile) {
-        log(`Reading custom config from file ${envPropsFile}.`);
-        envFile(envPropsFile, {overwrite: true, raise: false});
-    }
-    extend(process.env, passedEnvVariables);
-
-    log(`Environment variables: ${JSON.stringify(process.env)}`);
-
-    // make bluebird default Promise
-    Promise = require('bluebird'); // eslint-disable-line no-global-assign
+    logger.debug(`Environment variables: ${JSON.stringify(properties)}`);
+    Promise = require('bluebird');
 }
 
 function connectDatabase() {
@@ -51,9 +35,9 @@ function connectDatabase() {
 function launchServer() {
     app = require("./app.js");
     if (!module.parent) {
-        log(`Starting server on ${process.env.port} port`);
+        logger.info(`Starting server on ${process.env.port} port`);
         app.listen(process.env.port, () => {
-            err(`server started on port ${process.env.port} (${process.env.env})`);
+            logger.info(`server started on port ${process.env.port} (${process.env.env})`);
         });
     }
 }

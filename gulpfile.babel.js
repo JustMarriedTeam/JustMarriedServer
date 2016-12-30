@@ -11,7 +11,8 @@ import yaml from "gulp-yaml";
 
 const plugins = gulpLoadPlugins();
 const options = commandLineArgs([
-    {name: 'env', type: String, defaultValue: 'production'}
+    {name: 'env', type: String, defaultValue: 'production'},
+    {name: 'logLevel', type: String, defaultValue: 'production'}
 ]);
 
 const config = {

@@ -9,7 +9,7 @@ import httpStatus from "http-status";
 import expressWinston from "express-winston";
 import expressValidation from "express-validation";
 import helmet from "helmet";
-import winstonInstance from "./config/winston";
+import winstonInstance from "./logger";
 import APIError from "./helpers/APIError";
 import swaggerizeExpress from "swaggerize-express";
 import passport from "passport";
