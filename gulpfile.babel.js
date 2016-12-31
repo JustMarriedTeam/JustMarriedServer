@@ -36,7 +36,7 @@ const config = {
         testDir: 'build/test'
     },
     env: {
-        file: options.env != 'local' ? `./config/${options.env}.properties` : '.env.properties'
+        file: options.env != 'local' ? `./config/${options.env}.json` : '.env.json'
     }
 };
 

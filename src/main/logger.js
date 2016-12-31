@@ -9,7 +9,7 @@ const logger = new (winston.Logger)({
             colorize: true,
             silent: false,
             timestamp: true,
-            level: properties.logLevel
+            level: properties.get('logLevel')
         })
     ]
 });

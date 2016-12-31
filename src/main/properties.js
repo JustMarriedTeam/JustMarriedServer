@@ -1,13 +1,40 @@
-import envFile from 'node-env-file';
-import extend from 'lodash/extend';
-import pick from 'lodash/pick';
+import nconf from "nconf";
 
-const passedEnvVariables = pick(process.env,
-    'logLevel', 'protocol', 'host', 'port', 'domain', 'envPropsFile', 'dbUrl', 'jwtSecret');
-envFile(`${__dirname}/env.properties`);
-const envPropsFile = passedEnvVariables['envPropsFile'];
-if(!!envPropsFile) {
-    envFile(envPropsFile, {overwrite: true, raise: false});
+const REQUIRED_PROPERTIES = [
+    'logLevel',
+    'protocol',
+    'host',
+    'port',
+    'domain',
+    'dbUrl',
+    'jwtSecret'
+];
+
+nconf.use('memory');
+
+nconf.argv({
+    "logLevel": {
+        describe: 'Logging level of the application'
+    },
+    'envPropsFile': {
+        describe: 'File that overrides properties loaded from all other files'
+    }
+});
+
+nconf.env(['envPropsFile', ...REQUIRED_PROPERTIES]);
+
+if(nconf.get('envPropsFile')) {
+    nconf.file('local', nconf.get('envPropsFile'));
 }
 
-export default extend({}, process.env, passedEnvVariables);
+if(nconf.get('envPropsDir')) {
+    nconf.file('system', {
+        dir: nconf.get('envPropsDir'),
+        search: true
+    });
+}
+
+nconf.file('application', `${__dirname}/env.properties`);
+nconf.required(REQUIRED_PROPERTIES);
+
+export default nconf;

@@ -18,16 +18,17 @@ function connectDatabase() {
     mongoose.Promise = Promise;
     Promise.promisifyAll(mongoose);
 
+    const dbUrl = properties.get('dbUrl');
     // connect to mongo db
-    mongoose.connect(process.env.dbUrl, {server: {socketOptions: {keepAlive: 1}}});
+    mongoose.connect(dbUrl, {server: {socketOptions: {keepAlive: 1}}});
     mongoose.connection.on('error', () => {
-        throw new Error(`unable to connect to database: ${process.env.dbUrl}`);
+        throw new Error(`unable to connect to database: ${dbUrl}`);
     });
 
     // print mongoose logs in dev env
-    if (process.env.MONGOOSE_DEBUG) {
+    if (properties.get('MONGOOSE_DEBUG')) {
         mongoose.set('err', (collectionName, method, query, doc) => {
-            err(`${collectionName}.${method}`, util.inspect(query, false, 20), doc);
+            logger.error(`${collectionName}.${method}`, util.inspect(query, false, 20), doc);
         });
     }
 }
@@ -35,9 +36,11 @@ function connectDatabase() {
 function launchServer() {
     app = require("./app.js");
     if (!module.parent) {
-        logger.info(`Starting server on ${process.env.port} port`);
-        app.listen(process.env.port, () => {
-            logger.info(`server started on port ${process.env.port} (${process.env.env})`);
+        const port = properties.get('port');
+        const env = properties.get('env');
+        logger.info(`Starting server on ${port} port`);
+        app.listen(port, () => {
+            logger.info(`server started on port ${port} (${env})`);
         });
     }
 }

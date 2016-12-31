@@ -1,15 +1,20 @@
-import logger from './logger'
+import logger from './logger';
+import properties from './properties';
+
+let protocol = properties.get('protocol');
+let host = properties.get('host');
+let domain = properties.get('domain');
+let port = properties.get('port');
 
 logger.info(
     `
        Server info:
-        protocol: ${process.env.protocol},
-        host: ${process.env.host},
-        domain: ${process.env.domain},
-        port: ${process.env.port}
+        protocol: ${protocol},
+        host: ${host},
+        domain: ${domain},
+        port: ${port}
         
     `
 );
 
-export const SERVER_URI = `${process.env.protocol}://${process.env.host}`
-    + (!process.env.domain ? `:${process.env.port}` : '');
+export const SERVER_URI = `${protocol}://${host}` + (!domain ? `:${port}` : '');

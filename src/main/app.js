@@ -13,9 +13,10 @@ import winstonInstance from "./logger";
 import APIError from "./helpers/APIError";
 import swaggerizeExpress from "swaggerize-express";
 import passport from "passport";
+import properties from './properties';
 
 const app = express();
-const env = process.env.env;
+const env = properties.get('env');
 
 
 initializeLogging();
