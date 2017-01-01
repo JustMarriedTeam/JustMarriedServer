@@ -1,14 +1,14 @@
-import Task from '../models/task.model';
+import Task from "../models/task.model";
 
 function listTasks(criteria) {
-    return Task.find()
-        .skip(criteria.skip || 0)
-        .limit(criteria.limit || 1000)
+  return Task.find()
+        .skip(criteria.skip)
+        .limit(criteria.limit)
         .exec();
 }
 
 function createTask(task) {
-    return Task.createAsync(task);
+  return Task.createAsync(task);
 }
 
-export { listTasks, createTask }
+export { listTasks, createTask };

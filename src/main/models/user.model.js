@@ -1,11 +1,11 @@
-import Promise from 'bluebird';
-import mongoose from 'mongoose';
-import httpStatus from 'http-status';
-import APIError from '../helpers/APIError';
+import Promise from "bluebird";
+import mongoose from "mongoose";
+import httpStatus from "http-status";
+import APIError from "../helpers/APIError";
 
-/**
- * User Schema
- */
+const DEFAULT_SKIP = 0;
+const DEFAULT_LIMIT = 50;
+
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
   mobileNumber: {
     type: String,
     required: true,
-    match: [/^[1-9][0-9]{9}$/, 'The value of path {PATH} ({VALUE}) is not a valid mobile number.']
+    match: [/^[1-9][0-9]{9}$/, "The value of path {PATH} ({VALUE}) is not a valid mobile number."]
   },
   createdAt: {
     type: Date,
@@ -22,28 +22,12 @@ const UserSchema = new mongoose.Schema({
   }
 });
 
-/**
- * Add your
- * - pre-save hooks
- * - validations
- * - virtuals
- */
-
-/**
- * Methods
- */
 UserSchema.method({
 });
 
-/**
- * Statics
- */
+
 UserSchema.statics = {
-  /**
-   * Get user
-   * @param {ObjectId} id - The objectId of user.
-   * @returns {Promise<User, APIError>}
-   */
+
   get(id) {
     return this.findById(id)
       .exec()
@@ -51,27 +35,19 @@ UserSchema.statics = {
         if (user) {
           return user;
         }
-        const err = new APIError('No such user exists!', httpStatus.NOT_FOUND);
+        const err = new APIError("No such user exists!", httpStatus.NOT_FOUND);
         return Promise.reject(err);
       });
   },
 
-  /**
-   * List users in descending order of 'createdAt' timestamp.
-   * @param {number} skip - Number of users to be skipped.
-   * @param {number} limit - Limit number of users to be returned.
-   * @returns {Promise<User[]>}
-   */
-  list({ skip = 0, limit = 50 } = {}) {
+  list({ skip = DEFAULT_SKIP, limit = DEFAULT_LIMIT } = {}) {
     return this.find()
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
       .exec();
   }
+
 };
 
-/**
- * @typedef User
- */
-export default mongoose.model('User', UserSchema);
+export default mongoose.model("User", UserSchema);

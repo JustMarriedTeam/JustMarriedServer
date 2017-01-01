@@ -13,92 +13,83 @@ import winstonInstance from "./logger";
 import APIError from "./helpers/APIError";
 import swaggerizeExpress from "swaggerize-express";
 import passport from "passport";
-import properties from './properties';
+import properties from "./properties";
 
 const app = express();
-const env = properties.get('env');
+const env = properties.get("env");
+const api = require("./api.json");
 
 
 initializeLogging();
 configureOthers();
 setupAuth();
-mountApi();
 swaggerize();
 configureErrorHandling();
 configureNotFoundBehaviour();
 
 function setupAuth() {
-    app.use(passport.initialize());
+  app.use(passport.initialize());
 }
 
 function swaggerize() {
-    app.use(swaggerizeExpress({
-        api: require('./api.json'), // can change it to yaml and it would work, get rid of that plugin...
-        docspath: '/api-docs',
-        handlers: './handlers',
-        security: './security'
-    }));
+  app.use(swaggerizeExpress({
+    api,
+    docspath: "/api-docs",
+    handlers: "./handlers",
+    security: "./security"
+  }));
 }
 
 function configureOthers() {
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({extended: true}));
-    app.use(cookieParser());
-    app.use(compress());
-    app.use(methodOverride());
-    app.use(helmet());
-    app.use(cors());
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(cookieParser());
+  app.use(compress());
+  app.use(methodOverride());
+  app.use(helmet());
+  app.use(cors());
 }
 
 function configureNotFoundBehaviour() {
-    app.use((req, res, next) => {
-        const err = new APIError('API not found', httpStatus.NOT_FOUND);
-        return next(err);
-    });
+  app.use((req, res, next) => {
+    const err = new APIError("API not found", httpStatus.NOT_FOUND);
+    return next(err);
+  });
 }
 
 function configureErrorHandling() {
-    app.use((err, req, res, next) => {
-        if (err instanceof expressValidation.ValidationError) {
-            const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
-            const error = new APIError(unifiedErrorMessage, err.status, true);
-            return next(error);
-        } else if (!(err instanceof APIError)) {
-            const apiError = new APIError(err.message, err.status, err.isPublic);
-            return next(apiError);
-        }
-        return next(err);
-    });
-    // app.use((err, req, res) => {
-    //     res.status(err.status).json({
-    //         message: err.isPublic ? err.message : httpStatus[err.status],
-    //         stack: process.env.env === 'development' ? err.stack : {}
-    //     });
-    // });
+  app.use((err, req, res, next) => { // eslint-disable-line max-params
+    if (err instanceof expressValidation.ValidationError) {
+      const unifiedErrorMessage = err.errors.map((error) =>
+        error.messages.join(". ")).join(" and ");
+      const error = new APIError(unifiedErrorMessage, err.status, true);
+      return next(error);
+    } else if (!(err instanceof APIError)) {
+      const apiError = new APIError(err.message, err.status, err.isPublic);
+      return next(apiError);
+    }
+    return next(err);
+  });
 }
 
 function initializeLogging() {
-    if (env === 'development') {
-        app.use(logger('dev'));
-        expressWinston.requestWhitelist.push('body');
-        expressWinston.responseWhitelist.push('body');
-        app.use(expressWinston.logger({
-            winstonInstance,
-            meta: true,
-            msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-            colorStatus: true
-        }));
-    }
+  if (env === "development") {
+    app.use(logger("dev"));
+    expressWinston.requestWhitelist.push("body");
+    expressWinston.responseWhitelist.push("body");
+    app.use(expressWinston.logger({
+      winstonInstance,
+      meta: true,
+      msg: "HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms",
+      colorStatus: true
+    }));
+  }
 
-    if (env !== 'test') {
-        app.use(expressWinston.errorLogger({
-            winstonInstance
-        }));
-    }
-}
-
-function mountApi() {
-    // app.use('/api', routes);
+  if (env !== "test") {
+    app.use(expressWinston.errorLogger({
+      winstonInstance
+    }));
+  }
 }
 
 export default app;

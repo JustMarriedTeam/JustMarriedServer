@@ -1,5 +1,5 @@
-import { postAccount } from '../controllers/account.controller'
+import { postAccount } from "../controllers/account.controller";
 
 module.exports = {
-    post: postAccount
+  post: postAccount
 };

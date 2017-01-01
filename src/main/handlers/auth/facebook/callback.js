@@ -2,8 +2,8 @@ import facebookAuthenticator from "../../../security/authenticators/facebookAuth
 import {getReleasedToken} from "../../../controllers/auth.controller";
 
 module.exports = {
-    get: [
-        facebookAuthenticator.recoverFacebookAuthenticationResponse,
-        getReleasedToken
-    ]
+  get: [
+    facebookAuthenticator.recoverFacebookAuthenticationResponse,
+    getReleasedToken
+  ]
 };

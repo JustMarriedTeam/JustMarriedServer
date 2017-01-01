@@ -2,8 +2,8 @@ import googleAuthenticator from "../../../security/authenticators/googleAuthenti
 import {getReleasedToken} from "../../../controllers/auth.controller";
 
 module.exports = {
-    get: [
-        googleAuthenticator.recoverGoogleAuthenticationResponse,
-        getReleasedToken
-    ]
+  get: [
+    googleAuthenticator.recoverGoogleAuthenticationResponse,
+    getReleasedToken
+  ]
 };

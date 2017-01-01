@@ -1,7 +1,9 @@
+import HttpStatus from "http-status";
+
 module.exports = {
-    get: function (req, res) {
-        res.status(200).json({
-            text: 'Hi there!'
-        });
-    }
+  get(req, res) {
+    res.status(HttpStatus.OK).json({
+      text: "Hi there!"
+    });
+  }
 };

@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
 
 function generateToken(userId) {
-    return jwt.sign({id: userId}, 'serversecret', {expiresIn: 3600});
+  return jwt.sign({id: userId}, "serversecret", {expiresIn: 3600});
 }
 
 module.exports.releaseToken = function (account) {
-    let token = generateToken(account.id);
-    return {
-        token: token
-    }
+  const token = generateToken(account.id);
+  return {
+    token
+  };
 };
 
 //http://mongoosejs.com/docs/queries.html

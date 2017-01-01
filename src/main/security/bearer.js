@@ -1,5 +1,5 @@
-import { isAuthenticated } from './authenticators/jwtAuthenticator'
+import { isAuthenticated } from "./authenticators/jwtAuthenticator";
 
-export default isAuthenticated
+export default isAuthenticated;
 
 //https://github.com/karlmoad/test-api

@@ -1,5 +1,24 @@
 {
   "parser": "babel-eslint",
-  "extends": "defaults/configurations/airbnb/es6",
-  "rules": {}
+  "extends": "walmart/configurations/es6-node",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "env": {
+    "browser": false,
+    "node": true
+  },
+  "rules": {
+    "filenames/match-regex": ["error", "^((\\{[a-z]+([A-Z][a-z]+)+\\})|([a-z]+)|([a-z]+\\.[a-z]+))$"],
+    "filenames/no-index": "warn",
+    "func-style": "off",
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false,
+        "classes": true
+      }
+    ]
+  }
 }
