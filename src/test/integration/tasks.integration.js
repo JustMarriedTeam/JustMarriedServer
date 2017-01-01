@@ -28,36 +28,30 @@ describe("Tasks", () => {
 
   let token;
 
-  before((done) => {
-    Promise.join(
+  before(() => Promise.join(
       setUpAccounts(blueAccount),
       setUpTasks(redTask, greenTask, blueTask),
         (account) => {
           token = getTokenFor(account);
         }
-    ).finally(done);
-  });
+  ));
 
-  after((done) => Promise.all(
+  after(() => Promise.join(
     tearDownAccounts(),
     tearDownTasks()
-  ).finally(done));
+  ));
 
   describe("GET /api/tasks", () => {
 
-    it("should return OK", (done) => {
+    it("should get all tasks", () =>
       request(app)
         .get("/api/tasks")
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.deep.equal({
-            text: "Hi there!"
-          });
-          done();
+          expect(res.body).to.have.lengthOf(3);
         })
-        .catch(done);
-    });
+    );
 
   });
 
