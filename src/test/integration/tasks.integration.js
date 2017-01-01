@@ -1,5 +1,6 @@
 /* global describe, before, after, it */
 
+import Promise from "bluebird";
 import request from "supertest";
 import httpStatus from "http-status";
 import chai, { expect } from "chai";
@@ -11,6 +12,14 @@ import {
   tearDownAccounts
 } from "../data/accounts.data";
 
+import {
+  redTask,
+  greenTask,
+  blueTask,
+  setUpTasks,
+  tearDownTasks
+} from "../data/tasks.data";
+
 import { getTokenFor } from "../utils/auth.utils";
 
 chai.config.includeStack = true;
@@ -20,12 +29,19 @@ describe("Tasks", () => {
   let token;
 
   before((done) => {
-    setUpAccounts(blueAccount).then((account) => {
-      token = getTokenFor(account);
-    }).finally(done);
+    Promise.join(
+      setUpAccounts(blueAccount),
+      setUpTasks(redTask, greenTask, blueTask),
+        (account) => {
+          token = getTokenFor(account);
+        }
+    ).finally(done);
   });
 
-  after((done) => tearDownAccounts().then(done));
+  after((done) => Promise.all(
+    tearDownAccounts(),
+    tearDownTasks()
+  ).finally(done));
 
   describe("GET /api/tasks", () => {
 
