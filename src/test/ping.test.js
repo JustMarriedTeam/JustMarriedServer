@@ -15,7 +15,9 @@ describe("Ping test", () => {
         .get("/api/ping")
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.equal("Hi there!");
+          expect(res.body).to.deep.equal({
+            text: "Hi there!"
+          });
           done();
         })
         .catch(done);

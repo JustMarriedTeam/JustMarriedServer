@@ -5,15 +5,24 @@ import gulpLoadPlugins from "gulp-load-plugins";
 import path from "path";
 import del from "del";
 import runSequence from "run-sequence";
-import commandLineArgs from "command-line-args";
 import yaml from "gulp-yaml";
+import minimist from "minimist";
+import pick from "lodash/pick";
+import keys from "lodash/keys";
+import extend from "lodash/extend";
 
+const defaultConfig = {
+  env: "production",
+  logLevel: "production"
+};
 
 const plugins = gulpLoadPlugins();
-const options = commandLineArgs([
-    {name: "env", type: String, defaultValue: "production"},
-    {name: "logLevel", type: String, defaultValue: "production"}
-]);
+
+const options = extend(
+  {},
+  defaultConfig,
+  pick(minimist(process.argv), ...keys(defaultConfig))
+);
 
 const config = {
   src: {
