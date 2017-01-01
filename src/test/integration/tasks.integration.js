@@ -20,16 +20,15 @@ describe("Tasks", () => {
   let token;
 
   before((done) => {
-    console.log('before');
     setUpAccounts(blueAccount).then((account) => {
       token = getTokenFor(account);
-      console.log(token);
     }).finally(done);
   });
 
   after((done) => tearDownAccounts().then(done));
 
   describe("GET /api/tasks", () => {
+
     it("should return OK", (done) => {
       request(app)
         .get("/api/tasks")
@@ -43,6 +42,7 @@ describe("Tasks", () => {
         })
         .catch(done);
     });
+
   });
 
 });
