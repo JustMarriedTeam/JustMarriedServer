@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
+import database from "../database";
 import bcrypt from "bcrypt-nodejs";
+import User from "./user.model";
 
 const SALT_LENGTH = 8;
 
-const AccountSchema = new mongoose.Schema({
+const AccountSchema = new database.Schema({
   login: {
     type: String,
     index: true
@@ -31,6 +32,10 @@ const AccountSchema = new mongoose.Schema({
       email: String,
       name: String
     }
+  },
+  user: {
+    type: database.Schema.ObjectId,
+    ref: User.modelName
   }
 });
 
@@ -42,4 +47,4 @@ AccountSchema.methods.isPasswordValid = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-export default mongoose.model("Account", AccountSchema);
+export default database.model("Account", AccountSchema);

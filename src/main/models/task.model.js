@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
+import database from "../database";
 import pick from "lodash/pick";
 
 
-const TaskSchema = new mongoose.Schema({
+const TaskSchema = new database.Schema({
   name: String,
   description: String,
   status: String
@@ -15,4 +15,4 @@ TaskSchema.method({
 });
 
 
-export default mongoose.model("Task", TaskSchema);
+export default database.model("Task", TaskSchema);
