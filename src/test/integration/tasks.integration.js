@@ -43,13 +43,24 @@ describe("Tasks", () => {
 
   describe("GET /api/tasks", () => {
 
-    it("should get all tasks", () =>
+    it("can get all tasks", () =>
       request(app)
         .get("/api/tasks")
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
           expect(res.body).to.have.lengthOf(3);
+        })
+    );
+
+    it("can limit tasks got", () =>
+      request(app)
+        .get("/api/tasks")
+        .query({ limit: 1 })
+        .set("token", token)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body).to.have.lengthOf(1);
         })
     );
 
