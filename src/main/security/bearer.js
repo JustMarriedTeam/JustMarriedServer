@@ -1,4 +1,4 @@
-import { isAuthenticated } from "./authenticators/jwtAuthenticator";
+import { isAuthenticated } from "./authenticators/jwt.authenticator";
 
 export default isAuthenticated;
 
