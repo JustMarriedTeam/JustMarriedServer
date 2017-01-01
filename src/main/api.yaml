@@ -137,6 +137,9 @@ paths:
         - name: offset
           in: query
           type: string
+        - name: sortBy
+          in: query
+          type: object
         - name: state
           in: query
           type: string

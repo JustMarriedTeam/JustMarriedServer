@@ -14,6 +14,7 @@ import {
 } from "../data/accounts.data";
 
 import {
+  blackTask,
   redTask,
   greenTask,
   blueTask,
@@ -31,7 +32,7 @@ describe("Tasks", () => {
 
   before(() => Promise.join(
     setUpAccounts(blueAccount),
-    setUpTasks(redTask, greenTask, blueTask),
+    setUpTasks(blackTask, redTask, greenTask, blueTask),
     (account) => {
       token = getTokenFor(account);
     }
@@ -50,21 +51,52 @@ describe("Tasks", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.have.lengthOf(3);
+          expect(res.body).to.have.lengthOf(4);
           forEach([
+            {
+              "name": "black task",
+              "status": "blocked"
+            },
             {
               "name": "red task",
               "status": "blocked"
             },
             {
+              "name": "blue task",
+              "status": "done"
+            },
+            {
               "name": "green task",
               "status": "pending"
+            }
+          ], (task) => expect(res.body).to.include(task));
+        })
+    );
+
+    it("tasks returned are sorted by state and name", () =>
+      request(app)
+        .get("/api/tasks")
+        .set("token", token)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.body).to.be.deep.equal([
+            {
+              "name": "black task",
+              "status": "blocked"
+            },
+            {
+              "name": "red task",
+              "status": "blocked"
             },
             {
               "name": "blue task",
               "status": "done"
+            },
+            {
+              "name": "green task",
+              "status": "pending"
             }
-          ], (task, index) => expect(res.body[index]).to.be.deep.equal(task));
+          ]);
         })
     );
 
@@ -88,7 +120,7 @@ describe("Tasks", () => {
         .then((res) => {
           expect(res.body).to.be.deep.equal([
             {
-              "name": "red task",
+              "name": "black task",
               "status": "blocked"
             }
           ]);

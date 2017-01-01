@@ -4,13 +4,13 @@ import map from "lodash/map";
 
 const redTask = new Task({
   name: "red task",
-  description: "a blue task",
+  description: "a red task",
   status: TASK_STATUS.BLOCKED
 });
 
 const greenTask = new Task({
   name: "green task",
-  description: "a blue task",
+  description: "a green task",
   status: TASK_STATUS.PENDING
 });
 
@@ -18,6 +18,12 @@ const blueTask = new Task({
   name: "blue task",
   description: "a blue task",
   status: TASK_STATUS.DONE
+});
+
+const blackTask = new Task({
+  name: "black task",
+  description: "a black task",
+  status: TASK_STATUS.BLOCKED
 });
 
 function setUpTasks(...tasks) {
@@ -32,6 +38,7 @@ export {
   redTask,
   greenTask,
   blueTask,
+  blackTask,
   setUpTasks,
   tearDownTasks
 };
