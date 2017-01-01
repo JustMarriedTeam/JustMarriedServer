@@ -1,0 +1,25 @@
+/* global describe, it */
+
+import request from "supertest-as-promised";
+import httpStatus from "http-status";
+import chai, { expect } from "chai";
+import app from "../main/index";
+
+chai.config.includeStack = true;
+
+describe("Ping test", () => {
+
+  describe("# GET /api/ping", () => {
+    it("should return OK", (done) => {
+      request(app)
+        .get("/api/ping")
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(res.text).to.equal("Hi there!");
+          done();
+        })
+        .catch(done);
+    });
+  });
+
+});

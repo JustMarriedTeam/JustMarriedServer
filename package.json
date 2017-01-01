@@ -18,7 +18,7 @@
     "eslint": "eslint \"src/main/**/*.js\"",
     "lint": "npm run eslint",
     "lint:watch": "npm run lint -- --watch",
-    "test": "NODE_ENV=test babel-node node_modules/.bin/isparta cover _mocha -- --ui bdd --reporter spec --colors --compilers js:babel-core/register ./server/**/*.test.js --env=test",
+    "test": "mocha --opts .mocharc ",
     "test:watch": "npm run test -- --watch --env=test",
     "test:check-coverage": "npm run test && istanbul check-coverage",
     "report-coverage": "coveralls < ./coverage/lcov.info"
