@@ -10,7 +10,7 @@ import expressWinston from "express-winston";
 import expressValidation from "express-validation";
 import helmet from "helmet";
 import winstonInstance from "./logger";
-import APIError from "./helpers/APIError";
+import APIError from "./helpers/api.error";
 import swaggerizeExpress from "swaggerize-express";
 import passport from "passport";
 import properties from "./properties";

@@ -76,7 +76,12 @@ gulp.task("mainCompile", () =>
 
 gulp.task("testCompile", () =>
     gulp.src(`${config.src.test.baseDir}/**/*.js`, {base: "./src"})
+        .pipe(plugins.sourcemaps.init())
         .pipe(plugins.babel())
+        .pipe(plugins.sourcemaps.write(".", {
+          includeContent: false,
+          sourceRoot: "./src"
+        }))
         .pipe(gulp.dest(config.build.baseDir))
 );
 

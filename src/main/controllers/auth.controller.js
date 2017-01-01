@@ -1,4 +1,4 @@
-import jwtManager from "../security/jwt/jwtManager";
+import jwtManager from "../security/jwt/jwt.manager";
 import { format } from "util";
 import properties from "../properties";
 

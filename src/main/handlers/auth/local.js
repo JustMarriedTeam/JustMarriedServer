@@ -1,4 +1,4 @@
-import localAuthenticator from "../../security/authenticators/localAuthenticator";
+import localAuthenticator from "../../security/authenticators/local.authenticator";
 import { getReleasedToken } from "../../controllers/auth.controller";
 
 module.exports = {
