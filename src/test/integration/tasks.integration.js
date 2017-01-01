@@ -8,7 +8,7 @@ import app from "../../main/index";
 import forEach from "lodash/forEach";
 
 import {
-  blueAccount,
+  anAccount,
   setUpAccounts,
   tearDownAccounts
 } from "../data/accounts.data";
@@ -31,8 +31,8 @@ describe("Tasks", () => {
   let token;
 
   before(() => Promise.join(
-    setUpAccounts(blueAccount),
     setUpTasks(blackTask, redTask, greenTask, blueTask),
+    setUpAccounts(anAccount().tasks(blackTask, redTask, greenTask, blueTask).build()),
     (account) => {
       token = getTokenFor(account);
     }

@@ -1,12 +1,6 @@
 import Account from "../../main/models/account.model";
 import User from "../../main/models/user.model";
-
-const blueAccount = new Account({
-  user: new User({
-    firstName: "firstName",
-    lastName: "lastName"
-  })
-});
+import BuilderDecorator from "../utils/builder.decorator";
 
 function setUpAccounts(account) {
   return account.saveAsync();
@@ -15,9 +9,17 @@ function setUpAccounts(account) {
 function tearDownAccounts() {
   return Account.removeAsync();
 }
+// account.schema.obj
+function anAccount() {
+  return new BuilderDecorator(Account)
+    .user(new User({
+      firstName: "firstName",
+      lastName: "lastName"
+    }));
+}
 
 export {
-  blueAccount,
+  anAccount,
   setUpAccounts,
   tearDownAccounts
 };
