@@ -14,6 +14,10 @@ import {
 } from "../data/accounts.data";
 
 import {
+  aUser
+} from "../data/users.data";
+
+import {
   blackTask,
   redTask,
   greenTask,
@@ -31,8 +35,10 @@ describe("Tasks", () => {
   let token;
 
   before(() => Promise.join(
+    setUpAccounts(anAccount().withUser(
+      aUser().withTasks([blackTask, redTask, greenTask, blueTask]).build()
+    ).build()),
     setUpTasks(blackTask, redTask, greenTask, blueTask),
-    setUpAccounts(anAccount().tasks(blackTask, redTask, greenTask, blueTask).build()),
     (account) => {
       token = getTokenFor(account);
     }
