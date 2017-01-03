@@ -14,14 +14,16 @@ import {
 } from "../data/accounts.data";
 
 import {
-  aUser
+  smallUser,
+  bigUser,
+  setUpUsers
 } from "../data/users.data";
 
 import {
-  blackTask,
-  redTask,
-  greenTask,
-  blueTask,
+  aRedTask,
+  aGreenTask,
+  aBlueTask,
+  aBlackTask,
   setUpTasks,
   tearDownTasks
 } from "../data/tasks.data";
@@ -35,10 +37,15 @@ describe("Tasks", () => {
   let token;
 
   before(() => Promise.join(
-    setUpAccounts(anAccount().withUser(
-      aUser().withTasks([blackTask, redTask, greenTask, blueTask]).build()
-    ).build()),
-    setUpTasks(blackTask, redTask, greenTask, blueTask),
+    setUpAccounts(anAccount()
+      .withUser(bigUser).build()),
+    setUpUsers(bigUser, smallUser),
+    setUpTasks(
+      aBlackTask().withOwners([bigUser]).build(),
+      aGreenTask().withOwners([bigUser]).build(),
+      aBlueTask().withOwners([bigUser, smallUser]).build(),
+      aRedTask().withOwners([smallUser]).build()
+    ),
     (account) => {
       token = getTokenFor(account);
     }
@@ -51,20 +58,16 @@ describe("Tasks", () => {
 
   describe("GET /api/tasks", () => {
 
-    it("can get all tasks", () =>
+    it("can get all tasks assigned to user", () =>
       request(app)
         .get("/api/tasks")
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.have.lengthOf(4);
+          expect(res.body).to.have.lengthOf(3);
           forEach([
             {
               "name": "black task",
-              "status": "blocked"
-            },
-            {
-              "name": "red task",
               "status": "blocked"
             },
             {
@@ -88,10 +91,6 @@ describe("Tasks", () => {
           expect(res.body).to.be.deep.equal([
             {
               "name": "black task",
-              "status": "blocked"
-            },
-            {
-              "name": "red task",
               "status": "blocked"
             },
             {

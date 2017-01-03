@@ -12,15 +12,28 @@ function tearDownUsers() {
   return User.removeAsync();
 }
 
-function aUser() {
+function aSmallUser() {
   return new UserBuilder()
-    .withFirstName("firstName")
-    .withLastName("lastName")
+    .withFirstName("smallFirstName")
+    .withLastName("smallLastName")
     .withStatus("active");
 }
 
+function aBigUser() {
+  return new UserBuilder()
+    .withFirstName("bigFirstName")
+    .withLastName("bigLastName")
+    .withStatus("active");
+}
+
+const bigUser = aSmallUser().build();
+const smallUser = aBigUser().build();
+
 export {
-  aUser,
+  aSmallUser,
+  aBigUser,
+  bigUser,
+  smallUser,
   setUpUsers,
   tearDownUsers
 };

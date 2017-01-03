@@ -1,30 +1,9 @@
 import Promise from "bluebird";
 import Task, { TASK_STATUS } from "../../main/models/task.model";
 import map from "lodash/map";
+import builderDecorator from "../utils/builder.decorator";
 
-const redTask = new Task({
-  name: "red task",
-  description: "a red task",
-  status: TASK_STATUS.BLOCKED
-});
-
-const greenTask = new Task({
-  name: "green task",
-  description: "a green task",
-  status: TASK_STATUS.PENDING
-});
-
-const blueTask = new Task({
-  name: "blue task",
-  description: "a blue task",
-  status: TASK_STATUS.DONE
-});
-
-const blackTask = new Task({
-  name: "black task",
-  description: "a black task",
-  status: TASK_STATUS.BLOCKED
-});
+const TaskBuilder = builderDecorator(Task);
 
 function setUpTasks(...tasks) {
   return Promise.all(map(tasks, (task) => task.saveAsync()));
@@ -34,11 +13,39 @@ function tearDownTasks() {
   return Task.removeAsync();
 }
 
+function aBlackTask() {
+  return new TaskBuilder()
+    .withName("black task")
+    .withDescription("a black task")
+    .withStatus(TASK_STATUS.BLOCKED);
+}
+
+function aBlueTask() {
+  return new TaskBuilder()
+    .withName("blue task")
+    .withDescription("a blue task")
+    .withStatus(TASK_STATUS.DONE);
+}
+
+function aGreenTask() {
+  return new TaskBuilder()
+    .withName("green task")
+    .withDescription("a green task")
+    .withStatus(TASK_STATUS.PENDING);
+}
+
+function aRedTask() {
+  return new TaskBuilder()
+    .withName("red task")
+    .withDescription("a red task")
+    .withStatus(TASK_STATUS.BLOCKED);
+}
+
 export {
-  redTask,
-  greenTask,
-  blueTask,
-  blackTask,
+  aRedTask,
+  aGreenTask,
+  aBlueTask,
+  aBlackTask,
   setUpTasks,
   tearDownTasks
 };

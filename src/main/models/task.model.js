@@ -14,6 +14,7 @@ const TaskSchema = new database.Schema({
     required: true
   },
   description: String,
+  owners: [ { type: database.Schema.ObjectId, ref: "User" } ],
   status: {
     type: String,
     enum: values(TASK_STATUS),
