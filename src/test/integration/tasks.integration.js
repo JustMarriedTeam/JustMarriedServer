@@ -165,7 +165,8 @@ describe("Tasks", () => {
                 "username": "smallUsername",
                 "firstName": "smallFirstName",
                 "lastName": "smallLastName",
-                "status": "active"
+                "status": "active",
+                "actors": []
               }
             ]
           });
