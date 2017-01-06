@@ -72,7 +72,7 @@ describe("Users", () => {
 
   describe("GET /api/users", () => {
 
-    it("should get users", () => {
+    it("should get users", () =>
       request(app)
       .get("/api/users")
       .set("token", token)
@@ -81,14 +81,18 @@ describe("Users", () => {
         expect(res.body).to.have.lengthOf(2);
         forEach([
           {
-
+            "username": "priest123",
+            "firstName": "priestFristName",
+            "lastName": "priestListName"
           },
           {
-
+            "username": "bride123",
+            "firstName": "brideFristName",
+            "lastName": "brideListName"
           }
         ], (user) => expect(omit(user, "_id")).to.include(user));
-      });
-    });
+      })
+    );
 
   });
 
