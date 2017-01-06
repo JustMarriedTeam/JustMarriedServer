@@ -1,7 +1,7 @@
-import { listUsers } from "../controllers/user.controller";
+import { getUsers } from "../controllers/user.controller";
 
 module.exports = {
-  get: listUsers,
+  get: getUsers,
   post(req, res) {
     res.json({"created": true});
   }

@@ -21,7 +21,7 @@ const plugins = gulpLoadPlugins();
 const options = extend(
   {},
   defaultConfig,
-  pick(minimist(process.argv), ...keys(defaultConfig))
+  pick(extend({}, process.env, minimist(process.argv)), ...keys(defaultConfig))
 );
 
 const config = {
@@ -117,7 +117,7 @@ gulp.task("nodemon", ["copyResources", "compile"], () =>
       debug: true,
       verbose: true,
       watch: config.src.main.baseDir,
-      tasks: ["copyResources", "compile"]
+      tasks: ["copyNonJs", "yamlToJson", "compile"]
     })
 );
 

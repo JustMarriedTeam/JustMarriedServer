@@ -1,13 +1,19 @@
 import jwtManager from "../security/jwt/jwt.manager";
 import { format } from "util";
 import properties from "../properties";
+import HttpStatus from "http-status";
 
 const authRedirectUrl = properties.get("authRedirectUrl");
 
-function getReleasedToken(req, res) {
+function releaseToken(req, res) {
   const token = jwtManager.releaseToken(req.user);
-  res.cookie("authToken", token.token);//.status(200).json(token);
+  res.status(HttpStatus.OK).json(token);
+}
+
+function redirectWithToken(req, res) {
+  const token = jwtManager.releaseToken(req.user);
+  res.cookie("authToken", token.token);
   res.redirect(format(authRedirectUrl, token.token));
 }
 
-export {getReleasedToken};
+export { releaseToken, redirectWithToken };

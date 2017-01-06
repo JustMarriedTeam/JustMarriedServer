@@ -1,6 +1,6 @@
-import {getReleasedToken} from "../../controllers/auth.controller";
+import {redirectWithToken} from "../../controllers/auth.controller";
 
 module.exports = {
-  get: getReleasedToken
+  get: redirectWithToken
 
 };

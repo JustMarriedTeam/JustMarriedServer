@@ -1,4 +1,6 @@
 import Account from "../models/account.model";
+import User from "../models/user.model";
+import Promise from "bluebird";
 
 function createAccount(credentials) {
   return Account.findOneAsync({"login": credentials.login})
@@ -9,7 +11,15 @@ function createAccount(credentials) {
           const account = new Account();
           account.login = credentials.login;
           account.setPassword(credentials.password);
-          return account.saveAsync().then(() => account);
+          const user = new User({
+            username: credentials.login
+          });
+          account.user = user;
+
+          return Promise.all([
+            user.saveAsync(),
+            account.saveAsync()
+          ]);
         });
 }
 

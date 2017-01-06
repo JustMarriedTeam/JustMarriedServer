@@ -17,6 +17,7 @@ import {
 import {
   aUser,
   setUpUsers,
+  connectUsers,
   tearDownUsers
 } from "../data/users.data";
 
@@ -52,14 +53,11 @@ describe("Users", () => {
       .withLastName("priestListName")
       .build();
 
-    bride.actors.pushAll([groom, priest]);
-    groom.actors.pushAll([bride, priest]);
-    priest.actors.pushAll([bride, groom]);
-
     return Promise.join(
       setUpAccounts(anAccount()
         .withUser(groom).build()),
       setUpUsers(bride, groom, priest),
+      connectUsers(bride, groom, priest),
       (account) => {
         token = getTokenFor(account);
       }
@@ -73,7 +71,9 @@ describe("Users", () => {
   ));
 
   describe("GET /api/users", () => {
-    request(app)
+
+    it("should get users", () => {
+      request(app)
       .get("/api/users")
       .set("token", token)
       .expect(httpStatus.OK)
@@ -88,6 +88,8 @@ describe("Users", () => {
           }
         ], (user) => expect(omit(user, "_id")).to.include(user));
       });
+    });
+
   });
 
 });
