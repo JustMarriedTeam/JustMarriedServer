@@ -16,10 +16,10 @@ function createAccount(credentials) {
           });
           account.user = user;
 
-          return Promise.all([
-            user.saveAsync(),
-            account.saveAsync()
-          ]);
+          return Promise.join(
+            account.saveAsync(),
+            user.saveAsync()
+          , (savedAccount) => savedAccount);
         });
 }
 
