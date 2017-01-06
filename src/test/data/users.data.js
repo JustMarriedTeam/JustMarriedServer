@@ -12,6 +12,11 @@ function tearDownUsers() {
   return User.removeAsync();
 }
 
+function aUser() {
+  return new UserBuilder()
+    .withStatus("active");
+}
+
 function aSmallUser() {
   return new UserBuilder()
     .withUsername("smallUsername")
@@ -32,6 +37,7 @@ const bigUser = aSmallUser().build();
 const smallUser = aBigUser().build();
 
 export {
+  aUser,
   aSmallUser,
   aBigUser,
   bigUser,

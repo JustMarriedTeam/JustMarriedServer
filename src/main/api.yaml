@@ -107,6 +107,31 @@ paths:
               schema:
                 $ref: '#/definitions/Account'
 
+  /users:
+    get:
+      description: |
+        Lists users relevant for current user using given criteria
+      security:
+          - bearer: []
+      parameters:
+          - name: limit
+            in: query
+            type: string
+          - name: offset
+            in: query
+            type: string
+          - name: sortBy
+            in: query
+            type: string
+          - name: role
+            in: query
+            type: string
+      responses:
+        200:
+          description: List of `Users` matching the criteria specified
+          schema:
+            $ref: '#/definitions/Users'
+
   /users/{userId}:
     get:
       description: |
@@ -191,7 +216,13 @@ definitions:
 
   User:
     properties:
+      _id:
+        type: integer
       username:
+        type: string
+      firstName:
+        type: string
+      lastName:
         type: string
 
   Task:
@@ -202,12 +233,18 @@ definitions:
         type: string
       description:
         type: string
+      owners:
+        type: array
+        items:
+          - $ref: '#/definitions/User'
 
+  Users:
+    type: array
+    items:
+      - $ref: '#/definitions/User'
 
   Tasks:
     type: array
     items:
       - $ref: '#/definitions/Task'
-
-
 

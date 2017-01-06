@@ -5,7 +5,8 @@ const UserSchema = new database.Schema({
   username: String,
   firstName: String,
   lastName: String,
-  status: String
+  status: String,
+  actors: [ { type: database.Schema.ObjectId, ref: "User" } ]
 });
 
 UserSchema.method({

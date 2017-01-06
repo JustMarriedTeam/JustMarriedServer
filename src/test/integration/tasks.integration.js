@@ -17,7 +17,8 @@ import {
 import {
   smallUser,
   bigUser,
-  setUpUsers
+  setUpUsers,
+  tearDownUsers
 } from "../data/users.data";
 
 import {
@@ -54,6 +55,7 @@ describe("Tasks", () => {
 
   after(() => Promise.join(
     tearDownAccounts(),
+    tearDownUsers(),
     tearDownTasks()
   ));
 
