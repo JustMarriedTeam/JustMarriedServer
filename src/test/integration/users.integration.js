@@ -25,7 +25,7 @@ import {getTokenFor} from "../utils/auth.utils";
 chai.config.includeStack = true;
 
 
-describe("Tasks", () => {
+describe("Users", () => {
 
   let token;
   let bride;
@@ -51,6 +51,10 @@ describe("Tasks", () => {
       .withFirstName("priestFristName")
       .withLastName("priestListName")
       .build();
+
+    bride.actors.pushAll([groom, priest]);
+    groom.actors.pushAll([bride, priest]);
+    priest.actors.pushAll([bride, groom]);
 
     return Promise.join(
       setUpAccounts(anAccount()
