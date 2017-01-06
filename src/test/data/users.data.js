@@ -14,6 +14,7 @@ function tearDownUsers() {
 
 function aSmallUser() {
   return new UserBuilder()
+    .withUsername("smallUsername")
     .withFirstName("smallFirstName")
     .withLastName("smallLastName")
     .withStatus("active");
@@ -21,6 +22,7 @@ function aSmallUser() {
 
 function aBigUser() {
   return new UserBuilder()
+    .withUsername("bigUsername")
     .withFirstName("bigFirstName")
     .withLastName("bigLastName")
     .withStatus("active");

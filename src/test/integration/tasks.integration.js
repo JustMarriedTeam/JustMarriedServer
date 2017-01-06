@@ -6,6 +6,7 @@ import httpStatus from "http-status";
 import chai, {expect} from "chai";
 import app from "../../main/index";
 import forEach from "lodash/forEach";
+import omit from "lodash/omit";
 
 import {
   anAccount,
@@ -68,17 +69,38 @@ describe("Tasks", () => {
           forEach([
             {
               "name": "black task",
-              "status": "blocked"
+              "description": "a black task",
+              "status": "blocked",
+              "owners": [
+                {
+                  "username": "bigUsername"
+                }
+              ]
             },
             {
               "name": "blue task",
-              "status": "done"
+              "description": "a blue task",
+              "status": "done",
+              "owners": [
+                {
+                  "username": "smallUsername"
+                },
+                {
+                  "username": "bigUsername"
+                }
+              ]
             },
             {
               "name": "green task",
-              "status": "pending"
+              "description": "a green task",
+              "status": "pending",
+              "owners": [
+                {
+                  "username": "smallUsername"
+                }
+              ]
             }
-          ], (task) => expect(res.body).to.include(task));
+          ], (task) => expect(omit(task, "_id", "owners._id")).to.include(task));
         })
     );
 
@@ -88,20 +110,9 @@ describe("Tasks", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.be.deep.equal([
-            {
-              "name": "black task",
-              "status": "blocked"
-            },
-            {
-              "name": "blue task",
-              "status": "done"
-            },
-            {
-              "name": "green task",
-              "status": "pending"
-            }
-          ]);
+          expect(res.body[0].name).to.be.equal("black task");
+          expect(res.body[1].name).to.be.equal("blue task");
+          expect(res.body[2].name).to.be.equal("green task");
         })
     );
 
@@ -123,12 +134,39 @@ describe("Tasks", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(res.body).to.be.deep.equal([
-            {
-              "name": "black task",
-              "status": "blocked"
-            }
-          ]);
+          expect(res.body[0].name).to.be.equal("blue task");
+        })
+    );
+
+  });
+
+  describe("POST /api/tasks", () => {
+
+    it("can save a new task", () =>
+      request(app)
+        .post("/api/tasks")
+        .send({
+          name: "test name",
+          description: "test description",
+          status: "pending",
+          owners: [ bigUser ]
+        })
+        .set("token", token)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(omit(res.body, "_id", "owners[0]._id")).to.deep.equal({
+            "name": "test name",
+            "description": "test description",
+            "status": "pending",
+            "owners": [
+              {
+                "username": "smallUsername",
+                "firstName": "smallFirstName",
+                "lastName": "smallLastName",
+                "status": "active"
+              }
+            ]
+          });
         })
     );
 

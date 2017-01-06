@@ -1,5 +1,4 @@
 import database from "../database";
-import pick from "lodash/pick";
 import values from "lodash/values";
 
 const TASK_STATUS = {
@@ -23,9 +22,13 @@ const TaskSchema = new database.Schema({
 });
 
 TaskSchema.method({
+
   toJSON() {
-    return pick(this.toObject(), ["name", "status"]);
+    return this.toObject({
+      versionKey: false
+    });
   }
+
 });
 
 export { TASK_STATUS };

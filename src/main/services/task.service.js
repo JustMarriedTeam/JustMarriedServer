@@ -6,15 +6,17 @@ const DEFAULT_SORT_BY = "status name";
 function listTasks(criteria) {
   const actingUser = getFromContext("user");
   return Task.find()
+    .select("name description status owners")
+    .populate("owners", "username")
     .where("owners").in([actingUser])
-    .skip(criteria.skip)
+    .skip(criteria.offset)
     .limit(criteria.limit)
     .sort(criteria.sortBy || DEFAULT_SORT_BY)
     .exec();
 }
 
-function createTask(task) {
-  return Task.createAsync(task);
+function createTask(taskToSave) {
+  return Task.createAsync(taskToSave).then((savedTask) => savedTask.populateAsync("owners"));
 }
 
 export { listTasks, createTask };
