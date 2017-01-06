@@ -14,5 +14,20 @@ function listUsers(criteria) {
     .exec();
 }
 
-export { listUsers };
+function saveUser(userToSave) {
+  const actingUser = getFromContext("user");
+  return User
+    .find()
+    .where("actors")
+    .in(userToSave.actors || [])
+    .exec()
+    .then((actors) => {
+      actors.unshift(actingUser);
+      userToSave.actors = actors;
+      return User.createAsync(userToSave)
+        .then((savedUser) => savedUser.populateAsync("actors", "_id username firstName lastName status"));
+    });
+}
+
+export { listUsers, saveUser };
 

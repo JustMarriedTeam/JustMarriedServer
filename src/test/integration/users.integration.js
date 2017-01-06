@@ -96,4 +96,35 @@ describe("Users", () => {
 
   });
 
+  describe("POST /api/users", () => {
+
+    it("should save user", () =>
+      request(app)
+        .post("/api/users")
+        .send({
+          username: "bestMan123",
+          firstName: "bestManFirstName",
+          lastName: "bestManLastName"
+        })
+        .set("token", token)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(omit(res.body, "_id", "actors[0]._id")).to.deep.equal({
+            "username": "bestMan123",
+            "firstName": "bestManFirstName",
+            "lastName": "bestManLastName",
+            "actors": [
+              {
+                "status": "active",
+                "username": "groom123",
+                "firstName": "groomFristName",
+                "lastName": "groomListName"
+              }
+            ]
+          });
+        })
+    );
+
+  });
+
 });

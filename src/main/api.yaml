@@ -131,6 +131,23 @@ paths:
           description: List of `Users` matching the criteria specified
           schema:
             $ref: '#/definitions/Users'
+    post:
+        description: |
+          Creates a new user - might be bound to account sometime later
+        security:
+          - bearer: []
+        parameters:
+          - name: user
+            in: body
+            description: User to save
+            required: true
+            schema:
+              $ref: '#/definitions/User'
+        responses:
+          200:
+              description: The newly created user
+              schema:
+                $ref: '#/definitions/User'
 
   /users/{userId}:
     get:
