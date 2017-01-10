@@ -1,6 +1,4 @@
 /* eslint-disable filenames/no-index */
-import mongoose from "mongoose";
-import util from "util";
 import logger from "./logger";
 import properties from "./properties";
 
@@ -16,23 +14,7 @@ function setUpEnvironment() {
 }
 
 function connectDatabase() {
-  mongoose.Promise = Promise;
-  Promise.promisifyAll(mongoose);
-
-  const dbUrl = properties.get("dbUrl");
-    // connect to mongo db
-  mongoose.connect(dbUrl, {server: {socketOptions: {keepAlive: 1}}});
-  mongoose.connection.on("error", () => {
-    throw new Error(`unable to connect to database: ${dbUrl}`);
-  });
-
-    // print mongoose logs in dev env
-  if (properties.get("MONGOOSE_DEBUG")) {
-    mongoose.set("err", (collectionName, method, query, doc) => { // eslint-disable-line
-      const sth = 20;
-      logger.error(`${collectionName}.${method}`, util.inspect(query, false, sth), doc);
-    });
-  }
+  require('./database'); // eslint-disable-line
 }
 
 function launchServer() {

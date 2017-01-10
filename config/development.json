@@ -8,5 +8,7 @@
   "protocol": "http",
   "host": "localhost",
   "port": 2701,
-  "domain": false
+  "domain": false,
+  "session.remote": false,
+  "session.secret": "topsecret"
 }

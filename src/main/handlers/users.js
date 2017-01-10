@@ -1,5 +1,6 @@
+import { getUsers, postUser } from "../controllers/user.controller";
+
 module.exports = {
-  post(req, res) {
-    res.json({"created": true});
-  }
+  get: getUsers,
+  post: postUser
 };

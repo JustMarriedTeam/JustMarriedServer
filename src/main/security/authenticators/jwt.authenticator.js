@@ -1,17 +1,25 @@
 import passport from "passport";
 import {Strategy as JwtStrategy, ExtractJwt} from "passport-jwt";
 import Account from "../../models/account.model.js";
+import { bindToContext } from "../../context";
 
-const jwtOptions = {
-  jwtFromRequest: ExtractJwt.fromHeader("token"),
+passport.use(new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromExtractors([
+    ExtractJwt.fromHeader("token"),
+    ExtractJwt.fromUrlQueryParameter("token")
+  ]),
   secretOrKey: "serversecret"
-};
-
-passport.use(new JwtStrategy(jwtOptions, (payload, done) => {
-  Account.findOneAsync({_id: payload.id})
-        .then((account) => {
-          if (!account) {done(null, false);} else {done(null, account);}
-        }).catch((err) => done(err, false));
+}, (payload, done) => {
+  Account.findOne({_id: payload.id})
+    .populate("user")
+    .exec()
+        .then(bindToContext((account) => {
+          if (!account) {
+            done(null, false);
+          } else {
+            done(null, account);
+          }
+        })).catch((err) => done(err, false));
 }));
 
-exports.isAuthenticated = passport.authenticate("jwt", {session: false});
+exports.requireAuthentication = passport.authenticate("jwt");

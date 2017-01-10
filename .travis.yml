@@ -3,6 +3,10 @@ node_js:
 - '6.9'
 before_script: npm run lint && npm run build
 script: npm run test
+branches:
+  only:
+  - master
+  - develop
 deploy:
   provider: heroku
   api_key:
