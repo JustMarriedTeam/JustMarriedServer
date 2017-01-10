@@ -6,7 +6,6 @@
   "protocol": "https",
   "host": "just-married-server.herokuapp.com",
   "domain": true,
-  "session.remote": true,
-  "memcache.url": "memcache-url-to-be-set"
+  "session.remote": true
 }
 

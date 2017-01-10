@@ -1,7 +1,7 @@
 import session from "express-session";
 import properties from "../properties";
 
-const MemcachedStore = require("connect-memcached")(session);
+const MemcachedStore = require("connect-memjs")(session);
 
 function configureSession(app) {
   app.use(session({
@@ -11,7 +11,9 @@ function configureSession(app) {
       if (useRemote) {
         return {
           store: new MemcachedStore({
-            hosts: [properties.get("memcache.url")]
+            servers: properties.get("memcached.servers").split(","),
+            username: properties.get("memcached.username"),
+            password: properties.get("memcached.password")
           })
         };
       } else {

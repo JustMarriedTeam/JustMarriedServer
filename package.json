@@ -18,7 +18,7 @@
     "eslint": "eslint \"src/main/**/*.js\"",
     "lint": "npm run eslint",
     "lint:watch": "npm run lint -- --watch",
-    "test": "mocha --opts .mocharc ",
+    "test": "npm run build && mocha --opts .mocharc ",
     "test:watch": "npm run test -- --watch --env=test",
     "test:check-coverage": "npm run test && istanbul check-coverage",
     "report-coverage": "coveralls < ./coverage/lcov.info"
@@ -45,7 +45,7 @@
     "bluebird": "3.4.6",
     "body-parser": "1.15.2",
     "compression": "1.6.2",
-    "connect-memcached": "0.2.0",
+    "connect-memjs": "0.1.0",
     "continuation-local-storage": "3.2.0",
     "cookie-parser": "1.4.3",
     "cors": "2.8.1",
