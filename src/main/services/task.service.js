@@ -1,10 +1,11 @@
 import Task from "../models/task.model";
-import { getFromContext } from "../context";
+import { getFromRequestContext } from "../context";
 
 const DEFAULT_SORT_BY = "status name";
 
 function listTasks(criteria) {
-  const actingUser = getFromContext("user"); // wrap request's session in it and still use that...
+  const request = getFromRequestContext("request");
+  const actingUser = getFromRequestContext("user");
   return Task.find()
     .select("name description status owners")
     .populate("owners", "username")

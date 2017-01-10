@@ -10,10 +10,20 @@ function getFromContext(name) {
   return context.get(name);
 }
 
+function getFromRequestContext(name) {
+  return context.get(`request.${name}`);
+}
+
+function bindEmitter(emitter) {
+  context.bindEmitter(emitter);
+}
+
 const runInContext = (fn) => context.run(fn);
 
 export {
   runInContext,
   setInContext,
-  getFromContext
+  bindEmitter,
+  getFromContext,
+  getFromRequestContext
 };

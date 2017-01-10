@@ -15,17 +15,9 @@ import { configureSecurity } from "./config/security.config";
 import { configureSession } from "./config/session.config";
 import { configureLogging } from "./config/logging.config";
 import { configureSwagger } from "./config/swagger.config";
-
+import { configureContext } from "./config/context.config";
 
 const app = express();
-
-configureOthers();
-configureSession(app);
-configureLogging(app);
-configureSecurity(app);
-configureSwagger(app);
-configureErrorHandling();
-configureNotFoundBehaviour();
 
 function configureOthers() {
   app.use(bodyParser.json());
@@ -59,5 +51,15 @@ function configureErrorHandling() {
   });
 }
 
+export default (function configureRespectingOrder() {
+  configureOthers();
+  configureSession(app);
+  configureLogging(app);
+  configureSecurity(app);
+  configureContext(app);
+  configureSwagger(app);
+  configureErrorHandling();
+  configureNotFoundBehaviour();
 
-export default app;
+  return app;
+})(app);
