@@ -7,10 +7,7 @@ const REQUIRED_PROPERTIES = [
   "port",
   "domain",
   "dbUrl",
-  "jwtSecret",
-  "memcached.servers",
-  "memcached.username",
-  "memcached.password"
+  "jwtSecret"
 ];
 
 nconf.use("memory");
@@ -24,7 +21,13 @@ nconf.argv({
   }
 });
 
-nconf.env(["envPropsFile", ...REQUIRED_PROPERTIES]);
+nconf.env([
+  "envPropsFile",
+  "memcached.servers",
+  "memcached.username",
+  "memcached.password",
+  ...REQUIRED_PROPERTIES
+]);
 
 if (nconf.get("envPropsFile")) {
   nconf.file("local", nconf.get("envPropsFile"));
