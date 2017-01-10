@@ -1,6 +1,5 @@
 import passport from "passport";
 import FacebookStrategy from "passport-facebook";
-import Account from "../../models/account.model";
 import {SERVER_URI} from "../../server";
 import {bindOrCreate} from "../../services/account.service";
 

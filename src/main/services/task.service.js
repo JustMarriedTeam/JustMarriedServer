@@ -1,5 +1,5 @@
 import Task from "../models/task.model";
-import { getFromContext, getFromRequestContext } from "../context";
+import { getFromRequestContext } from "../context";
 
 const DEFAULT_SORT_BY = "status name";
 

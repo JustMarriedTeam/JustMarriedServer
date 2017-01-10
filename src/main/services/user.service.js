@@ -25,7 +25,8 @@ function saveUser(userToSave) {
       actors.unshift(actingUser);
       userToSave.actors = actors;
       return User.createAsync(userToSave)
-        .then((savedUser) => savedUser.populateAsync("actors", "_id username firstName lastName status"));
+        .then((savedUser) => savedUser.populateAsync("actors",
+          "_id username firstName lastName status"));
     });
 }
 
