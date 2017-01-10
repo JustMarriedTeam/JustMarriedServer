@@ -1,6 +1,7 @@
 import database from "../database";
 import bcrypt from "bcrypt-nodejs";
 import User from "./user.model";
+import omit from "lodash/omit";
 
 const SALT_LENGTH = 8;
 
@@ -32,6 +33,12 @@ const AccountSchema = new database.Schema({
     ref: User.modelName
   }
 });
+
+AccountSchema.methods.toJSON = function () {
+  return omit(this.toObject({
+    versionKey: false
+  }), "password");
+};
 
 AccountSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_LENGTH), null);

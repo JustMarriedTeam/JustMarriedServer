@@ -22,8 +22,8 @@ function doCreateAccount(details) {
 
   return Promise.join(
     account.saveAsync(),
-    user.saveAsync()
-    , (savedAccount) => savedAccount);
+    user.saveAsync(),
+    (savedAccount) => savedAccount);
 }
 
 function doMergeAccounts(existingAccount, account) {
@@ -78,7 +78,7 @@ function bindOrCreate(provider, profile, existingAccount) {
           external: set({}, `${provider}`, profile)
         });
       }
-    });
+    }).then((createdAccount) => createdAccount.populateAsync("user"));
 }
 
 export { createAccount, bindOrCreate };

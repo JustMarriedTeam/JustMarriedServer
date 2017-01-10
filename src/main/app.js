@@ -29,13 +29,6 @@ function configureOthers() {
   app.use(cors());
 }
 
-function configureNotFoundBehaviour() {
-  app.use((req, res, next) => {
-    const err = new APIError("API not found", httpStatus.NOT_FOUND);
-    return next(err);
-  });
-}
-
 function configureErrorHandling() {
   app.use((err, req, res, next) => { // eslint-disable-line max-params
     if (err instanceof expressValidation.ValidationError) {
@@ -59,7 +52,6 @@ export default (function configureRespectingOrder() {
   configureContext(app);
   configureSwagger(app);
   configureErrorHandling();
-  configureNotFoundBehaviour();
 
   return app;
 })(app);
