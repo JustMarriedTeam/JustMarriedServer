@@ -187,6 +187,27 @@ paths:
           description: User with given `userId`
           schema:
             $ref: '#/definitions/User'
+    put:
+      description: |
+        Modifies a particular `User`
+      security:
+        - bearer: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          type: string
+        - name: user
+          in: body
+          description: User details to update
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        200:
+            description: The newly created user
+            schema:
+              $ref: '#/definitions/User'
 
   /tasks:
     get:

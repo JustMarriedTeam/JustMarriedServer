@@ -28,10 +28,11 @@ function doCreateAccount(details) {
 
 function doMergeAccounts(existingAccount, account) {
   if (existingAccount.id !== account.id) {
-    const accountDetails = omit(account.toJSON(), "_id");
+    const accountDetails = omit(account.toJSON(), "_id", "user._id");
     merge(existingAccount, accountDetails);
     return Promise.join(
       existingAccount.saveAsync(),
+      account.user.removeAsync(),
       account.removeAsync(),
       (unifiedAccount) => unifiedAccount
     );
