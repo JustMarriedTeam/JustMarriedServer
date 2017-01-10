@@ -7,7 +7,10 @@ const REQUIRED_PROPERTIES = [
   "port",
   "domain",
   "dbUrl",
-  "jwtSecret"
+  "jwtSecret",
+  "memcached.servers",
+  "memcached.username",
+  "memcached.password"
 ];
 
 nconf.use("memory");
