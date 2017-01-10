@@ -1,6 +1,7 @@
 language: node_js
 node_js:
 - '6.9'
+services: mongodb
 before_script: npm run lint
 script: env=test npm run test
 branches:
