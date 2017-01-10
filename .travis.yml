@@ -3,7 +3,7 @@ node_js:
 - '6.9'
 services: mongodb
 before_script: npm run lint
-script: env=test npm run test
+script: npm run test
 branches:
   only:
   - master
