@@ -6,6 +6,8 @@ const MemcachedStore = require("connect-memjs")(session);
 function configureSession(app) {
   app.use(session({
     secret: properties.get("session.secret"),
+    resave: false,
+    saveUninitialized: false,
     ...((useRemote) => {
 
       if (useRemote) {
