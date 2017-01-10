@@ -284,6 +284,10 @@ definitions:
         type: string
       lastName:
         type: string
+      actors:
+        type: array
+        items:
+          - $ref: '#/definitions/User'
 
   Task:
     properties:
