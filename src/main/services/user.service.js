@@ -1,10 +1,10 @@
 import User from "../models/user.model";
-import { getFromContext } from "../context";
+import { getFromRequestContext } from "../context";
 
 const DEFAULT_SORT_BY = "status name";
 
 function listUsers(criteria) {
-  const actingUser = getFromContext("user");
+  const actingUser = getFromRequestContext("user.user");
   return User.find()
     .select("username firstName lastName")
     .where("actors").in([actingUser])
@@ -15,7 +15,7 @@ function listUsers(criteria) {
 }
 
 function saveUser(userToSave) {
-  const actingUser = getFromContext("user");
+  const actingUser = getFromRequestContext("user.user");
   return User
     .find()
     .where("actors")

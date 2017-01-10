@@ -4,7 +4,7 @@ import { getFromRequestContext } from "../context";
 const DEFAULT_SORT_BY = "status name";
 
 function listTasks(criteria) {
-  const actingUser = getFromRequestContext("user");
+  const actingUser = getFromRequestContext("user.user");
   return Task.find()
     .select("name description status owners")
     .populate("owners", "username")
