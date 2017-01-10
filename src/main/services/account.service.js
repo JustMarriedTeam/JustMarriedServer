@@ -55,14 +55,18 @@ function createAccount(details) {
 }
 
 function bindOrCreate(provider, profile, existingAccount) {
+  const primaryAccount = existingAccount ? (() => {
+    const account = new Account(existingAccount);
+    account.isNew = false;
+    return account;
+  })() : null;
   return Account.findOneAsync({ [`external.${provider}.id`]: profile.id })
     .then((account) => {
-      if (existingAccount) {
-        existingAccount.isNew = false;
+      if (primaryAccount) {
         if (account) {
-          return doMergeAccounts(existingAccount, account);
+          return doMergeAccounts(primaryAccount, account);
         } else {
-          return doExtendAccount(existingAccount, {
+          return doExtendAccount(primaryAccount, {
             external: set({}, `${provider}`, profile)
           });
         }

@@ -1,10 +1,9 @@
 import Task from "../models/task.model";
-import { getFromRequestContext } from "../context";
+import { getFromContext, getFromRequestContext } from "../context";
 
 const DEFAULT_SORT_BY = "status name";
 
 function listTasks(criteria) {
-  const request = getFromRequestContext("request");
   const actingUser = getFromRequestContext("user");
   return Task.find()
     .select("name description status owners")
