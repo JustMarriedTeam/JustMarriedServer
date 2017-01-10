@@ -3,7 +3,7 @@ import { format } from "util";
 import properties from "../properties";
 import HttpStatus from "http-status";
 
-const authRedirectUrl = properties.get("authRedirectUrl");
+const authRedirectUrl = properties.get("authRedirectUrl"); // this can be removed - get redirect url from session
 
 function releaseToken(req, res) {
   const token = jwtManager.releaseToken(req.user);

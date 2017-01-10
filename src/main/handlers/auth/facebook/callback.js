@@ -3,7 +3,7 @@ import {redirectWithToken} from "../../../controllers/auth.controller";
 
 module.exports = {
   get: [
-    facebookAuthenticator.recoverFacebookAuthenticationResponse,
+    facebookAuthenticator.recoverFacebookResponse,
     redirectWithToken
   ]
 };

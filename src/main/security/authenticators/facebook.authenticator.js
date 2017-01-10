@@ -1,7 +1,8 @@
 import passport from "passport";
 import FacebookStrategy from "passport-facebook";
+import Account from "../../models/account.model";
 import {SERVER_URI} from "../../server";
-import {bindToAccount} from "../../services/account.service";
+import {bindOrCreate} from "../../services/account.service";
 
 passport.use(new FacebookStrategy({
   clientID: "1806015219657884",
@@ -10,14 +11,12 @@ passport.use(new FacebookStrategy({
   profileFields: ["emails", "displayName", "name"],
   passReqToCallback: true
 }, (req, accessToken, refreshToken, profile, done) => // eslint-disable-line
-    bindToAccount({
-      "facebook": {
-        id: profile.id,
-        token: accessToken,
-        name: `${profile.name.givenName} ${profile.name.familyName}`,
-        email: profile.emails[0].value
-      }
-    }).then((savedAccount) => done(null, savedAccount))
+  bindOrCreate("facebook", {
+    id: profile.id,
+    token: accessToken,
+    name: `${profile.name.givenName} ${profile.name.familyName}`,
+    email: profile.emails[0].value
+  }, new Account(req.user)).then((account) => done(null, account))
 ));
 
 exports.issueFacebookAuthenticationRequest = passport.authenticate("facebook", {
@@ -25,6 +24,11 @@ exports.issueFacebookAuthenticationRequest = passport.authenticate("facebook", {
   display: "popup"
 });
 
-exports.recoverFacebookAuthenticationResponse = passport.authenticate("facebook", {
+exports.issueFacebookAuthorizationRequest = passport.authorize("facebook", {
+  scope: "email",
+  display: "popup"
+});
+
+exports.recoverFacebookResponse = passport.authenticate("facebook", {
   failureRedirect: "/api/error"
 });

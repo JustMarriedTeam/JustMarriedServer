@@ -10,6 +10,7 @@ function configureSecurity(app) {
   });
 
   app.use(passport.initialize());
+  app.use(passport.session());
 }
 
 export { configureSecurity };

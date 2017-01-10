@@ -19,11 +19,11 @@ import { configureSwagger } from "./config/swagger.config";
 
 const app = express();
 
+configureOthers();
 configureSession(app);
 configureLogging(app);
 configureSecurity(app);
 configureSwagger(app);
-configureOthers();
 configureErrorHandling();
 configureNotFoundBehaviour();
 
