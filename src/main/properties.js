@@ -23,6 +23,7 @@ nconf.argv({
 
 nconf.env([
   "envPropsFile",
+  "session.secret",
   "memcached.servers",
   "memcached.username",
   "memcached.password",
