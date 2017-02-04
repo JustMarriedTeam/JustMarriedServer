@@ -5,7 +5,6 @@ import request from "supertest";
 import httpStatus from "http-status";
 import chai, {expect} from "chai";
 import app from "../../main/index";
-import omit from "lodash/omit";
 import {withoutIdentifiers} from "../utils/comparison.utils";
 
 import {
@@ -52,8 +51,8 @@ describe("Tasks", () => {
   ));
 
   after(() => Promise.join(
-    tearDownAccounts(),
-    tearDownWeddings()
+    tearDownWeddings(),
+    tearDownAccounts()
   ));
 
   describe("GET /api/wedding/tasks", () => {
