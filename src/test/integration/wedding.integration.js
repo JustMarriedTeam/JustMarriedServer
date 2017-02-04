@@ -32,6 +32,10 @@ import {
 describe("Wedding", () => {
 
   const dummyWedding = aWedding()
+    .withOwners([
+      groom.user,
+      bride.user
+    ])
     .withParticipants([
       groom,
       bride
@@ -87,6 +91,18 @@ describe("Wedding", () => {
                 "status": "done",
                 "description": "a blue task",
                 "name": "blue task"
+              }
+            ],
+            "owners": [
+              {
+                "firstName": "smallFirstName",
+                "lastName": "smallLastName",
+                "username": "smallUsername"
+              },
+              {
+                "firstName": "bigFirstName",
+                "lastName": "bigLastName",
+                "username": "bigUsername"
               }
             ],
             "participants": [

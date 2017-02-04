@@ -129,86 +129,6 @@ paths:
               schema:
                 $ref: '#/definitions/Account'
 
-  /users:
-    get:
-      description: |
-        Lists users relevant for current user using given criteria
-      security:
-          - bearer: []
-      parameters:
-          - name: limit
-            in: query
-            type: string
-          - name: offset
-            in: query
-            type: string
-          - name: sortBy
-            in: query
-            type: string
-          - name: role
-            in: query
-            type: string
-      responses:
-        200:
-          description: List of `Users` matching the criteria specified
-          schema:
-            $ref: '#/definitions/Users'
-    post:
-        description: |
-          Creates a new user - might be bound to account sometime later
-        security:
-          - bearer: []
-        parameters:
-          - name: user
-            in: body
-            description: User to save
-            required: true
-            schema:
-              $ref: '#/definitions/User'
-        responses:
-          200:
-              description: The newly created user
-              schema:
-                $ref: '#/definitions/User'
-
-  /users/{userId}:
-    get:
-      description: |
-        Gets a `User` by `userId`
-      security:
-          - bearer: []
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: User with given `userId`
-          schema:
-            $ref: '#/definitions/User'
-    put:
-      description: |
-        Modifies a particular `User`
-      security:
-        - bearer: []
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-        - name: user
-          in: body
-          description: User details to update
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        200:
-            description: The newly created user
-            schema:
-              $ref: '#/definitions/User'
-
   /wedding:
     get:
        description: |
@@ -222,7 +142,7 @@ paths:
             $ref: '#/definitions/Wedding'
 
 
-  /tasks:
+  /wedding/tasks:
     get:
       description: |
         Gets list of `Task`s matching given query parameters.
@@ -325,11 +245,6 @@ definitions:
         type: array
         items:
           - $ref: '#/definitions/User'
-
-  Users:
-    type: array
-    items:
-      - $ref: '#/definitions/User'
 
   Tasks:
     type: array

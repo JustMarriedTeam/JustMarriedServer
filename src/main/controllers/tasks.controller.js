@@ -1,8 +1,8 @@
-import { createTask, listTasks } from "../services/task.service";
+import {createTask, listTasks} from "../services/task.service";
 import HttpStatus from "http-status";
 
 function getTasks(req, res, done) {
-  listTasks(req.query).then((tasks) => res.status(HttpStatus.OK).json(tasks))
+  listTasks().then((tasks) => res.status(HttpStatus.OK).json(tasks))
         .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
         .finally(done);
 }

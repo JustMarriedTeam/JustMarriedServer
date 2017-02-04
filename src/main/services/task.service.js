@@ -1,22 +1,16 @@
-import Task from "../models/task.model";
+import Wedding from "../models/wedding.model";
 import { getFromRequestContext } from "../context";
 
-const DEFAULT_SORT_BY = "status name";
-
-function listTasks(criteria) {
+function listTasks() {
   const actingUser = getFromRequestContext("user.user");
-  return Task.find()
-    .select("name description status owners")
-    .populate("owners", "username")
+  return Wedding.findOne()
+    .select("tasks")
     .where("owners").in([actingUser])
-    .skip(criteria.offset)
-    .limit(criteria.limit)
-    .sort(criteria.sortBy || DEFAULT_SORT_BY)
     .exec();
 }
 
 function createTask(taskToSave) {
-  return Task.createAsync(taskToSave).then((savedTask) => savedTask.populateAsync("owners"));
+  // return Task.createAsync(taskToSave).then((savedTask) => savedTask.populateAsync("owners"));
 }
 
 export { listTasks, createTask };

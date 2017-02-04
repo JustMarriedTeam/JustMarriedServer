@@ -11,7 +11,6 @@ passport.use(new JwtStrategy({
   secretOrKey: "serversecret"
 }, (payload, done) => {
   Account.findOne({_id: payload.id})
-    .populate("user")
     .exec()
         .then(bindToContext((account) => {
           if (!account) {

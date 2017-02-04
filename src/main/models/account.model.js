@@ -28,7 +28,10 @@ const AccountSchema = new database.Schema({
       name: String
     }
   },
-  user: UserSchema
+  user: {
+    type: UserSchema,
+    required: true
+  }
 });
 
 AccountSchema.methods.toJSON = function () {
