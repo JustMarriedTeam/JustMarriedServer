@@ -9,25 +9,22 @@ import forEach from "lodash/forEach";
 import omit from "lodash/omit";
 
 import {
-  anAccount,
+  redAccount,
   setUpAccounts,
   tearDownAccounts
 } from "../data/accounts.data";
 
 import {
-  greenUser,
-  redUser,
-  setUpUsers,
-  tearDownUsers
-} from "../data/users.data";
+  aBlueWedding,
+  setUpWeddings,
+  tearDownWeddings
+} from "../data/wedding.data";
 
 import {
-  aRedTask,
-  aGreenTask,
-  aBlueTask,
-  aBlackTask,
-  setUpTasks,
-  tearDownTasks
+  redTask,
+  greenTask,
+  blueTask,
+  blackTask
 } from "../data/tasks.data";
 
 import {getTokenFor} from "../utils/auth.utils";
@@ -38,16 +35,17 @@ describe("Tasks", () => {
 
   let token;
 
+  const dummyWedding = aBlueWedding()
+    .withTasks([
+      redTask,
+      blueTask,
+      greenTask,
+      blackTask
+    ]).build();
+
   before(() => Promise.join(
-    setUpAccounts(anAccount()
-      .withUser(redUser).build()),
-    setUpUsers(redUser, greenUser),
-    setUpTasks(
-      aBlackTask().withOwners([redUser]).build(),
-      aGreenTask().withOwners([redUser]).build(),
-      aBlueTask().withOwners([redUser, greenUser]).build(),
-      aRedTask().withOwners([greenUser]).build()
-    ),
+    setUpAccounts(redAccount),
+    setUpWeddings(dummyWedding),
     (account) => {
       token = getTokenFor(account);
     }
@@ -55,15 +53,14 @@ describe("Tasks", () => {
 
   after(() => Promise.join(
     tearDownAccounts(),
-    tearDownUsers(),
-    tearDownTasks()
+    tearDownWeddings()
   ));
 
-  describe("GET /api/tasks", () => {
+  describe("GET /api/wedding/tasks", () => {
 
     it("can get all tasks assigned to user", () =>
       request(app)
-        .get("/api/tasks")
+        .get("/api/wedding/tasks")
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
@@ -71,7 +68,7 @@ describe("Tasks", () => {
           forEach([
             {
               "name": "black task",
-              "description": "a black task",
+              "descri ption": "a black task",
               "status": "blocked",
               "owners": [
                 {
@@ -108,7 +105,7 @@ describe("Tasks", () => {
 
     it("tasks returned are sorted by state and name", () =>
       request(app)
-        .get("/api/tasks")
+        .get("/api/wedding/tasks")
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
@@ -120,7 +117,7 @@ describe("Tasks", () => {
 
     it("can limit tasks got", () =>
       request(app)
-        .get("/api/tasks")
+        .get("/api/wedding/tasks")
         .query({limit: 1})
         .set("token", token)
         .expect(httpStatus.OK)
@@ -131,7 +128,7 @@ describe("Tasks", () => {
 
     it("can offset tasks got", () =>
       request(app)
-        .get("/api/tasks")
+        .get("/api/wedding/tasks")
         .query({offset: 1, limit: 1})
         .set("token", token)
         .expect(httpStatus.OK)
@@ -142,16 +139,15 @@ describe("Tasks", () => {
 
   });
 
-  describe("POST /api/tasks", () => {
+  describe("POST /api/wedding/tasks", () => {
 
     it("can save a new task", () =>
       request(app)
-        .post("/api/tasks")
+        .post("/api/wedding/tasks")
         .send({
           name: "test name",
           description: "test description",
-          status: "pending",
-          owners: [ redUser ]
+          status: "pending"
         })
         .set("token", token)
         .expect(httpStatus.OK)
