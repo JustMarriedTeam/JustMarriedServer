@@ -3,10 +3,7 @@ import { getFromRequestContext } from "../context";
 
 function listTasks() {
   const actingUser = getFromRequestContext("user.user");
-  return Wedding.findOne()
-    .select("tasks")
-    .where("owners").in([actingUser])
-    .exec();
+  return Wedding.findTasksBy(actingUser);
 }
 
 function createTask(taskToSave) {

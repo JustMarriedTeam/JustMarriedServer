@@ -11,6 +11,28 @@ const WeddingSchema = new database.Schema({
   guests: [GuestSchema]
 });
 
+WeddingSchema.static({
+
+  findByOwner(owner) {
+    return this.findOneAsync({
+      owners: {
+        $elemMatch: owner
+      }
+    });
+  },
+
+  findTasksBy(owner) {
+    return this.findOne({
+      owners: {
+        $elemMatch: owner
+      }
+    }).select("tasks")
+      .exec()
+      .then((wedding) => wedding.tasks);
+  }
+
+});
+
 WeddingSchema.method({
 
   toJSON() {

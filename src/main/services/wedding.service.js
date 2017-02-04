@@ -3,11 +3,9 @@ import { getFromRequestContext } from "../context";
 
 function getWeddingOfLoggedUser() {
   const actingUser = getFromRequestContext("user.user");
-  return Wedding.findOneAsync({
-    owners: {
-      $elemMatch: actingUser
-    }
-  });
+  return Wedding.findByOwner(actingUser);
 }
 
-export { getWeddingOfLoggedUser };
+export {
+  getWeddingOfLoggedUser
+};

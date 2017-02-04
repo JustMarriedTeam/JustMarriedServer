@@ -31,6 +31,10 @@ function aWedding() {
 
 function aBlueWedding() {
   return aWedding()
+    .withOwners([
+      groom.user,
+      bride.user
+    ])
     .withParticipants([
       groom,
       bride
