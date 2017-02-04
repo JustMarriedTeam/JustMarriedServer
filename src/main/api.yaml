@@ -209,6 +209,19 @@ paths:
             schema:
               $ref: '#/definitions/User'
 
+  /wedding:
+    get:
+       description: |
+        Gets a wedding.
+       security:
+          - bearer: []
+       responses:
+        200:
+          description: A wedding of currently logged user
+          schema:
+            $ref: '#/definitions/Wedding'
+
+
   /tasks:
     get:
       description: |
@@ -298,6 +311,17 @@ definitions:
       description:
         type: string
       owners:
+        type: array
+        items:
+          - $ref: '#/definitions/User'
+
+  Wedding:
+    properties:
+      _id:
+        type: integer
+      participants:
+        type: object
+      guests:
         type: array
         items:
           - $ref: '#/definitions/User'
