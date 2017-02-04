@@ -1,6 +1,6 @@
 import database from "../database";
 import bcrypt from "bcrypt-nodejs";
-import User from "./user.model";
+import { UserSchema } from "./user.model";
 import omit from "lodash/omit";
 
 const SALT_LENGTH = 8;
@@ -28,10 +28,7 @@ const AccountSchema = new database.Schema({
       name: String
     }
   },
-  user: {
-    type: database.Schema.ObjectId,
-    ref: User.modelName
-  }
+  user: UserSchema
 });
 
 AccountSchema.methods.toJSON = function () {

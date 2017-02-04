@@ -15,8 +15,8 @@ import {
 } from "../data/accounts.data";
 
 import {
-  smallUser,
-  bigUser,
+  greenUser,
+  redUser,
   setUpUsers,
   tearDownUsers
 } from "../data/users.data";
@@ -40,13 +40,13 @@ describe("Tasks", () => {
 
   before(() => Promise.join(
     setUpAccounts(anAccount()
-      .withUser(bigUser).build()),
-    setUpUsers(bigUser, smallUser),
+      .withUser(redUser).build()),
+    setUpUsers(redUser, greenUser),
     setUpTasks(
-      aBlackTask().withOwners([bigUser]).build(),
-      aGreenTask().withOwners([bigUser]).build(),
-      aBlueTask().withOwners([bigUser, smallUser]).build(),
-      aRedTask().withOwners([smallUser]).build()
+      aBlackTask().withOwners([redUser]).build(),
+      aGreenTask().withOwners([redUser]).build(),
+      aBlueTask().withOwners([redUser, greenUser]).build(),
+      aRedTask().withOwners([greenUser]).build()
     ),
     (account) => {
       token = getTokenFor(account);
@@ -151,7 +151,7 @@ describe("Tasks", () => {
           name: "test name",
           description: "test description",
           status: "pending",
-          owners: [ bigUser ]
+          owners: [ redUser ]
         })
         .set("token", token)
         .expect(httpStatus.OK)

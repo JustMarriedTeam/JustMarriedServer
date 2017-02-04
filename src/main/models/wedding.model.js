@@ -1,18 +1,12 @@
 import database from "../database";
+import { ParticipantSchema } from "./participant.model";
+import { TaskSchema } from "./task.model";
+import { GuestSchema } from "./guest.model";
 
 const WeddingSchema = new database.Schema({
-  participants: {
-    groom: { type: database.Schema.ObjectId, ref: "User" },
-    bride: { type: database.Schema.ObjectId, ref: "User" }
-  },
-  guests: [{
-    firstName: {
-      type: String
-    },
-    lastName: {
-      type: String
-    }
-  }]
+  participants: [ParticipantSchema],
+  tasks: [TaskSchema],
+  guests: [GuestSchema]
 });
 
 WeddingSchema.method({

@@ -2,6 +2,18 @@ import Wedding from "../../main/models/wedding.model";
 import builderDecorator from "../utils/builder.decorator";
 import map from "lodash/map";
 
+import {
+  redTask,
+  blackTask,
+  blueTask,
+  greenTask
+} from "./tasks.data";
+
+import {
+  groom,
+  bride
+} from "./participants.data";
+
 const WeddingBuilder = builderDecorator(Wedding);
 
 
@@ -19,6 +31,16 @@ function aWedding() {
 
 function aBlueWedding() {
   return aWedding()
+    .withParticipants([
+      groom,
+      bride
+    ])
+    .withTasks([
+      redTask,
+      blueTask,
+      greenTask,
+      blackTask
+    ])
     .withGuests([
       { firstName: "firstNameA", lastName: "lastNameA" },
       { firstName: "firstNameB", lastName: "lastNameB" }

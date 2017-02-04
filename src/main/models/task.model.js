@@ -13,7 +13,6 @@ const TaskSchema = new database.Schema({
     required: true
   },
   description: String,
-  owners: [ { type: database.Schema.ObjectId, ref: "User" } ],
   status: {
     type: String,
     enum: values(TASK_STATUS),
@@ -31,5 +30,5 @@ TaskSchema.method({
 
 });
 
-export { TASK_STATUS };
+export { TASK_STATUS, TaskSchema };
 export default database.model("Task", TaskSchema);

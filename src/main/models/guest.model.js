@@ -1,12 +1,11 @@
 import database from "../database";
 
-const UserSchema = new database.Schema({
-  username: String,
+const GuestSchema = new database.Schema({
   firstName: String,
   lastName: String
 });
 
-UserSchema.method({
+GuestSchema.method({
 
   toJSON() {
     return this.toObject({
@@ -16,5 +15,5 @@ UserSchema.method({
 
 });
 
-export { UserSchema };
-export default database.model("User", UserSchema);
+export { GuestSchema };
+export default database.model("Guest", GuestSchema);

@@ -4,26 +4,50 @@ import request from "supertest";
 import httpStatus from "http-status";
 import chai, {expect} from "chai";
 import app from "../../main/index";
-import omit from "lodash/omit";
-import {anAccount, setUpAccounts, tearDownAccounts} from "../data/accounts.data";
-import { setUpWeddings, tearDownWeddings, aBlueWedding } from "../data/wedding.data";
-import {smallUser, bigUser, setUpUsers, tearDownUsers} from "../data/users.data";
 import {getTokenFor} from "../utils/auth.utils";
+import {withoutIdentifiers} from "../utils/comparison.utils";
+
+import {
+  redAccount,
+  setUpAccounts,
+  tearDownAccounts
+} from "../data/accounts.data";
+
+import {
+  aWedding,
+  setUpWeddings,
+  tearDownWeddings
+} from "../data/wedding.data";
+
+import {
+  redTask,
+  blueTask
+} from "../data/tasks.data";
+
+import {
+  groom,
+  bride
+} from "../data/participants.data";
 
 describe("Wedding", () => {
+
+  const dummyWedding = aWedding()
+    .withParticipants([
+      groom,
+      bride
+    ]).withTasks([
+      redTask,
+      blueTask
+    ]).withGuests([
+      {firstName: "firstNameA", lastName: "lastNameA"},
+      {firstName: "firstNameB", lastName: "lastNameB"}
+    ]).build();
 
   let token;
 
   before(() => Promise.join(
-    setUpAccounts(anAccount()
-      .withUser(bigUser).build()),
-    setUpUsers(bigUser, smallUser),
-    setUpWeddings(aBlueWedding()
-      .withParticipants({
-        bride: smallUser,
-        groom: bigUser
-      })
-      .build()),
+    setUpAccounts(redAccount),
+    setUpWeddings(dummyWedding),
     (account) => {
       token = getTokenFor(account);
     }
@@ -32,7 +56,6 @@ describe("Wedding", () => {
   after(() => Promise.join(
     tearDownWeddings(),
     tearDownAccounts(),
-    tearDownUsers(),
   ));
 
   describe("GET /api/wedding", () => {
@@ -43,12 +66,7 @@ describe("Wedding", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(omit(res.body, "_id",
-            "guests[0]._id",
-            "guests[1]._id",
-            "participants.bride._id",
-            "participants.groom._id"
-          )).to.deep.equal({
+          expect(withoutIdentifiers(res.body)).to.deep.equal({
             "guests": [
               {
                 "firstName": "firstNameA",
@@ -59,22 +77,36 @@ describe("Wedding", () => {
                 "lastName": "lastNameB"
               }
             ],
-            "participants": {
-              "bride": {
-                "username": "bigUsername",
-                "firstName": "bigFirstName",
-                "lastName": "bigLastName",
-                "status": "active",
-                "actors": []
+            "tasks": [
+              {
+                "status": "blocked",
+                "description": "a red task",
+                "name": "red task"
               },
-              "groom": {
-                "username": "smallUsername",
-                "firstName": "smallFirstName",
-                "lastName": "smallLastName",
-                "status": "active",
-                "actors": []
+              {
+                "status": "done",
+                "description": "a blue task",
+                "name": "blue task"
               }
-            }
+            ],
+            "participants": [
+              {
+                "user": {
+                  "username": "smallUsername",
+                  "firstName": "smallFirstName",
+                  "lastName": "smallLastName"
+                },
+                "role": "groom"
+              },
+              {
+                "user": {
+                  "username": "bigUsername",
+                  "firstName": "bigFirstName",
+                  "lastName": "bigLastName"
+                },
+                "role": "bride"
+              }
+            ]
           });
         })
     );

@@ -1,6 +1,10 @@
 import Account from "../../main/models/account.model";
 import User from "../../main/models/user.model";
 import builderDecorator from "../utils/builder.decorator";
+import {
+  redUser,
+  greenUser
+} from "./users.data";
 
 const AccountBuilder = builderDecorator(Account);
 
@@ -20,8 +24,13 @@ function anAccount() {
     }));
 }
 
+const redAccount = anAccount().withUser(redUser).build();
+const greenAccount = anAccount().withUser(greenUser).build();
+
 export {
   anAccount,
   setUpAccounts,
-  tearDownAccounts
+  tearDownAccounts,
+  redAccount,
+  greenAccount
 };
