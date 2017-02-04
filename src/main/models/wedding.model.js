@@ -35,6 +35,11 @@ WeddingSchema.static({
 
 WeddingSchema.method({
 
+  addTask(taskToAdd) {
+    this.tasks.push(taskToAdd);
+    return this.saveAsync();
+  },
+
   toJSON() {
     return this.toObject({
       versionKey: false

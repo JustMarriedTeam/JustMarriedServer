@@ -104,19 +104,10 @@ describe("Tasks", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(omit(res.body, "_id", "owners[0]._id")).to.deep.equal({
+          expect(withoutIdentifiers(res.body)).to.deep.equal({
             "name": "test name",
             "description": "test description",
-            "status": "pending",
-            "owners": [
-              {
-                "username": "smallUsername",
-                "firstName": "smallFirstName",
-                "lastName": "smallLastName",
-                "status": "active",
-                "actors": []
-              }
-            ]
+            "status": "pending"
           });
         })
     );

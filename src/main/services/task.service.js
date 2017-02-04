@@ -1,4 +1,5 @@
 import Wedding from "../models/wedding.model";
+import Task from "../models/task.model";
 import { getFromRequestContext } from "../context";
 
 function listTasks() {
@@ -7,7 +8,11 @@ function listTasks() {
 }
 
 function createTask(taskToSave) {
-  // return Task.createAsync(taskToSave).then((savedTask) => savedTask.populateAsync("owners"));
+  const actingUser = getFromRequestContext("user.user");
+  const savedTask = new Task(taskToSave);
+  return Wedding.findByOwner(actingUser)
+    .then((wedding) => wedding.addTask(savedTask))
+    .then(() => savedTask);
 }
 
 export { listTasks, createTask };
