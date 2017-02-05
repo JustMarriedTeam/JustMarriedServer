@@ -1,66 +1,21 @@
 /* global describe, before, after, it */
-import Promise from "bluebird";
 import request from "supertest";
 import httpStatus from "http-status";
 import chai, {expect} from "chai";
 import app from "../../main/index";
 import {getTokenFor} from "../utils/auth.utils";
 import {withoutIdentifiers} from "../utils/comparison.utils";
-
-import {
-  redAccount,
-  setUpAccounts,
-  tearDownAccounts
-} from "../data/accounts.data";
-
-import {
-  aWedding,
-  setUpWeddings,
-  tearDownWeddings
-} from "../data/wedding.data";
-
-import {
-  redTask,
-  blueTask
-} from "../data/tasks.data";
-
-import {
-  groom,
-  bride
-} from "../data/participants.data";
+import {setUpColored, tearDownColored} from "../data/colored.set";
 
 describe("Wedding", () => {
 
-  const dummyWedding = aWedding()
-    .withOwners([
-      groom.user,
-      bride.user
-    ])
-    .withParticipants([
-      groom,
-      bride
-    ]).withTasks([
-      redTask,
-      blueTask
-    ]).withGuests([
-      {firstName: "firstNameA", lastName: "lastNameA"},
-      {firstName: "firstNameB", lastName: "lastNameB"}
-    ]).build();
-
   let token;
 
-  before(() => Promise.join(
-    setUpAccounts(redAccount),
-    setUpWeddings(dummyWedding),
-    (account) => {
-      token = getTokenFor(account);
-    }
-  ));
+  before(() => setUpColored((account) => {
+    token = getTokenFor(account);
+  }));
 
-  after(() => Promise.join(
-    tearDownWeddings(),
-    tearDownAccounts(),
-  ));
+  after(() => tearDownColored());
 
   describe("GET /api/wedding", () => {
 
@@ -74,53 +29,63 @@ describe("Wedding", () => {
             "guests": [
               {
                 "firstName": "firstNameA",
-                "lastName": "lastNameA"
+                "lastName": "lastNameA",
               },
               {
                 "firstName": "firstNameB",
                 "lastName": "lastNameB"
               }
             ],
-            "tasks": [
-              {
-                "status": "blocked",
-                "description": "a red task",
-                "name": "red task"
-              },
-              {
-                "status": "done",
-                "description": "a blue task",
-                "name": "blue task"
-              }
-            ],
             "owners": [
               {
-                "firstName": "smallFirstName",
-                "lastName": "smallLastName",
-                "username": "smallUsername"
+                "firstName": "redFirstName",
+                "lastName": "redLastName",
+                "username": "redUsername"
               },
               {
-                "firstName": "bigFirstName",
-                "lastName": "bigLastName",
-                "username": "bigUsername"
+                "firstName": "greenFirstName",
+                "lastName": "greenLastName",
+                "username": "greenUsername"
               }
             ],
             "participants": [
               {
+                "role": "groom",
                 "user": {
-                  "username": "smallUsername",
-                  "firstName": "smallFirstName",
-                  "lastName": "smallLastName"
-                },
-                "role": "groom"
+                  "firstName": "redFirstName",
+                  "lastName": "redLastName",
+                  "username": "redUsername"
+                }
               },
               {
+                "role": "bride",
                 "user": {
-                  "username": "bigUsername",
-                  "firstName": "bigFirstName",
-                  "lastName": "bigLastName"
-                },
-                "role": "bride"
+                  "firstName": "greenFirstName",
+                  "lastName": "greenLastName",
+                  "username": "greenUsername"
+                }
+              }
+            ],
+            "tasks": [
+              {
+                "description": "a red task",
+                "name": "red task",
+                "status": "blocked"
+              },
+              {
+                "description": "a blue task",
+                "name": "blue task",
+                "status": "done"
+              },
+              {
+                "description": "a green task",
+                "name": "green task",
+                "status": "pending"
+              },
+              {
+                "description": "a black task",
+                "name": "black task",
+                "status": "blocked"
               }
             ]
           });

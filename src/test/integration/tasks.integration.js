@@ -8,7 +8,7 @@ import app from "../../main/index";
 import {withoutIdentifiers} from "../utils/comparison.utils";
 
 import {
-  redAccount,
+  aRedAccount,
   setUpAccounts,
   tearDownAccounts
 } from "../data/accounts.data";
@@ -20,10 +20,10 @@ import {
 } from "../data/wedding.data";
 
 import {
-  redTask,
-  greenTask,
-  blueTask,
-  blackTask
+  aRedTask,
+  aGreenTask,
+  aBlueTask,
+  aBlackTask
 } from "../data/tasks.data";
 
 import {getTokenFor} from "../utils/auth.utils";
@@ -36,14 +36,14 @@ describe("Tasks", () => {
 
   const dummyWedding = aBlueWedding()
     .withTasks([
-      redTask,
-      blueTask,
-      greenTask,
-      blackTask
+      aRedTask,
+      aBlueTask,
+      aGreenTask,
+      aBlackTask
     ]).build();
 
   before(() => Promise.join(
-    setUpAccounts(redAccount),
+    setUpAccounts(aRedAccount),
     setUpWeddings(dummyWedding),
     (account) => {
       token = getTokenFor(account);
