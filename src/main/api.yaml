@@ -165,19 +165,6 @@ paths:
         Gets list of `Task`s matching given query parameters.
       security:
           - bearer: []
-      parameters:
-        - name: limit
-          in: query
-          type: string
-        - name: offset
-          in: query
-          type: string
-        - name: sortBy
-          in: query
-          type: string
-        - name: state
-          in: query
-          type: string
       responses:
         200:
           description: List of `Task`s matching the criteria specified
@@ -252,10 +239,6 @@ definitions:
         type: string
       description:
         type: string
-      owners:
-        type: array
-        items:
-          - $ref: '#/definitions/User'
 
   Wedding:
     properties:
