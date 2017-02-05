@@ -146,6 +146,12 @@ paths:
         Saves a wedding.
        security:
           - bearer: []
+       parameters:
+        - name: wedding
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Wedding'
        responses:
         200:
           description: A new wedding
@@ -217,6 +223,8 @@ definitions:
         type: string
       password:
         type: string
+      user:
+        $ref: '#/definitions/User'
 
   User:
     properties:
@@ -228,10 +236,13 @@ definitions:
         type: string
       lastName:
         type: string
-      actors:
-        type: array
-        items:
-          - $ref: '#/definitions/User'
+
+  Participant:
+    properties:
+      role:
+        type: string
+      user:
+        $ref: '#/definitions/User'
 
   Task:
     properties:
@@ -251,7 +262,9 @@ definitions:
       _id:
         type: integer
       participants:
-        type: object
+        type: array
+        items:
+          - $ref: '#/definitions/Participant'
       guests:
         type: array
         items:

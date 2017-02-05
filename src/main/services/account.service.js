@@ -15,9 +15,9 @@ function doCreateAccount(details) {
 
   account.external = details.external;
 
-  const user = new User({
+  const user = new User(merge({}, {
     username: details.login
-  });
+  }, details.user));
   account.user = user;
 
   return Promise.join(
