@@ -29,7 +29,7 @@ describe("Wedding", () => {
             "guests": [
               {
                 "firstName": "firstNameA",
-                "lastName": "lastNameA",
+                "lastName": "lastNameA"
               },
               {
                 "firstName": "firstNameB",
@@ -88,6 +88,79 @@ describe("Wedding", () => {
                 "status": "blocked"
               }
             ]
+          });
+        })
+    );
+
+  });
+
+  describe("POST /api/wedding", () => {
+
+    it("can save wedding", () =>
+      request(app)
+        .post("/api/wedding")
+        .send({
+          "guests": [
+            {
+              "firstName": "Leszek",
+              "lastName": "Orzeszek"
+            }
+          ],
+          "participants": [
+            {
+              "role": "groom",
+              "user": {
+                "firstName": "redFirstName",
+                "lastName": "redLastName",
+                "username": "redUsername"
+              }
+            },
+            {
+              "role": "bride",
+              "user": {
+                "firstName": "greenFirstName",
+                "lastName": "greenLastName",
+                "username": "greenUsername"
+              }
+            }
+          ]
+        })
+        .set("token", token)
+        .expect(httpStatus.CREATED)
+        .then((res) => {
+          expect(withoutIdentifiers(res.body)).to.deep.equal({
+            "guests": [
+              {
+                "firstName": "Leszek",
+                "lastName": "Orzeszek"
+              }
+            ],
+            "owners": [
+              {
+                "firstName": "redFirstName",
+                "lastName": "redLastName",
+                "username": "redUsername"
+              }
+            ],
+            "participants": [
+              {
+                "role": "groom",
+                "user": {
+                  "firstName": "redFirstName",
+                  "lastName": "redLastName",
+                  "username": "redUsername"
+                }
+              },
+              {
+                "role": "bride",
+                "user": {
+                  "firstName": "greenFirstName",
+                  "lastName": "greenLastName",
+                  "username": "greenUsername"
+                }
+              }
+            ],
+            "tasks": []
           });
         })
     );

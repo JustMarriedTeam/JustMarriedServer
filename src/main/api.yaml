@@ -141,6 +141,17 @@ paths:
           schema:
             $ref: '#/definitions/Wedding'
 
+    post:
+       description: |
+        Saves a wedding.
+       security:
+          - bearer: []
+       responses:
+        200:
+          description: A new wedding
+          schema:
+            $ref: '#/definitions/Wedding'
+
 
   /wedding/tasks:
     get:
