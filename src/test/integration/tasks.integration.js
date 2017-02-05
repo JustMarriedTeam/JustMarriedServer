@@ -1,32 +1,11 @@
 /* global describe, before, after, it */
-
-import Promise from "bluebird";
 import request from "supertest";
 import httpStatus from "http-status";
 import chai, {expect} from "chai";
 import app from "../../main/index";
 import {withoutIdentifiers} from "../utils/comparison.utils";
-
-import {
-  aRedAccount,
-  setUpAccounts,
-  tearDownAccounts
-} from "../data/accounts.data";
-
-import {
-  aBlueWedding,
-  setUpWeddings,
-  tearDownWeddings
-} from "../data/wedding.data";
-
-import {
-  aRedTask,
-  aGreenTask,
-  aBlueTask,
-  aBlackTask
-} from "../data/tasks.data";
-
 import {getTokenFor} from "../utils/auth.utils";
+import {setUpColored, tearDownColored} from "../data/colored.set";
 
 chai.config.includeStack = true;
 
@@ -34,26 +13,11 @@ describe("Tasks", () => {
 
   let token;
 
-  const dummyWedding = aBlueWedding()
-    .withTasks([
-      aRedTask,
-      aBlueTask,
-      aGreenTask,
-      aBlackTask
-    ]).build();
+  before(() => setUpColored((account) => {
+    token = getTokenFor(account);
+  }));
 
-  before(() => Promise.join(
-    setUpAccounts(aRedAccount),
-    setUpWeddings(dummyWedding),
-    (account) => {
-      token = getTokenFor(account);
-    }
-  ));
-
-  after(() => Promise.join(
-    tearDownWeddings(),
-    tearDownAccounts()
-  ));
+  after(() => tearDownColored());
 
   describe("GET /api/wedding/tasks", () => {
 
