@@ -20,10 +20,7 @@ function doCreateAccount(details) {
   }, details.user));
   account.user = user;
 
-  return Promise.join(
-    account.saveAsync(),
-    user.saveAsync(),
-    (savedAccount) => savedAccount);
+  return account.saveAsync();
 }
 
 function doMergeAccounts(existingAccount, account) {
