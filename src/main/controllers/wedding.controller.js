@@ -1,6 +1,6 @@
 /* eslint-disable max-params */
 import HttpStatus from "http-status";
-import { getWeddingOfLoggedUser, createWedding } from "../services/wedding.service";
+import { getWeddingOfLoggedUser, createWedding, updateWedding } from "../services/wedding.service";
 
 function getWedding(req, res, done) {
   getWeddingOfLoggedUser().then((wedding) => res.status(HttpStatus.OK).json(wedding))
@@ -14,4 +14,10 @@ function postWedding(req, res, done) {
     .finally(done);
 }
 
-export { getWedding, postWedding };
+function putWedding(req, res, done) {
+  updateWedding(req.body).then((wedding) => res.status(HttpStatus.OK).json(wedding))
+    .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
+    .finally(done);
+}
+
+export { getWedding, postWedding, putWedding };

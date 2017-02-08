@@ -1,6 +1,7 @@
-import { getWedding, postWedding } from "../controllers/wedding.controller";
+import { getWedding, postWedding, putWedding } from "../controllers/wedding.controller";
 
 module.exports = {
   get: getWedding,
-  post: postWedding
+  post: postWedding,
+  put: putWedding
 };

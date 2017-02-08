@@ -1,5 +1,6 @@
 import Wedding from "../models/wedding.model";
 import merge from "lodash/merge";
+import extend from "lodash/extend";
 import { getFromRequestContext } from "../context";
 
 function getWeddingOfLoggedUser() {
@@ -15,7 +16,16 @@ function createWedding(weddingDetails) {
   return wedding.saveAsync();
 }
 
+function updateWedding(weddingDetails) {
+  const actingUser = getFromRequestContext("user.user");
+  return Wedding.findByOwner(actingUser).then((currentWedding) => {
+    extend(currentWedding, weddingDetails);
+    return currentWedding.saveAsync();
+  });
+}
+
 export {
   getWeddingOfLoggedUser,
-  createWedding
+  createWedding,
+  updateWedding
 };

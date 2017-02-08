@@ -158,6 +158,23 @@ paths:
           schema:
             $ref: '#/definitions/Wedding'
 
+    put:
+       description: |
+        Updates a wedding.
+       security:
+          - bearer: []
+       parameters:
+        - name: wedding
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Wedding'
+       responses:
+        200:
+          description: A updated wedding
+          schema:
+            $ref: '#/definitions/Wedding'
+
 
   /wedding/tasks:
     get:

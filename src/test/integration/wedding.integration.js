@@ -167,6 +167,132 @@ describe("Wedding", () => {
 
   });
 
+
+  describe("PUT /api/wedding", () => {
+
+    it("can update wedding", () =>
+      request(app)
+        .put("/api/wedding")
+        .send({
+          "guests": [
+            {
+              "firstName": "Zbyszek",
+              "lastName": "Grzybek"
+            },
+            {
+              "firstName": "Piotrek",
+              "lastName": "Dziabek"
+            }
+          ],
+          "participants": [
+            {
+              "role": "groom",
+              "user": {
+                "firstName": "redFirstName",
+                "lastName": "redLastName",
+                "username": "redUsername"
+              }
+            },
+            {
+              "role": "bride",
+              "user": {
+                "firstName": "greenFirstName",
+                "lastName": "greenLastName",
+                "username": "greenUsername"
+              }
+            },
+            {
+              "role": "bridesMaid",
+              "user": {
+                "firstName": "bridesmaidFirstName",
+                "lastName": "bridesmaidLastName",
+                "username": "dummyBridesmaid"
+              }
+            }
+          ],
+          "tasks": [
+            {
+              "description": "a red task",
+              "name": "red task",
+              "status": "blocked"
+            },
+            {
+              "description": "a blue task",
+              "name": "blue task",
+              "status": "done"
+            }
+          ]
+        })
+        .set("token", token)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(withoutIdentifiers(res.body)).to.deep.equal({
+            "guests": [
+              {
+                "firstName": "Zbyszek",
+                "lastName": "Grzybek"
+              },
+              {
+                "firstName": "Piotrek",
+                "lastName": "Dziabek"
+              }
+            ],
+            "owners": [
+              {
+                "firstName": "redFirstName",
+                "lastName": "redLastName",
+                "username": "redUsername"
+              },
+              {
+                "firstName": "greenFirstName",
+                "lastName": "greenLastName",
+                "username": "greenUsername"
+              }
+            ],
+            "participants": [
+              {
+                "role": "groom",
+                "user": {
+                  "firstName": "redFirstName",
+                  "lastName": "redLastName",
+                  "username": "redUsername"
+                }
+              },
+              {
+                "role": "bride",
+                "user": {
+                  "firstName": "greenFirstName",
+                  "lastName": "greenLastName",
+                  "username": "greenUsername"
+                }
+              },
+              {
+                "role": "bridesMaid",
+                "user": {
+                  "firstName": "bridesmaidFirstName",
+                  "lastName": "bridesmaidLastName",
+                  "username": "dummyBridesmaid"
+                }
+              }
+            ],
+            "tasks": [
+              {
+                "description": "a red task",
+                "name": "red task",
+                "status": "blocked"
+              },
+              {
+                "description": "a blue task",
+                "name": "blue task",
+                "status": "done"
+              }
+            ]
+          });
+        })
+    );
+
+  });
+
 });
 
 chai.config.includeStack = true;
