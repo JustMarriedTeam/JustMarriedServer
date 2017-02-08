@@ -15,15 +15,12 @@ function doCreateAccount(details) {
 
   account.external = details.external;
 
-  const user = new User({
+  const user = new User(merge({}, {
     username: details.login
-  });
+  }, details.user));
   account.user = user;
 
-  return Promise.join(
-    account.saveAsync(),
-    user.saveAsync(),
-    (savedAccount) => savedAccount);
+  return account.saveAsync();
 }
 
 function doMergeAccounts(existingAccount, account) {

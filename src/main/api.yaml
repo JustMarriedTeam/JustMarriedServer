@@ -129,105 +129,59 @@ paths:
               schema:
                 $ref: '#/definitions/Account'
 
-  /users:
+  /wedding:
     get:
-      description: |
-        Lists users relevant for current user using given criteria
-      security:
+       description: |
+        Gets a wedding.
+       security:
           - bearer: []
-      parameters:
-          - name: limit
-            in: query
-            type: string
-          - name: offset
-            in: query
-            type: string
-          - name: sortBy
-            in: query
-            type: string
-          - name: role
-            in: query
-            type: string
-      responses:
+       responses:
         200:
-          description: List of `Users` matching the criteria specified
+          description: A wedding of currently logged user
           schema:
-            $ref: '#/definitions/Users'
+            $ref: '#/definitions/Wedding'
+
     post:
-        description: |
-          Creates a new user - might be bound to account sometime later
-        security:
+       description: |
+        Saves a wedding.
+       security:
           - bearer: []
-        parameters:
-          - name: user
-            in: body
-            description: User to save
-            required: true
-            schema:
-              $ref: '#/definitions/User'
-        responses:
-          200:
-              description: The newly created user
-              schema:
-                $ref: '#/definitions/User'
-
-  /users/{userId}:
-    get:
-      description: |
-        Gets a `User` by `userId`
-      security:
-          - bearer: []
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: User with given `userId`
-          schema:
-            $ref: '#/definitions/User'
-    put:
-      description: |
-        Modifies a particular `User`
-      security:
-        - bearer: []
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          type: string
-        - name: user
+       parameters:
+        - name: wedding
           in: body
-          description: User details to update
           required: true
           schema:
-            $ref: '#/definitions/User'
-      responses:
+            $ref: '#/definitions/Wedding'
+       responses:
         200:
-            description: The newly created user
-            schema:
-              $ref: '#/definitions/User'
+          description: A new wedding
+          schema:
+            $ref: '#/definitions/Wedding'
 
-  /tasks:
+    put:
+       description: |
+        Updates a wedding.
+       security:
+          - bearer: []
+       parameters:
+        - name: wedding
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Wedding'
+       responses:
+        200:
+          description: A updated wedding
+          schema:
+            $ref: '#/definitions/Wedding'
+
+
+  /wedding/tasks:
     get:
       description: |
         Gets list of `Task`s matching given query parameters.
       security:
           - bearer: []
-      parameters:
-        - name: limit
-          in: query
-          type: string
-        - name: offset
-          in: query
-          type: string
-        - name: sortBy
-          in: query
-          type: string
-        - name: state
-          in: query
-          type: string
       responses:
         200:
           description: List of `Task`s matching the criteria specified
@@ -273,6 +227,8 @@ definitions:
         type: string
       password:
         type: string
+      user:
+        $ref: '#/definitions/User'
 
   User:
     properties:
@@ -284,10 +240,13 @@ definitions:
         type: string
       lastName:
         type: string
-      actors:
-        type: array
-        items:
-          - $ref: '#/definitions/User'
+
+  Participant:
+    properties:
+      role:
+        type: string
+      user:
+        $ref: '#/definitions/User'
 
   Task:
     properties:
@@ -297,15 +256,19 @@ definitions:
         type: string
       description:
         type: string
-      owners:
+
+  Wedding:
+    properties:
+      _id:
+        type: integer
+      participants:
+        type: array
+        items:
+          - $ref: '#/definitions/Participant'
+      guests:
         type: array
         items:
           - $ref: '#/definitions/User'
-
-  Users:
-    type: array
-    items:
-      - $ref: '#/definitions/User'
 
   Tasks:
     type: array

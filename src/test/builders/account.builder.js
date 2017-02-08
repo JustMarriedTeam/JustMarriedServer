@@ -11,7 +11,7 @@ function setUpAccounts(account) {
 function tearDownAccounts() {
   return Account.removeAsync();
 }
-// account.schema.obj
+
 function anAccount() {
   return new AccountBuilder()
     .withUser(new User({
