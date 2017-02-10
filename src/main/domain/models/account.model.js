@@ -1,4 +1,4 @@
-import database from "../database";
+import database from "../../database";
 import bcrypt from "bcrypt-nodejs";
 import { UserSchema } from "./user.model";
 import omit from "lodash/omit";

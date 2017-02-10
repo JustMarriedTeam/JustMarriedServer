@@ -1,4 +1,4 @@
-import User from "../../main/models/user.model";
+import User from "../../main/domain/models/user.model";
 import builderDecorator from "../utils/builder.decorator";
 
 const UserBuilder = builderDecorator(User);

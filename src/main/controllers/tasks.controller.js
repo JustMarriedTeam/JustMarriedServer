@@ -1,4 +1,4 @@
-import {createTask, listTasks} from "../services/task.service";
+import {createTask, listTasks} from "../domain/services/task.service";
 import HttpStatus from "http-status";
 
 function getTasks(req, res, done) {

@@ -1,6 +1,6 @@
 import passport from "passport";
 import {Strategy as JwtStrategy, ExtractJwt} from "passport-jwt";
-import Account from "../../models/account.model.js";
+import Account from "../../domain/models/account.model.js";
 import { bindToContext } from "../../context";
 
 passport.use(new JwtStrategy({

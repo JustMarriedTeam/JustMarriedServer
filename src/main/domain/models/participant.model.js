@@ -1,4 +1,4 @@
-import database from "../database";
+import database from "../../database";
 import { UserSchema } from "./user.model";
 
 const ParticipantSchema = new database.Schema({

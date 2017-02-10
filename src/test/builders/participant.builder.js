@@ -1,4 +1,4 @@
-import Participant from "../../main/models/participant.model";
+import Participant from "../../main/domain/models/participant.model";
 
 import builderDecorator from "../utils/builder.decorator";
 

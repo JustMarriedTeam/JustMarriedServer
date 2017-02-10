@@ -1,4 +1,4 @@
-import database from "../database";
+import database from "../../database";
 
 const GuestSchema = new database.Schema({
   firstName: String,

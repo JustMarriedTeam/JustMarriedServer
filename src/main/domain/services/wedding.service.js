@@ -1,7 +1,7 @@
 import Wedding from "../models/wedding.model";
-import merge from "lodash/merge";
 import extend from "lodash/extend";
-import { getFromRequestContext } from "../context";
+import { getFromRequestContext } from "../../context";
+import { aWedding } from "../../domain/builders/wedding.builder";
 
 function getWeddingOfLoggedUser() {
   const actingUser = getFromRequestContext("user.user");
@@ -10,9 +10,15 @@ function getWeddingOfLoggedUser() {
 
 function createWedding(weddingDetails) {
   const actingUser = getFromRequestContext("user.user");
-  const wedding = new Wedding(merge({}, weddingDetails, {
-    owners: [actingUser]
-  }));
+  const { guests, participants, tasks } = weddingDetails;
+
+  const wedding = aWedding()
+    .withParticipants(participants)
+    .withGuests(guests)
+    .withOwner(actingUser)
+    .withTasks(tasks)
+    .build();
+
   return wedding.saveAsync();
 }
 

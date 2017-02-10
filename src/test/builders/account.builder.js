@@ -1,5 +1,5 @@
-import Account from "../../main/models/account.model";
-import User from "../../main/models/user.model";
+import Account from "../../main/domain/models/account.model";
+import User from "../../main/domain/models/user.model";
 import builderDecorator from "../utils/builder.decorator";
 
 const AccountBuilder = builderDecorator(Account);

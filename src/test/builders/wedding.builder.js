@@ -1,4 +1,4 @@
-import Wedding from "../../main/models/wedding.model";
+import Wedding from "../../main/domain/models/wedding.model";
 import builderDecorator from "../utils/builder.decorator";
 import map from "lodash/map";
 

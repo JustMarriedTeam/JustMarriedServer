@@ -7,7 +7,7 @@ import { aTask } from "../builders/task.builder";
 import { aWedding, setUpWeddings, tearDownWeddings } from "../builders/wedding.builder";
 
 
-import { TASK_STATUS } from "../../main/models/task.model";
+import { TASK_STATUS } from "../../main/domain/models/task.model";
 
 function createSet() {
 

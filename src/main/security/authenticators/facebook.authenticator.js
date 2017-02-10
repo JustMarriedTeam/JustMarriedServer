@@ -1,7 +1,7 @@
 import passport from "passport";
 import FacebookStrategy from "passport-facebook";
 import {SERVER_URI} from "../../server";
-import {bindOrCreate} from "../../services/account.service";
+import {bindOrCreate} from "../../domain/services/account.service";
 
 passport.use(new FacebookStrategy({
   clientID: "1806015219657884",

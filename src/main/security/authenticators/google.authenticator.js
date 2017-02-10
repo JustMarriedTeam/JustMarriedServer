@@ -1,8 +1,8 @@
 import passport from "passport";
 import { OAuth2Strategy as GoogleStrategy } from "passport-google-oauth";
-import Account from "../../models/account.model";
+import Account from "../../domain/models/account.model";
 import { SERVER_URI } from "../../server";
-import { bindOrCreate } from "../../services/account.service";
+import { bindOrCreate } from "../../domain/services/account.service";
 
 // https://console.developers.google.com/apis/credentials?project=justwedding-76fa3
 passport.use(new GoogleStrategy({

@@ -1,6 +1,6 @@
 import Wedding from "../models/wedding.model";
 import Task from "../models/task.model";
-import { getFromRequestContext } from "../context";
+import { getFromRequestContext } from "../../context";
 
 function listTasks() {
   const actingUser = getFromRequestContext("user.user");

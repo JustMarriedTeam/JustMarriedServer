@@ -1,4 +1,4 @@
-import Task from "../../main/models/task.model";
+import Task from "../../main/domain/models/task.model";
 import builderDecorator from "../utils/builder.decorator";
 
 const TaskBuilder = builderDecorator(Task);

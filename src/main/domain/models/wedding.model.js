@@ -1,4 +1,4 @@
-import database from "../database";
+import database from "../../database";
 import { ParticipantSchema } from "./participant.model";
 import { UserSchema } from "./user.model";
 import { TaskSchema } from "./task.model";

@@ -1,6 +1,9 @@
 /* eslint-disable max-params */
 import HttpStatus from "http-status";
-import { getWeddingOfLoggedUser, createWedding, updateWedding } from "../services/wedding.service";
+import {
+  getWeddingOfLoggedUser,
+  createWedding,
+  updateWedding } from "../domain/services/wedding.service";
 
 function getWedding(req, res, done) {
   getWeddingOfLoggedUser().then((wedding) => res.status(HttpStatus.OK).json(wedding))

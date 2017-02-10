@@ -1,4 +1,4 @@
-import database from "../database";
+import database from "../../database";
 import values from "lodash/values";
 
 const TASK_STATUS = {

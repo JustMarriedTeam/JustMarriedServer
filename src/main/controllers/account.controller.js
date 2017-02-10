@@ -1,4 +1,4 @@
-import { createAccount } from "../services/account.service";
+import { createAccount } from "../domain/services/account.service";
 import HttpStatus from "http-status";
 
 function postAccount(req, res, done) {
