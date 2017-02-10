@@ -21,6 +21,7 @@ function createSet() {
 
   const redGroom = aParticipant()
     .withRole("groom")
+    .withActive(true)
     .withUser(redUser)
     .build();
 
@@ -34,6 +35,7 @@ function createSet() {
 
   const greenBride = aParticipant()
     .withRole("bride")
+    .withActive(false)
     .withUser(greenUser)
     .build();
 

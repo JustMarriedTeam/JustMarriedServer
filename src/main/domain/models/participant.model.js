@@ -3,6 +3,7 @@ import { UserSchema } from "./user.model";
 
 const ParticipantSchema = new database.Schema({
   user: UserSchema,
+  active: Boolean,
   role: String
 });
 

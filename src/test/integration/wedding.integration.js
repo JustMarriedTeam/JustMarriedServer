@@ -51,6 +51,7 @@ describe("Wedding", () => {
             "participants": [
               {
                 "role": "groom",
+                "active": true,
                 "user": {
                   "firstName": "redFirstName",
                   "lastName": "redLastName",
@@ -59,6 +60,7 @@ describe("Wedding", () => {
               },
               {
                 "role": "bride",
+                "active": false,
                 "user": {
                   "firstName": "greenFirstName",
                   "lastName": "greenLastName",
@@ -109,6 +111,7 @@ describe("Wedding", () => {
           "participants": [
             {
               "role": "groom",
+              "active": true,
               "user": {
                 "firstName": "redFirstName",
                 "lastName": "redLastName",
@@ -117,6 +120,7 @@ describe("Wedding", () => {
             },
             {
               "role": "bride",
+              "active": true,
               "user": {
                 "firstName": "greenFirstName",
                 "lastName": "greenLastName",
@@ -145,6 +149,7 @@ describe("Wedding", () => {
             "participants": [
               {
                 "role": "groom",
+                "active": true,
                 "user": {
                   "firstName": "redFirstName",
                   "lastName": "redLastName",
@@ -153,11 +158,20 @@ describe("Wedding", () => {
               },
               {
                 "role": "bride",
+                "active": true,
                 "user": {
                   "firstName": "greenFirstName",
                   "lastName": "greenLastName",
                   "username": "greenUsername"
                 }
+              },
+              {
+                "active": false,
+                "role": "bridesmaid"
+              },
+              {
+                "active": false,
+                "role": "bestMan"
               }
             ],
             "tasks": []

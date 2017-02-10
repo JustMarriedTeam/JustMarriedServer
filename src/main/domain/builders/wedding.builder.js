@@ -1,5 +1,28 @@
 import Wedding from "../models/wedding.model";
+import find from "lodash/fp/find";
+import map from "lodash/map";
 import merge from "lodash/merge";
+
+const DEFAULT_PARTICIPANTS = [
+  {
+    role: "groom",
+    active: false
+  },
+  {
+    role: "bride",
+    active: false
+  },
+  {
+    role: "bridesmaid",
+    active: false
+  },
+  {
+    role: "bestMan",
+    active: false
+  }
+];
+
+const findByRole = (role) => find({ role });
 
 export default class WeddingBuilder {
 
@@ -8,7 +31,9 @@ export default class WeddingBuilder {
   }
 
   withParticipants(participants) {
-    this.params.participants = participants;
+    this.params.participants = map(DEFAULT_PARTICIPANTS, (participant) =>
+      merge({}, participant, findByRole(participant.role)(participants))
+    );
     return this;
   }
 
