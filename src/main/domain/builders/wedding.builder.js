@@ -1,4 +1,5 @@
 import Wedding from "../models/wedding.model";
+import merge from "lodash/merge";
 
 export default class WeddingBuilder {
 
@@ -12,12 +13,12 @@ export default class WeddingBuilder {
   }
 
   withGuests(guests) {
-    this.params.participants = guests;
+    this.params.guests = guests;
     return this;
   }
 
   withTasks(tasks) {
-    this.params.participants = tasks;
+    this.params.tasks = tasks;
     return this;
   }
 
