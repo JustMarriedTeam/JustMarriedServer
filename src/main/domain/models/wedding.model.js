@@ -40,12 +40,6 @@ WeddingSchema.method({
     return this.saveAsync();
   },
 
-  toJSON() {
-    return this.toObject({
-      versionKey: false
-    });
-  }
-
 });
 
 export default database.model("Wedding", WeddingSchema);

@@ -14,7 +14,7 @@ function omitByRecursivelyInPlace(value, iteratee) {
 
 function withoutIdentifiers(payload) {
   return omitByRecursivelyInPlace(payload, (value, key) => {
-    return key === "_id";
+    return key === "id";
   });
 }
 

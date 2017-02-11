@@ -6,15 +6,5 @@ const UserSchema = new database.Schema({
   lastName: String
 });
 
-UserSchema.method({
-
-  toJSON() {
-    return this.toObject({
-      versionKey: false
-    });
-  }
-
-});
-
 export { UserSchema };
 export default database.model("User", UserSchema);

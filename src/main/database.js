@@ -20,4 +20,15 @@ if (properties.get("MONGOOSE_DEBUG")) {
   });
 }
 
+mongoose.plugin((schema) => {
+  schema.options.toJSON = {
+    virtuals: true,
+    versionKey: false,
+    transform(doc, ret) {
+      ret.id = ret._id;
+      delete ret._id;
+    }
+  };
+});
+
 export default mongoose;

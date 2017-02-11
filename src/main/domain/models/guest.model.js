@@ -5,15 +5,5 @@ const GuestSchema = new database.Schema({
   lastName: String
 });
 
-GuestSchema.method({
-
-  toJSON() {
-    return this.toObject({
-      versionKey: false
-    });
-  }
-
-});
-
 export { GuestSchema };
 export default database.model("Guest", GuestSchema);

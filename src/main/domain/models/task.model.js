@@ -20,15 +20,5 @@ const TaskSchema = new database.Schema({
   }
 });
 
-TaskSchema.method({
-
-  toJSON() {
-    return this.toObject({
-      versionKey: false
-    });
-  }
-
-});
-
 export { TASK_STATUS, TaskSchema };
 export default database.model("Task", TaskSchema);
