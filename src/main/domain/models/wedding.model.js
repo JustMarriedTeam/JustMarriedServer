@@ -5,6 +5,8 @@ import { TaskSchema } from "./task.model";
 import { GuestSchema } from "./guest.model";
 
 const WeddingSchema = new database.Schema({
+  name: String,
+  description: String,
   owners: [UserSchema],
   participants: [ParticipantSchema],
   tasks: [TaskSchema],

@@ -51,6 +51,6 @@ export default (function configureRespectingOrder() {
   configureContext(app);
   configureSwagger(app);
   configureErrorHandling();
-
+  app.disable("etag"); // disable this on prod
   return app;
 })(app);
