@@ -1,4 +1,4 @@
-/* global describe, before, after, it */
+/* global describe, beforeEach, afterEach, it */
 import request from "supertest";
 import httpStatus from "http-status";
 import chai, {expect} from "chai";
@@ -11,11 +11,11 @@ describe("Wedding", () => {
 
   let token;
 
-  before(() => setUpColored((account) => {
+  beforeEach(() => setUpColored((account) => {
     token = getTokenFor(account);
   }));
 
-  after(() => tearDownColored());
+  afterEach(() => tearDownColored());
 
   describe("GET /api/wedding", () => {
 
@@ -181,10 +181,9 @@ describe("Wedding", () => {
 
   });
 
-
   describe("PUT /api/wedding", () => {
 
-    it("can update wedding", () =>
+    it("returns updated wedding", () =>
       request(app)
         .put("/api/wedding")
         .send({
@@ -192,10 +191,6 @@ describe("Wedding", () => {
             {
               "firstName": "Zbyszek",
               "lastName": "Grzybek"
-            },
-            {
-              "firstName": "Piotrek",
-              "lastName": "Dziabek"
             }
           ],
           "participants": [
@@ -214,26 +209,13 @@ describe("Wedding", () => {
                 "lastName": "greenLastName",
                 "username": "greenUsername"
               }
-            },
-            {
-              "role": "bridesMaid",
-              "user": {
-                "firstName": "bridesmaidFirstName",
-                "lastName": "bridesmaidLastName",
-                "username": "dummyBridesmaid"
-              }
             }
           ],
           "tasks": [
             {
-              "description": "a red task",
-              "name": "red task",
-              "status": "blocked"
-            },
-            {
-              "description": "a blue task",
-              "name": "blue task",
-              "status": "done"
+              "description": "a modified task",
+              "name": "modified task",
+              "status": "pending"
             }
           ]
         })
@@ -245,10 +227,6 @@ describe("Wedding", () => {
               {
                 "firstName": "Zbyszek",
                 "lastName": "Grzybek"
-              },
-              {
-                "firstName": "Piotrek",
-                "lastName": "Dziabek"
               }
             ],
             "owners": [
@@ -279,31 +257,40 @@ describe("Wedding", () => {
                   "lastName": "greenLastName",
                   "username": "greenUsername"
                 }
-              },
-              {
-                "role": "bridesMaid",
-                "user": {
-                  "firstName": "bridesmaidFirstName",
-                  "lastName": "bridesmaidLastName",
-                  "username": "dummyBridesmaid"
-                }
               }
             ],
             "tasks": [
               {
-                "description": "a red task",
-                "name": "red task",
-                "status": "blocked"
-              },
-              {
-                "description": "a blue task",
-                "name": "blue task",
-                "status": "done"
+                "description": "a modified task",
+                "name": "modified task",
+                "status": "pending"
               }
             ]
           });
         })
     );
+
+    it("can update sub-documents", () =>
+      request(app)
+      .get("/api/wedding")
+      .set("token", token)
+      .then((res) => res.body)
+      .then((existingWedding) => {
+        return request(app)
+          .put("/api/wedding")
+          .send(existingWedding)
+          .set("token", token)
+          .then(() => existingWedding);
+      }).then((existingWedding) => {
+        return request(app)
+          .get("/api/wedding")
+          .set("token", token)
+          .then((response) => ({ updatedWedding: response.body, existingWedding }));
+      }).then(({ existingWedding, updatedWedding }) => {
+        expect(updatedWedding).to.deep.eql(existingWedding);
+      })
+    );
+
 
   });
 
