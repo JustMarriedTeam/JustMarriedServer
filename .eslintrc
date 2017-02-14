@@ -10,7 +10,7 @@
     "node": true
   },
   "rules": {
-    "filenames/match-regex": ["error", "^((\\{[a-z]+([A-Z][a-z]+)+\\})|([a-z]+)|([a-z]+\\.[a-z]+))$"],
+    "filenames/match-regex": ["error", "^((\\{[a-z]+([A-Z][a-z]+)+\\})|([a-z]+(\\.[a-z]+){0,2}))$"],
     "filenames/no-index": "warn",
     "func-style": "off",
     "no-use-before-define": [
