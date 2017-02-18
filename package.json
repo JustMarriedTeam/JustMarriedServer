@@ -6,8 +6,8 @@
   "main": "index.js",
   "private": true,
   "engines": {
-    "node": ">=4.6.x",
-    "npm": ">=2.15.x"
+    "node": "=6.9.1",
+    "npm": "=3.10.8"
   },
   "scripts": {
     "postinstall": "gulp --env=$env",
