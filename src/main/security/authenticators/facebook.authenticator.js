@@ -9,13 +9,13 @@ passport.use(new FacebookStrategy({
   callbackURL: `${SERVER_URI}/api/auth/facebook/callback`,
   profileFields: ["emails", "displayName", "name"],
   passReqToCallback: true
-}, (req, accessToken, refreshToken, profile, done) => // eslint-disable-line
-  bindOrCreate("facebook", {
-    id: profile.id,
-    token: accessToken,
-    name: `${profile.name.givenName} ${profile.name.familyName}`,
-    email: profile.emails[0].value
-  }, req.user).then((account) => done(null, account))
+  }, (req, accessToken, refreshToken, profile, done) => // eslint-disable-line
+    bindOrCreate("facebook", {
+      id: profile.id,
+      token: accessToken,
+      name: `${profile.name.givenName} ${profile.name.familyName}`,
+      email: profile.emails[0].value
+    }, req.user).then((account) => done(null, account))
 ));
 
 exports.issueFacebookAuthenticationRequest = passport.authenticate("facebook", {

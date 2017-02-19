@@ -53,14 +53,11 @@ function createAccount(details) {
         .then(() => doCreateAccount(details));
 }
 
-function bindOrCreate(provider, profile, existingAccount) {
-  const primaryAccount = existingAccount ? (() => {
-    const account = new Account(existingAccount);
-    account.isNew = false;
-    return account;
-  })() : null;
-  return Account.findOneAsync({ [`external.${provider}.id`]: profile.id })
-    .then((account) => {
+function bindOrCreate(provider, profile, { id } = {}) {
+  return Promise.join(
+    Account.findOneAsync({ [`external.${provider}.id`]: profile.id }),
+    id ? Account.findById(id) : Promise.resolve(null),
+    (account, primaryAccount) => {
       if (primaryAccount) {
         if (account) {
           return doMergeAccounts(primaryAccount, account);
@@ -76,7 +73,8 @@ function bindOrCreate(provider, profile, existingAccount) {
           external: set({}, `${provider}`, profile)
         });
       }
-    }).then((createdAccount) => createdAccount.populateAsync("user"));
+    }
+  ).then((createdAccount) => createdAccount.populateAsync("user"));
 }
 
 function getLoggedUserAccount() {
