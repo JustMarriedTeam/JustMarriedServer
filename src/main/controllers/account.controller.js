@@ -1,5 +1,9 @@
 import { createAccount, getLoggedUserAccount } from "../domain/services/account.service";
 import HttpStatus from "http-status";
+import omit from "lodash/omit";
+
+const withoutSecurityIdentifiers = (account) =>
+  omit(account.toJSON(), [ "password", "external" ]);
 
 function postAccount(req, res, done) {
   createAccount({
@@ -14,7 +18,10 @@ function postAccount(req, res, done) {
 
 function getAccount(req, res, done) {
   getLoggedUserAccount()
-    .then((account) => res.json(account))
+    .then((account) => {
+      res.json(withoutSecurityIdentifiers(account));
+      return account;
+    })
     .then(() => res.status(HttpStatus.OK))
     .finally(done);
 }
