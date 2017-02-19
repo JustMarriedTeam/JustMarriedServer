@@ -27,6 +27,7 @@ mongoose.plugin((schema) => {
     transform(doc, ret) {
       ret.id = ret._id;
       delete ret._id;
+      delete ret.password; // todo move this to account.model
     }
   };
 });

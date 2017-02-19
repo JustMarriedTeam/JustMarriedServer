@@ -34,12 +34,6 @@ const AccountSchema = new database.Schema({
   }
 });
 
-AccountSchema.methods.toJSON = function () {
-  return omit(this.toObject({
-    versionKey: false
-  }), "password");
-};
-
 AccountSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_LENGTH), null);
 };
@@ -47,5 +41,17 @@ AccountSchema.methods.setPassword = function (password) {
 AccountSchema.methods.isPasswordValid = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
+
+AccountSchema.static({
+
+  findByUser(user) {
+    return this.findOneAsync({
+      user: {
+        $eq: user
+      }
+    });
+  }
+
+});
 
 export default database.model("Account", AccountSchema);

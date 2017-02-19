@@ -114,6 +114,16 @@ paths:
                 $ref: '#/definitions/Account'
 
   /accounts:
+    get:
+      security:
+        - bearer: []
+      description: |
+        Get the account of acting user
+      responses:
+          200:
+              description: The account of acting user
+              schema:
+                $ref: '#/definitions/Account'
     post:
       description: |
         Creates a new local account

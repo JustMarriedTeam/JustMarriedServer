@@ -4,6 +4,7 @@ import Promise from "bluebird";
 import set from "lodash/set";
 import merge from "lodash/merge";
 import omit from "lodash/omit";
+import {getFromRequestContext} from "../../context";
 
 function doCreateAccount(details) {
   const account = new Account();
@@ -78,4 +79,9 @@ function bindOrCreate(provider, profile, existingAccount) {
     }).then((createdAccount) => createdAccount.populateAsync("user"));
 }
 
-export { createAccount, bindOrCreate };
+function getLoggedUserAccount() {
+  const actingUser = getFromRequestContext("user.user");
+  return Account.findByUser(actingUser);
+}
+
+export { getLoggedUserAccount, createAccount, bindOrCreate };

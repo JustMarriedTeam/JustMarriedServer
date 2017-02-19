@@ -1,4 +1,4 @@
-import { createAccount } from "../domain/services/account.service";
+import { createAccount, getLoggedUserAccount } from "../domain/services/account.service";
 import HttpStatus from "http-status";
 
 function postAccount(req, res, done) {
@@ -12,4 +12,11 @@ function postAccount(req, res, done) {
     })).finally(done);
 }
 
-export { postAccount };
+function getAccount(req, res, done) {
+  getLoggedUserAccount()
+    .then((account) => res.json(account))
+    .then(() => res.status(HttpStatus.OK))
+    .finally(done);
+}
+
+export { getAccount, postAccount };
