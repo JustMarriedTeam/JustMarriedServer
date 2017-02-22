@@ -56,11 +56,7 @@ AccountSchema.methods.isPasswordValid = function (password) {
 AccountSchema.static({
 
   findByUser(user) {
-    return this.findOneAsync({
-      user: {
-        $eq: user
-      }
-    });
+    return this.findOneAsync({ "user._id": user.id });
   }
 
 });
