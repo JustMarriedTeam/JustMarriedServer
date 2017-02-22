@@ -16,6 +16,12 @@ function createSet() {
     .withLastName("miniLastName").build();
 
   const miniAccount = anAccount()
+    .withAssignments([
+      {
+        "action": "FILL_WEDDING",
+        "done": false
+      }
+    ])
     .withUser(miniUser).build();
 
   const miniGroom = aParticipant()

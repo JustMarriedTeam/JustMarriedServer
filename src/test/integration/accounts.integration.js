@@ -92,6 +92,28 @@ describe("Accounts", () => {
         })
     );
 
+    it("Creates a wedding for a manually created account", () =>
+      request(app)
+        .post("/api/accounts")
+        .send({
+          "login": "kboom@test.com",
+          "password": "babelek321A",
+          "user": {
+            "firstName": "Antoni",
+            "lastName": "Leszcz"
+          }
+        })
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(withoutIdentifiers(res.body.assignments)).to.eql([
+            {
+              "action": "FILL_WEDDING",
+              "done": false
+            }
+          ]);
+        })
+    );
+
   });
 
 });

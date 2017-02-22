@@ -57,6 +57,17 @@ AccountSchema.static({
 
   findByUser(user) {
     return this.findOneAsync({ "user._id": user.id });
+  },
+
+  markAssignmentComplete(user, action) {
+    return this.updateAsync({
+      "user._id": user.id,
+      "assignments": {
+        $elemMatch: { action }
+      }
+    }, {
+      $set: { "assignments.$.done": true }
+    });
   }
 
 });
