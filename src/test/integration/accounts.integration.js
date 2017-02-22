@@ -28,7 +28,12 @@ describe("Accounts", () => {
         .expect(httpStatus.OK)
         .then((res) => {
           expect(withoutIdentifiers(res.body)).to.deep.equal({
-            "assignments": [],
+            "assignments": [
+              {
+                "action": "FILL_WEDDING",
+                "done": false
+              }
+            ],
             "user": {
               "firstName": "miniFirstName",
               "lastName": "miniLastName"
