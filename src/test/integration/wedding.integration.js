@@ -50,13 +50,11 @@ describe("Wedding", () => {
             "owners": [
               {
                 "firstName": "redFirstName",
-                "lastName": "redLastName",
-                "username": "redUsername"
+                "lastName": "redLastName"
               },
               {
                 "firstName": "greenFirstName",
-                "lastName": "greenLastName",
-                "username": "greenUsername"
+                "lastName": "greenLastName"
               }
             ],
             "participants": [
@@ -65,8 +63,7 @@ describe("Wedding", () => {
                 "active": true,
                 "user": {
                   "firstName": "redFirstName",
-                  "lastName": "redLastName",
-                  "username": "redUsername"
+                  "lastName": "redLastName"
                 }
               },
               {
@@ -74,8 +71,7 @@ describe("Wedding", () => {
                 "active": false,
                 "user": {
                   "firstName": "greenFirstName",
-                  "lastName": "greenLastName",
-                  "username": "greenUsername"
+                  "lastName": "greenLastName"
                 }
               }
             ],
@@ -125,8 +121,7 @@ describe("Wedding", () => {
               "active": true,
               "user": {
                 "firstName": "redFirstName",
-                "lastName": "redLastName",
-                "username": "redUsername"
+                "lastName": "redLastName"
               }
             },
             {
@@ -134,8 +129,7 @@ describe("Wedding", () => {
               "active": true,
               "user": {
                 "firstName": "greenFirstName",
-                "lastName": "greenLastName",
-                "username": "greenUsername"
+                "lastName": "greenLastName"
               }
             }
           ]
@@ -153,8 +147,7 @@ describe("Wedding", () => {
             "owners": [
               {
                 "firstName": "redFirstName",
-                "lastName": "redLastName",
-                "username": "redUsername"
+                "lastName": "redLastName"
               }
             ],
             "participants": [
@@ -163,8 +156,7 @@ describe("Wedding", () => {
                 "active": true,
                 "user": {
                   "firstName": "redFirstName",
-                  "lastName": "redLastName",
-                  "username": "redUsername"
+                  "lastName": "redLastName"
                 }
               },
               {
@@ -172,8 +164,7 @@ describe("Wedding", () => {
                 "active": true,
                 "user": {
                   "firstName": "greenFirstName",
-                  "lastName": "greenLastName",
-                  "username": "greenUsername"
+                  "lastName": "greenLastName"
                 }
               },
               {
@@ -247,7 +238,6 @@ describe("Wedding", () => {
       modifiedWedding.participants.push({
         role: "bridesmaid",
         user: {
-          username: "bm",
           firstName: "Anna",
           lastName: "Danna"
         }

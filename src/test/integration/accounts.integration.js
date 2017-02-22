@@ -1,4 +1,4 @@
-/* global describe, before, after, it */
+/* global describe, beforeEach, afterEach, it */
 import request from "supertest";
 import httpStatus from "http-status";
 import chai, {expect} from "chai";
@@ -13,11 +13,11 @@ describe("Accounts", () => {
 
   let token;
 
-  before(() => setUpMinimal((account) => {
+  beforeEach(() => setUpMinimal((account) => {
     token = getTokenFor(account);
   }));
 
-  after(() => tearDownMinimal());
+  afterEach(() => tearDownMinimal());
 
   describe("GET /api/accounts", () => {
 
@@ -28,10 +28,10 @@ describe("Accounts", () => {
         .expect(httpStatus.OK)
         .then((res) => {
           expect(withoutIdentifiers(res.body)).to.deep.equal({
+            "assignments": [],
             "user": {
               "firstName": "miniFirstName",
-              "lastName": "miniLastName",
-              "username": "miniUsername"
+              "lastName": "miniLastName"
             }
           });
         })
@@ -49,20 +49,46 @@ describe("Accounts", () => {
           "password": "babelek321A",
           "user": {
             "firstName": "Antoni",
-            "lastName": "Leszcz",
-            "username": "aleszcz"
+            "lastName": "Leszcz"
           }
         })
         .expect(httpStatus.OK)
         .then((res) => {
           expect(withoutIdentifiers(res.body)).to.deep.equal({
+            "assignments": [
+              {
+                "action": "FILL_WEDDING",
+                "done": false
+              }
+            ],
             "login": "kboom@test.com",
             "user": {
               "firstName": "Antoni",
-              "lastName": "Leszcz",
-              "username": "aleszcz"
+              "lastName": "Leszcz"
             }
           });
+        })
+    );
+
+    it("Adds fill wedding assignments as a first assignment", () =>
+      request(app)
+        .post("/api/accounts")
+        .send({
+          "login": "kboom@test.com",
+          "password": "babelek321A",
+          "user": {
+            "firstName": "Antoni",
+            "lastName": "Leszcz"
+          }
+        })
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(withoutIdentifiers(res.body.assignments)).to.eql([
+            {
+              "action": "FILL_WEDDING",
+              "done": false
+            }
+          ]);
         })
     );
 

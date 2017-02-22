@@ -13,9 +13,12 @@ passport.use(new GoogleStrategy({
     bindOrCreate("google", {
       id: profile.id,
       token: accessToken,
-      name: profile.displayName,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
       email: profile.emails[0].value
-    }, req.user).then((account) => done(null, account))
+    }, req.user)
+      .then((account) => done(null, account))
+      .catch(() => done("Could not authenticate"))
 ));
 
 exports.issueGoogleAuthenticationRequest = passport.authenticate("google", {

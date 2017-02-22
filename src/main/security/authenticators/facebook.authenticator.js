@@ -13,9 +13,12 @@ passport.use(new FacebookStrategy({
     bindOrCreate("facebook", {
       id: profile.id,
       token: accessToken,
-      name: `${profile.name.givenName} ${profile.name.familyName}`,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
       email: profile.emails[0].value
-    }, req.user).then((account) => done(null, account))
+    }, req.user)
+      .then((account) => done(null, account))
+      .catch(() => done("Could not authenticate"))
 ));
 
 exports.issueFacebookAuthenticationRequest = passport.authenticate("facebook", {

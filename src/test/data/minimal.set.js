@@ -12,7 +12,6 @@ import { TASK_STATUS } from "../../main/domain/models/task.model";
 function createSet() {
 
   const miniUser = aUser()
-    .withUsername("miniUsername")
     .withFirstName("miniFirstName")
     .withLastName("miniLastName").build();
 

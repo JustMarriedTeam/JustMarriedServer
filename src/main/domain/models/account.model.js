@@ -4,6 +4,10 @@ import {UserSchema} from "./user.model";
 
 const SALT_LENGTH = 8;
 
+export const ACCOUNT_ASSIGNMENT = {
+  FILL_WEDDING: "FILL_WEDDING"
+};
+
 const AccountSchema = new database.Schema({
   login: {
     type: String,
@@ -18,19 +22,27 @@ const AccountSchema = new database.Schema({
       id: String,
       token: String,
       email: String,
-      name: String
+      firstName: String,
+      lastName: String
     },
     google: {
       id: String,
       token: String,
       email: String,
-      name: String
+      firstName: String,
+      lastName: String
     }
   },
   user: {
     type: UserSchema,
     required: true
-  }
+  },
+  assignments: [
+    {
+      action: String,
+      done: Boolean
+    }
+  ]
 });
 
 AccountSchema.methods.setPassword = function (password) {

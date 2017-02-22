@@ -1,27 +1,13 @@
 import Account from "../models/account.model";
-import User from "../models/user.model";
 import Promise from "bluebird";
 import set from "lodash/set";
 import merge from "lodash/merge";
 import omit from "lodash/omit";
 import {getFromRequestContext} from "../../context";
+import {anAccount} from "../builders/account.builder";
 
-function doCreateAccount(details) {
-  const account = new Account();
-
-  if (details.login) {
-    account.login = details.login;
-    account.setPassword(details.password);
-  }
-
-  account.external = details.external;
-
-  const user = new User(merge({}, {
-    username: details.login
-  }, details.user));
-  account.user = user;
-
-  return account.saveAsync();
+function doCreateAccount(accountBuilder) {
+  return accountBuilder.build().saveAsync();
 }
 
 function doMergeAccounts(existingAccount, account) {
@@ -45,17 +31,24 @@ function doExtendAccount(account, accountExtension) {
 }
 
 
-function createAccount(details) {
-  return Account.findOneAsync({"login": details.login})
-        .then((account) => {
-          if (account) {throw new Error("Account already exists");}
-        })
-        .then(() => doCreateAccount(details));
+function createAccount({login, password, user}) {
+  return Account.findOneAsync({login})
+    .then((account) => {
+      if (account) {
+        throw new Error("Account already exists");
+      }
+    })
+    .then(() => doCreateAccount(
+      anAccount()
+        .withLogin(login)
+        .withPassword(password)
+        .withUser(user)
+    ));
 }
 
-function bindOrCreate(provider, profile, { id } = {}) {
+function bindOrCreate(provider, profile, {id} = {}) {
   return Promise.join(
-    Account.findOneAsync({ [`external.${provider}.id`]: profile.id }),
+    Account.findOneAsync({[`external.${provider}.id`]: profile.id}),
     id ? Account.findById(id) : Promise.resolve(null),
     (account, primaryAccount) => {
       if (primaryAccount) {
@@ -69,9 +62,9 @@ function bindOrCreate(provider, profile, { id } = {}) {
       } else if (account) {
         return Promise.resolve(account);
       } else {
-        return doCreateAccount({
-          external: set({}, `${provider}`, profile)
-        });
+        return doCreateAccount(
+          anAccount().boundTo(provider, profile)
+        );
       }
     }
   ).then((createdAccount) => createdAccount.populateAsync("user"));
@@ -82,4 +75,4 @@ function getLoggedUserAccount() {
   return Account.findByUser(actingUser);
 }
 
-export { getLoggedUserAccount, createAccount, bindOrCreate };
+export {getLoggedUserAccount, createAccount, bindOrCreate};
