@@ -39,4 +39,33 @@ describe("Accounts", () => {
 
   });
 
+  describe("POST /api/accounts", () => {
+
+    it("Can save a new account", () =>
+      request(app)
+        .post("/api/accounts")
+        .send({
+          "login": "kboom@test.com",
+          "password": "babelek321A",
+          "user": {
+            "firstName": "Antoni",
+            "lastName": "Leszcz",
+            "username": "aleszcz"
+          }
+        })
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(withoutIdentifiers(res.body)).to.deep.equal({
+            "login": "kboom@test.com",
+            "user": {
+              "firstName": "Antoni",
+              "lastName": "Leszcz",
+              "username": "aleszcz"
+            }
+          });
+        })
+    );
+
+  });
+
 });
