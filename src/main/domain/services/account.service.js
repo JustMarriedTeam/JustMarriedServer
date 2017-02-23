@@ -5,9 +5,11 @@ import merge from "lodash/merge";
 import omit from "lodash/omit";
 import {getFromRequestContext} from "../../context";
 import {anAccount} from "../builders/account.builder";
+import {createWedding} from "./wedding.service";
 
 function doCreateAccount(accountBuilder) {
-  return accountBuilder.build().saveAsync();
+  return accountBuilder.build().saveAsync()
+    .then((account) => createWedding(account).then(() => account));
 }
 
 function doMergeAccounts(existingAccount, account) {

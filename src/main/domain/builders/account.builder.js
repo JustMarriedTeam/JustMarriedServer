@@ -8,7 +8,7 @@ export default class AccountBuilder {
 
   constructor() {
     this.params = {
-      externals: {}
+      external: {}
     };
   }
 
@@ -28,7 +28,7 @@ export default class AccountBuilder {
   }
 
   boundTo(provider, profile) {
-    merge(this.params.externals, set({}, `${provider}`, profile));
+    merge(this.params.external, set({}, `${provider}`, profile));
     return this;
   }
 
@@ -50,7 +50,7 @@ export default class AccountBuilder {
       const {
         email,
         firstName,
-        lastName } = params.externals[keys(params.externals)[0]];
+        lastName } = params.external[keys(params.external)[0]];
 
       params.user = new User({
         firstName,

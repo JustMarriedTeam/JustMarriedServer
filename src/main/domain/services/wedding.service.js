@@ -9,15 +9,12 @@ function getWeddingOfLoggedUser() {
   return Wedding.findByOwner(actingUser);
 }
 
-function createWedding(weddingDetails) {
-  const actingUser = getFromRequestContext("user.user");
-  const {guests, participants, tasks} = weddingDetails;
-
+function createWedding(account) {
   const wedding = aWedding()
-    .withParticipants(participants)
-    .withGuests(guests)
-    .withOwner(actingUser)
-    .withTasks(tasks)
+    .withParticipants([])
+    .withGuests([])
+    .withOwner(account.user)
+    .withTasks([])
     .build();
 
   return wedding.saveAsync();
