@@ -29,7 +29,8 @@ function updateWedding(weddingDetails) {
       .updateTasks(weddingDetails.tasks)
       .get();
     return updatedWedding.saveAsync();
-  }).then(() => Account.markAssignmentComplete(actingUser, ACCOUNT_ASSIGNMENT.FILL_WEDDING));
+  }).then((wedding) => Account.markAssignmentComplete(actingUser, ACCOUNT_ASSIGNMENT.FILL_WEDDING)
+    .then(() => wedding));
 }
 
 export {
