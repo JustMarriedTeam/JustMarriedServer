@@ -1,23 +1,20 @@
 import Wedding from "../models/wedding.model";
+import Account, { ACCOUNT_ASSIGNMENT } from "../models/account.model";
 import {getFromRequestContext} from "../../context";
 import {aWedding} from "../../domain/builders/wedding.builder";
 import WeddingUpdater from "../updaters/wedding.updater";
-
 
 function getWeddingOfLoggedUser() {
   const actingUser = getFromRequestContext("user.user");
   return Wedding.findByOwner(actingUser);
 }
 
-function createWedding(weddingDetails) {
-  const actingUser = getFromRequestContext("user.user");
-  const {guests, participants, tasks} = weddingDetails;
-
+function createWedding(account) {
   const wedding = aWedding()
-    .withParticipants(participants)
-    .withGuests(guests)
-    .withOwner(actingUser)
-    .withTasks(tasks)
+    .withParticipants([])
+    .withGuests([])
+    .withOwner(account.user)
+    .withTasks([])
     .build();
 
   return wedding.saveAsync();
@@ -32,7 +29,8 @@ function updateWedding(weddingDetails) {
       .updateTasks(weddingDetails.tasks)
       .get();
     return updatedWedding.saveAsync();
-  });
+  }).then((wedding) => Account.markAssignmentComplete(actingUser, ACCOUNT_ASSIGNMENT.FILL_WEDDING)
+    .then(() => wedding));
 }
 
 export {

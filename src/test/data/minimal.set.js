@@ -12,11 +12,16 @@ import { TASK_STATUS } from "../../main/domain/models/task.model";
 function createSet() {
 
   const miniUser = aUser()
-    .withUsername("miniUsername")
     .withFirstName("miniFirstName")
     .withLastName("miniLastName").build();
 
   const miniAccount = anAccount()
+    .withAssignments([
+      {
+        "action": "FILL_WEDDING",
+        "done": false
+      }
+    ])
     .withUser(miniUser).build();
 
   const miniGroom = aParticipant()

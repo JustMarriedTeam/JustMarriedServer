@@ -2,17 +2,10 @@
 import HttpStatus from "http-status";
 import {
   getWeddingOfLoggedUser,
-  createWedding,
   updateWedding } from "../domain/services/wedding.service";
 
 function getWedding(req, res, done) {
   getWeddingOfLoggedUser().then((wedding) => res.status(HttpStatus.OK).json(wedding))
-    .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
-    .finally(done);
-}
-
-function postWedding(req, res, done) {
-  createWedding(req.body).then((wedding) => res.status(HttpStatus.CREATED).json(wedding))
     .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
     .finally(done);
 }
@@ -23,4 +16,4 @@ function putWedding(req, res, done) {
     .finally(done);
 }
 
-export { getWedding, postWedding, putWedding };
+export { getWedding, putWedding };

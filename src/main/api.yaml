@@ -114,6 +114,16 @@ paths:
                 $ref: '#/definitions/Account'
 
   /accounts:
+    get:
+      security:
+        - bearer: []
+      description: |
+        Get the account of acting user
+      responses:
+          200:
+              description: The account of acting user
+              schema:
+                $ref: '#/definitions/Account'
     post:
       description: |
         Creates a new local account
@@ -138,23 +148,6 @@ paths:
        responses:
         200:
           description: A wedding of currently logged user
-          schema:
-            $ref: '#/definitions/Wedding'
-
-    post:
-       description: |
-        Saves a wedding.
-       security:
-          - bearer: []
-       parameters:
-        - name: wedding
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Wedding'
-       responses:
-        200:
-          description: A new wedding
           schema:
             $ref: '#/definitions/Wedding'
 

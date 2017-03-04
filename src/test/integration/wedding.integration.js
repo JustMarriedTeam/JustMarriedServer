@@ -50,13 +50,11 @@ describe("Wedding", () => {
             "owners": [
               {
                 "firstName": "redFirstName",
-                "lastName": "redLastName",
-                "username": "redUsername"
+                "lastName": "redLastName"
               },
               {
                 "firstName": "greenFirstName",
-                "lastName": "greenLastName",
-                "username": "greenUsername"
+                "lastName": "greenLastName"
               }
             ],
             "participants": [
@@ -65,8 +63,7 @@ describe("Wedding", () => {
                 "active": true,
                 "user": {
                   "firstName": "redFirstName",
-                  "lastName": "redLastName",
-                  "username": "redUsername"
+                  "lastName": "redLastName"
                 }
               },
               {
@@ -74,8 +71,7 @@ describe("Wedding", () => {
                 "active": false,
                 "user": {
                   "firstName": "greenFirstName",
-                  "lastName": "greenLastName",
-                  "username": "greenUsername"
+                  "lastName": "greenLastName"
                 }
               }
             ],
@@ -101,91 +97,6 @@ describe("Wedding", () => {
                 "status": "blocked"
               }
             ]
-          });
-        })
-    );
-
-  });
-
-  describe("POST /api/wedding", () => {
-
-    it("can save wedding", () =>
-      request(app)
-        .post("/api/wedding")
-        .send({
-          "guests": [
-            {
-              "firstName": "Leszek",
-              "lastName": "Orzeszek"
-            }
-          ],
-          "participants": [
-            {
-              "role": "groom",
-              "active": true,
-              "user": {
-                "firstName": "redFirstName",
-                "lastName": "redLastName",
-                "username": "redUsername"
-              }
-            },
-            {
-              "role": "bride",
-              "active": true,
-              "user": {
-                "firstName": "greenFirstName",
-                "lastName": "greenLastName",
-                "username": "greenUsername"
-              }
-            }
-          ]
-        })
-        .set("token", coloredToken)
-        .expect(httpStatus.CREATED)
-        .then((res) => {
-          expect(withoutIdentifiers(res.body)).to.deep.equal({
-            "guests": [
-              {
-                "firstName": "Leszek",
-                "lastName": "Orzeszek"
-              }
-            ],
-            "owners": [
-              {
-                "firstName": "redFirstName",
-                "lastName": "redLastName",
-                "username": "redUsername"
-              }
-            ],
-            "participants": [
-              {
-                "role": "groom",
-                "active": true,
-                "user": {
-                  "firstName": "redFirstName",
-                  "lastName": "redLastName",
-                  "username": "redUsername"
-                }
-              },
-              {
-                "role": "bride",
-                "active": true,
-                "user": {
-                  "firstName": "greenFirstName",
-                  "lastName": "greenLastName",
-                  "username": "greenUsername"
-                }
-              },
-              {
-                "active": false,
-                "role": "bridesmaid"
-              },
-              {
-                "active": false,
-                "role": "bestMan"
-              }
-            ],
-            "tasks": []
           });
         })
     );
@@ -247,7 +158,6 @@ describe("Wedding", () => {
       modifiedWedding.participants.push({
         role: "bridesmaid",
         user: {
-          username: "bm",
           firstName: "Anna",
           lastName: "Danna"
         }

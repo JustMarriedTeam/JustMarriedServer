@@ -12,7 +12,6 @@ import { TASK_STATUS } from "../../main/domain/models/task.model";
 function createSet() {
 
   const redUser = aUser()
-    .withUsername("redUsername")
     .withFirstName("redFirstName")
     .withLastName("redLastName").build();
 
@@ -26,7 +25,6 @@ function createSet() {
     .build();
 
   const greenUser = aUser()
-    .withUsername("greenUsername")
     .withFirstName("greenFirstName")
     .withLastName("greenLastName").build();
 
