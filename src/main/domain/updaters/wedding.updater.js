@@ -1,7 +1,7 @@
 import map from "lodash/fp/map";
-import omit from "lodash/omit";
-import get from "lodash/get";
+import set from "lodash/set";
 import extend from "lodash/extend";
+import merge from "lodash/merge";
 
 export default class WeddingUpdater {
 
@@ -14,19 +14,11 @@ export default class WeddingUpdater {
   }
 
   updateParticipants(updatedParticipants) {
-    const oldParticipants = this.weddingToUpdate.participants;
-    this.weddingToUpdate.participants = map((newParticipant) => {
-      const existingParticipant = oldParticipants.id(newParticipant.id);
-      if (existingParticipant) {
-        extend(existingParticipant, omit(newParticipant, "user"));
-        if (existingParticipant.user) {
-          extend(existingParticipant.user, newParticipant.user);
-        } else {
-          existingParticipant.user = newParticipant.user;
-        }
-        return existingParticipant;
+    this.weddingToUpdate.participants = map((updatedParticipant) => {
+      if (updatedParticipant.user) {
+        return merge({}, set({}, "user._id", updatedParticipant._id), updatedParticipant);
       } else {
-        return newParticipant;
+        return updatedParticipant;
       }
     })(updatedParticipants);
     return this;
@@ -35,7 +27,7 @@ export default class WeddingUpdater {
   updateGuests(updatedGuests) {
     const oldGuests = this.weddingToUpdate.guests;
     this.weddingToUpdate.guests = map((newGuest) => {
-      const existingParticipant = oldGuests.id(newGuest.id);
+      const existingParticipant = oldGuests.id(newGuest._id);
       if (existingParticipant) {
         return extend(existingParticipant, newGuest);
       } else {
@@ -48,7 +40,7 @@ export default class WeddingUpdater {
   updateTasks(updatedTasks) {
     const oldTasks = this.weddingToUpdate.tasks;
     this.weddingToUpdate.tasks = map((newTask) => {
-      const existingTask = oldTasks.id(newTask.id);
+      const existingTask = oldTasks.id(newTask._id);
       if (existingTask) {
         return extend(existingTask, newTask);
       } else {

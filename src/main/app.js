@@ -1,5 +1,5 @@
 import express from "express";
-import bodyParser from "body-parser";
+
 import cookieParser from "cookie-parser";
 import compress from "compression";
 import methodOverride from "method-override";
@@ -10,6 +10,7 @@ import helmet from "helmet";
 
 import APIError from "./helpers/api.error";
 
+import { configureConverters } from "./config/converters.config";
 import { configureSecurity } from "./config/security.config";
 import { configureSession } from "./config/session.config";
 import { configureLogging } from "./config/logging.config";
@@ -19,8 +20,6 @@ import { configureContext } from "./config/context.config";
 const app = express();
 
 function configureOthers() {
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(compress());
   app.use(methodOverride());
@@ -45,6 +44,7 @@ function configureErrorHandling() {
 
 export default (function configureRespectingOrder() {
   configureOthers();
+  configureConverters(app);
   configureSession(app);
   configureLogging(app);
   configureSecurity(app);

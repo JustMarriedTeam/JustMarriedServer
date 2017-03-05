@@ -10,6 +10,8 @@ import {setUpMinimal, tearDownMinimal} from "../data/minimal.set";
 import {createAccountAndGetToken} from "../actions/setup.action";
 import cloneDeep from "lodash/cloneDeep";
 import find from "lodash/fp/find";
+import merge from "lodash/merge";
+import set from "lodash/set";
 
 describe("Wedding", () => {
 
@@ -189,11 +191,12 @@ describe("Wedding", () => {
         });
     });
 
-    it("creates user for predefined participant if activated", () => {
+    it("creates a new user with the same id as participant " +
+      "if no user id provided when saving participant", () => {
       const modifiedWedding = cloneDeep(minimumWedding);
 
-      const groom = find({ role: "bride" })(modifiedWedding.participants);
-      groom.user = {
+      const modifiedBride = find({ role: "bride" })(modifiedWedding.participants);
+      modifiedBride.user = {
         firstName: "Jane",
         lastName: "Doe"
       };
@@ -208,8 +211,8 @@ describe("Wedding", () => {
             .set("token", minimalToken)
             .then((response) => response.body);
         }).then((updatedWedding) => {
-          expect(withoutIdentifiers(updatedWedding))
-            .to.deep.eql(withoutIdentifiers(modifiedWedding));
+          const updatedBride = find({ role: "bride" })(updatedWedding.participants);
+          expect(updatedBride).to.eql(merge(set({}, "user.id", modifiedBride.id), modifiedBride));
         });
     });
 
