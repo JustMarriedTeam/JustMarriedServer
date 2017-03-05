@@ -41,7 +41,11 @@ function createSet() {
       miniUser
     ])
     .withParticipants([
-      miniGroom
+      miniGroom,
+      aParticipant()
+        .withRole("bride")
+        .withActive(false)
+        .build()
     ])
     .withTasks([
       miniTask

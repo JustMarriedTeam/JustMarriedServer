@@ -19,7 +19,11 @@ export default class WeddingUpdater {
       const existingParticipant = oldParticipants.id(newParticipant.id);
       if (existingParticipant) {
         extend(existingParticipant, omit(newParticipant, "user"));
-        extend(existingParticipant.user, get(newParticipant, "user"));
+        if (existingParticipant.user) {
+          extend(existingParticipant.user, newParticipant.user);
+        } else {
+          existingParticipant.user = newParticipant.user;
+        }
         return existingParticipant;
       } else {
         return newParticipant;

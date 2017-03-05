@@ -9,6 +9,7 @@ import {setUpColored, tearDownColored} from "../data/colored.set";
 import {setUpMinimal, tearDownMinimal} from "../data/minimal.set";
 import {createAccountAndGetToken} from "../actions/setup.action";
 import cloneDeep from "lodash/cloneDeep";
+import find from "lodash/fp/find";
 
 describe("Wedding", () => {
 
@@ -132,7 +133,7 @@ describe("Wedding", () => {
                 }
               ],
               "owners": [
-                {}
+              {}
               ]
             });
         })));
@@ -185,6 +186,30 @@ describe("Wedding", () => {
             .then((response) => response.body);
         }).then((updatedWedding) => {
           expect(updatedWedding).to.deep.eql(modifiedWedding);
+        });
+    });
+
+    it("creates user for predefined participant if activated", () => {
+      const modifiedWedding = cloneDeep(minimumWedding);
+
+      const groom = find({ role: "bride" })(modifiedWedding.participants);
+      groom.user = {
+        firstName: "Jane",
+        lastName: "Doe"
+      };
+
+      return request(app)
+        .put("/api/wedding")
+        .send(modifiedWedding)
+        .set("token", minimalToken)
+        .then(() => {
+          return request(app)
+            .get("/api/wedding")
+            .set("token", minimalToken)
+            .then((response) => response.body);
+        }).then((updatedWedding) => {
+          expect(withoutIdentifiers(updatedWedding))
+            .to.deep.eql(withoutIdentifiers(modifiedWedding));
         });
     });
 
