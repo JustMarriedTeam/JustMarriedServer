@@ -7,6 +7,7 @@ import {getTokenFor} from "../utils/auth.utils";
 import {withoutIdentifiers} from "../utils/comparison.utils";
 import {setUpColored, tearDownColored} from "../data/colored.set";
 import {setUpMinimal, tearDownMinimal} from "../data/minimal.set";
+import {createAccountAndGetToken} from "../actions/setup.action";
 import cloneDeep from "lodash/cloneDeep";
 
 describe("Wedding", () => {
@@ -100,6 +101,41 @@ describe("Wedding", () => {
           });
         })
     );
+
+    it("creates a new wedding for every manually created account", () =>
+      createAccountAndGetToken().then((token) => request(app)
+        .get("/api/wedding")
+        .set("token", token)
+        .expect(httpStatus.OK)
+        .then((res) => res.body)
+        .then((newWedding) => {
+          expect(withoutIdentifiers(newWedding))
+            .to.deep.eql({
+              "guests": [],
+              "tasks": [],
+              "participants": [
+                {
+                  "role": "groom",
+                  "active": false
+                },
+                {
+                  "role": "bride",
+                  "active": false
+                },
+                {
+                  "role": "bridesmaid",
+                  "active": false
+                },
+                {
+                  "role": "bestMan",
+                  "active": false
+                }
+              ],
+              "owners": [
+                {}
+              ]
+            });
+        })));
 
   });
 
