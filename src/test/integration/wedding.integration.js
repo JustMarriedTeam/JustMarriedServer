@@ -78,28 +78,6 @@ describe("Wedding", () => {
                   "lastName": "greenLastName"
                 }
               }
-            ],
-            "tasks": [
-              {
-                "description": "a red task",
-                "name": "red task",
-                "status": "blocked"
-              },
-              {
-                "description": "a blue task",
-                "name": "blue task",
-                "status": "done"
-              },
-              {
-                "description": "a green task",
-                "name": "green task",
-                "status": "pending"
-              },
-              {
-                "description": "a black task",
-                "name": "black task",
-                "status": "blocked"
-              }
             ]
           });
         })
@@ -115,7 +93,6 @@ describe("Wedding", () => {
           expect(withoutIdentifiers(newWedding))
             .to.deep.eql({
               "guests": [],
-              "tasks": [],
               "participants": [
                 {
                   "role": "groom",
@@ -175,7 +152,6 @@ describe("Wedding", () => {
 
       modifiedWedding.participants = [];
       modifiedWedding.guests = [];
-      modifiedWedding.tasks = [];
 
       return request(app)
         .put("/api/wedding")
@@ -230,12 +206,6 @@ describe("Wedding", () => {
       modifiedWedding.guests.push({
         firstName: "John",
         lastName: "Rambo"
-      });
-
-      modifiedWedding.tasks.push({
-        name: "Do sth",
-        description: "or not",
-        status: "blocked"
       });
 
       return request(app)

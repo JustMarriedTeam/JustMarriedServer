@@ -31,22 +31,30 @@ describe("Tasks", () => {
             {
               "status": "blocked",
               "description": "a red task",
-              "name": "red task"
+              "name": "red task",
+              "dependingOn": [],
+              "requiredFor": []
             },
             {
               "status": "done",
               "description": "a blue task",
-              "name": "blue task"
+              "name": "blue task",
+              "dependingOn": [],
+              "requiredFor": []
             },
             {
               "status": "pending",
               "description": "a green task",
-              "name": "green task"
+              "name": "green task",
+              "dependingOn": [],
+              "requiredFor": []
             },
             {
               "status": "blocked",
               "description": "a black task",
-              "name": "black task"
+              "name": "black task",
+              "dependingOn": [],
+              "requiredFor": []
             }
           ]);
         })
@@ -70,7 +78,9 @@ describe("Tasks", () => {
           expect(withoutIdentifiers(res.body)).to.deep.equal({
             "name": "test name",
             "description": "test description",
-            "status": "pending"
+            "status": "pending",
+            "dependingOn": [],
+            "requiredFor": []
           });
         })
     );

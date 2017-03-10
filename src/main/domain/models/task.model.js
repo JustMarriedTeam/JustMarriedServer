@@ -17,7 +17,9 @@ const TaskSchema = new database.Schema({
     type: String,
     enum: values(TASK_STATUS),
     required: true
-  }
+  },
+  dependingOn: [database.Schema.Types.ObjectId],
+  requiredFor: [database.Schema.Types.ObjectId]
 });
 
 export { TASK_STATUS, TaskSchema };
