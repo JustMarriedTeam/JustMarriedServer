@@ -140,6 +140,7 @@ paths:
                 $ref: '#/definitions/Account'
 
   /wedding:
+
     get:
        description: |
         Gets a wedding.
@@ -249,11 +250,23 @@ definitions:
         type: string
       description:
         type: string
+      dependingOn:
+        type: array
+        items:
+          type: string
+      requiredFor:
+        type: array
+        items:
+          type: string
 
   Wedding:
     properties:
       _id:
         type: integer
+      name:
+        type: string
+      description:
+        type: string
       participants:
         type: array
         items:
@@ -262,6 +275,10 @@ definitions:
         type: array
         items:
           - $ref: '#/definitions/User'
+      tasks:
+        type: array
+        items:
+          - $ref: '#/definitions/Task'
 
   Tasks:
     type: array
