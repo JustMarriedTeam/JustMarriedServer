@@ -27,7 +27,7 @@ describe("Tasks", () => {
       () => updateTask(coloredSet.blackTask.id, extend({}, coloredSet.blackTask, {
         requiredFor: []
       })).then((tasks) => expect(tasks.id(coloredSet.redTask.id).dependingOn)
-        .to.include(coloredSet.blackTask._id))
+        .not.to.include(coloredSet.blackTask._id))
     ));
 
   });
