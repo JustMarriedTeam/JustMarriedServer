@@ -39,6 +39,19 @@ describe("Tasks", () => {
       })
     ));
 
+    it("should add new task to all tasks requiredFor " +
+      "if it lists itself as dependingOn them", () => runFromColoredAccount(
+      () => createTask({
+        name: "test name",
+        description: "test description",
+        status: "blocked",
+        dependingOn: [coloredSet.redTask.id]
+      }).then((task) => {
+        return getTasks().then((allTasks) =>
+          expect(allTasks.id(coloredSet.redTask.id).requiredFor).to.include(task._id));
+      })
+    ));
+
   });
 
   describe("updating", () => {
