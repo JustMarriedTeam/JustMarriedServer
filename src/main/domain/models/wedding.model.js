@@ -39,7 +39,7 @@ WeddingSchema.method({
 
   addTask(taskToAdd) {
     this.tasks.push(taskToAdd);
-    return this.saveAsync();
+    return this;
   }
 
 });

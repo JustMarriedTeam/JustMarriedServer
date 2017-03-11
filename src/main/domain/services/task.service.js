@@ -63,8 +63,29 @@ function updateTask(taskId, task) {
 function createTask(taskToSave) {
   const actingUser = getFromRequestContext("user.user");
   const savedTask = new Task(taskToSave);
+
   return Wedding.findByOwner(actingUser, "tasks")
     .then((wedding) => wedding.addTask(savedTask))
+    .then((wedding) => {
+
+      updateRelations({
+        taskId: savedTask.id,
+        type: "dependingOn",
+        oldRelations: [],
+        newRelations: allAsObjectId(taskToSave.requiredFor),
+        wedding
+      });
+
+      updateRelations({
+        taskId: savedTask.id,
+        type: "requiredFor",
+        oldRelations: [],
+        newRelations: allAsObjectId(taskToSave.dependingOn),
+        wedding
+      });
+
+      return wedding;
+    }).then((wedding) => wedding.saveAsync())
     .then(() => savedTask);
 }
 
