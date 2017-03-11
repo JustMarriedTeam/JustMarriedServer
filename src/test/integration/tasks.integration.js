@@ -6,15 +6,19 @@ import app from "../../main/index";
 import {withoutIdentifiers} from "../utils/comparison.utils";
 import {getTokenFor} from "../utils/auth.utils";
 import {setUpColored, tearDownColored} from "../data/colored.set";
+import extend from "lodash/extend";
 
 chai.config.includeStack = true;
 
 describe("Tasks", () => {
 
   let token;
+  const coloredSet = {};
 
   before(() => setUpColored((account) => {
     token = getTokenFor(account);
+  }, (set) => {
+    extend(coloredSet, set);
   }));
 
   after(() => tearDownColored());
@@ -27,34 +31,39 @@ describe("Tasks", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          expect(withoutIdentifiers(res.body)).to.deep.equal([
+          const { blackTask, blueTask, redTask, greenTask } = coloredSet;
+          expect(res.body).to.deep.equal([
             {
+              "id": redTask.id,
               "status": "blocked",
               "description": "a red task",
               "name": "red task",
-              "dependingOn": [],
+              "dependingOn": [blackTask.id, greenTask.id],
               "requiredFor": []
             },
             {
+              "id": blueTask.id,
               "status": "done",
               "description": "a blue task",
               "name": "blue task",
               "dependingOn": [],
-              "requiredFor": []
+              "requiredFor": [greenTask.id]
             },
             {
-              "status": "pending",
+              "id": greenTask.id,
+              "status": "done",
               "description": "a green task",
               "name": "green task",
-              "dependingOn": [],
-              "requiredFor": []
+              "dependingOn": [blueTask.id],
+              "requiredFor": [redTask.id]
             },
             {
-              "status": "blocked",
+              "id": blackTask.id,
+              "status": "pending",
               "description": "a black task",
               "name": "black task",
               "dependingOn": [],
-              "requiredFor": []
+              "requiredFor": [redTask.id]
             }
           ]);
         })

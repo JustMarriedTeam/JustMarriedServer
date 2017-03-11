@@ -1,13 +1,12 @@
 import Promise from "bluebird";
-
-import { anAccount, setUpAccounts, tearDownAccounts } from "../builders/account.builder";
-import { aUser } from "../builders/user.builder";
-import { aParticipant } from "../builders/participant.builder";
-import { aTask } from "../builders/task.builder";
-import { aWedding, setUpWeddings, tearDownWeddings } from "../builders/wedding.builder";
-
-
-import { TASK_STATUS } from "../../main/domain/models/task.model";
+import noop from "lodash/fp/noop";
+import {generateObjectId} from "../utils/id.generator";
+import {anAccount, setUpAccounts, tearDownAccounts} from "../builders/account.builder";
+import {aUser} from "../builders/user.builder";
+import {aParticipant} from "../builders/participant.builder";
+import {aTask} from "../builders/task.builder";
+import {aWedding, setUpWeddings, tearDownWeddings} from "../builders/wedding.builder";
+import {TASK_STATUS} from "../../main/domain/models/task.model";
 
 function createSet() {
 
@@ -37,28 +36,38 @@ function createSet() {
     .withUser(greenUser)
     .build();
 
-  const blackTask = aTask()
+  const blackTaskId = generateObjectId();
+  const blueTaskId = generateObjectId();
+  const greenTaskId = generateObjectId();
+  const redTaskId = generateObjectId();
+
+  const blackTask = aTask(blackTaskId)
     .withName("black task")
     .withDescription("a black task")
-    .withStatus(TASK_STATUS.BLOCKED)
+    .withStatus(TASK_STATUS.PENDING)
+    .withRequiredFor([redTaskId])
     .build();
 
-  const blueTask = aTask()
+  const blueTask = aTask(blueTaskId)
     .withName("blue task")
     .withDescription("a blue task")
     .withStatus(TASK_STATUS.DONE)
+    .withRequiredFor([greenTaskId])
     .build();
 
-  const greenTask = aTask()
+  const greenTask = aTask(greenTaskId)
     .withName("green task")
     .withDescription("a green task")
-    .withStatus(TASK_STATUS.PENDING)
+    .withStatus(TASK_STATUS.DONE)
+    .withDependingOn([blueTask])
+    .withRequiredFor([redTaskId])
     .build();
 
-  const redTask = aTask()
+  const redTask = aTask(redTaskId)
     .withName("red task")
     .withDescription("a red task")
     .withStatus(TASK_STATUS.BLOCKED)
+    .withDependingOn([blackTask, greenTask])
     .build();
 
   const coloredWedding = aWedding()
@@ -77,8 +86,8 @@ function createSet() {
       blackTask
     ])
     .withGuests([
-      { firstName: "firstNameA", lastName: "lastNameA" },
-      { firstName: "firstNameB", lastName: "lastNameB" }
+      {firstName: "firstNameA", lastName: "lastNameA"},
+      {firstName: "firstNameB", lastName: "lastNameB"}
     ]).build();
 
   return {
@@ -97,7 +106,7 @@ function createSet() {
 
 }
 
-function setUpColored(callback) {
+function setUpColored(callback, bindValues = noop) {
   const set = createSet();
 
   const {
@@ -110,7 +119,7 @@ function setUpColored(callback) {
     setUpAccounts(redAccount, greenAccount),
     setUpWeddings(coloredWedding),
     callback
-  );
+  ).then(() => bindValues(set));
 
 }
 
