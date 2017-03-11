@@ -31,14 +31,14 @@ describe("Tasks", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          const { blackTask, blueTask, redTask, greenTask } = coloredSet;
+          const { blackTask, blueTask, redTask, pinkTask, greenTask } = coloredSet;
           expect(res.body).to.deep.equal([
             {
               "id": redTask.id,
               "status": "blocked",
               "description": "a red task",
               "name": "red task",
-              "dependingOn": [blackTask.id, greenTask.id],
+              "dependingOn": [blackTask.id, pinkTask.id],
               "requiredFor": []
             },
             {
@@ -51,19 +51,27 @@ describe("Tasks", () => {
             },
             {
               "id": greenTask.id,
-              "status": "done",
+              "status": "pending",
               "description": "a green task",
               "name": "green task",
-              "dependingOn": [blueTask.id],
+              "dependingOn": [blackTask.id],
               "requiredFor": [redTask.id]
             },
             {
+              "description": "a pink task",
+              "id": pinkTask.id,
+              "name": "pink task",
+              "dependingOn": [greenTask.id, blueTask.id],
+              "requiredFor": [redTask.id],
+              "status": "blocked"
+            },
+            {
               "id": blackTask.id,
-              "status": "pending",
+              "status": "done",
               "description": "a black task",
               "name": "black task",
               "dependingOn": [],
-              "requiredFor": [redTask.id]
+              "requiredFor": [redTask.id, greenTask.id]
             }
           ]);
         })
