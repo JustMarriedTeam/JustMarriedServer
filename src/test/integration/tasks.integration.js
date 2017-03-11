@@ -96,4 +96,30 @@ describe("Tasks", () => {
 
   });
 
+  describe("PUT /api/wedding/tasks", () => {
+
+    it("can update a task", () =>
+      request(app)
+        .put(`/api/wedding/tasks/${coloredSet.redTask.id}`)
+        .send({
+          name: "test name",
+          description: "test description",
+          status: "pending",
+          dependingOn: [coloredSet.blueTask.id]
+        })
+        .set("token", token)
+        .expect(httpStatus.OK)
+        .then((res) => {
+          expect(withoutIdentifiers(res.body)).to.deep.equal({
+            "name": "test name",
+            "description": "test description",
+            "status": "pending",
+            "dependingOn": [],
+            "requiredFor": []
+          });
+        })
+    );
+
+  });
+
 });

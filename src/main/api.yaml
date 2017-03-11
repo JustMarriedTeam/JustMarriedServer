@@ -199,6 +199,28 @@ paths:
           schema:
             $ref: '#/definitions/Task'
 
+  /wedding/tasks/{taskId}:
+    put:
+      description: |
+        Updates an existing `Task`
+      security:
+        - bearer: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          type: string
+        - name: task
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        200:
+          description: The updated `Task`
+          schema:
+            $ref: '#/definitions/Task'
+
 
 definitions:
 

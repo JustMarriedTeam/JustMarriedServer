@@ -16,6 +16,10 @@ function listTasks() {
   return Wedding.findTasksBy(actingUser);
 }
 
+function updateTask() {
+
+}
+
 function createTask(taskToSave) {
   const actingUser = getFromRequestContext("user.user");
   const savedTask = new Task(taskToSave);
@@ -24,4 +28,4 @@ function createTask(taskToSave) {
     .then(() => savedTask);
 }
 
-export { listTasks, createTask };
+export { listTasks, updateTask, createTask };
