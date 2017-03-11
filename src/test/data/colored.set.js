@@ -40,12 +40,13 @@ function createSet() {
   const blueTaskId = generateObjectId();
   const greenTaskId = generateObjectId();
   const redTaskId = generateObjectId();
+  const pinkTaskId = generateObjectId();
 
   const blackTask = aTask(blackTaskId)
     .withName("black task")
     .withDescription("a black task")
-    .withStatus(TASK_STATUS.PENDING)
-    .withRequiredFor([redTaskId])
+    .withStatus(TASK_STATUS.DONE)
+    .withRequiredFor([redTaskId, greenTaskId])
     .build();
 
   const blueTask = aTask(blueTaskId)
@@ -58,8 +59,16 @@ function createSet() {
   const greenTask = aTask(greenTaskId)
     .withName("green task")
     .withDescription("a green task")
-    .withStatus(TASK_STATUS.DONE)
-    .withDependingOn([blueTask])
+    .withStatus(TASK_STATUS.PENDING)
+    .withDependingOn([blackTask])
+    .withRequiredFor([redTaskId])
+    .build();
+
+  const pinkTask = aTask(pinkTaskId)
+    .withName("pink task")
+    .withDescription("a pink task")
+    .withStatus(TASK_STATUS.BLOCKED)
+    .withDependingOn([greenTask, blueTask])
     .withRequiredFor([redTaskId])
     .build();
 
@@ -67,7 +76,7 @@ function createSet() {
     .withName("red task")
     .withDescription("a red task")
     .withStatus(TASK_STATUS.BLOCKED)
-    .withDependingOn([blackTask, greenTask])
+    .withDependingOn([blackTask, pinkTask])
     .build();
 
   const coloredWedding = aWedding()
@@ -83,6 +92,7 @@ function createSet() {
       redTask,
       blueTask,
       greenTask,
+      pinkTask,
       blackTask
     ])
     .withGuests([
@@ -100,6 +110,7 @@ function createSet() {
     blackTask,
     blueTask,
     greenTask,
+    pinkTask,
     redTask,
     coloredWedding
   };
