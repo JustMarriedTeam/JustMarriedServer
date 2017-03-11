@@ -49,7 +49,7 @@ function updateTask(taskId, task) {
       });
 
       return wedding.saveAsync()
-        .then((updatedWedding) => updatedWedding.tasks);
+        .then((updatedWedding) => updatedWedding.tasks.id(taskId));
     } else {
       throw Error("Task does not exist");
     }
