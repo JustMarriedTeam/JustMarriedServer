@@ -5,6 +5,7 @@ import {setUpColored, tearDownColored} from "../data/colored.set";
 import {createTask, updateTask} from "../../main/domain/services/task.service";
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
+import Promise from "bluebird";
 
 chai.config.includeStack = true;
 
@@ -33,9 +34,9 @@ describe("Tasks", () => {
         status: "blocked",
         requiredFor: [coloredSet.redTask.id]
       }).then((task) => {
-        return Promise.resolve(getTasks()).then((allTasks) => ({ task, allTasks }));
-      }).then(({task, allTasks}) => expect(allTasks.id(coloredSet.redTask.id).dependingOn)
-          .to.include(task._id))
+        return getTasks().then((allTasks) =>
+          expect(allTasks.id(coloredSet.redTask.id).dependingOn).to.include(task._id));
+      })
     ));
 
   });
