@@ -63,7 +63,7 @@ function updateTask(taskId, task) {
 function createTask(taskToSave) {
   const actingUser = getFromRequestContext("user.user");
   const savedTask = new Task(taskToSave);
-  return Wedding.findByOwner(actingUser)
+  return Wedding.findByOwner(actingUser, "tasks")
     .then((wedding) => wedding.addTask(savedTask))
     .then(() => savedTask);
 }

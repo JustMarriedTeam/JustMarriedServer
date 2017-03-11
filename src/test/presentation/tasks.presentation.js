@@ -87,17 +87,19 @@ describe("Tasks", () => {
         .send({
           name: "test name",
           description: "test description",
-          status: "pending"
+          status: "pending",
+          dependingOn: [coloredSet.blueTask.id],
+          requiredFor: [coloredSet.redTask.id, coloredSet.greenTask.id]
         })
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
           expect(withoutIdentifiers(res.body)).to.deep.equal({
-            "name": "test name",
-            "description": "test description",
-            "status": "pending",
-            "dependingOn": [],
-            "requiredFor": []
+            name: "test name",
+            description: "test description",
+            status: "pending",
+            dependingOn: [coloredSet.blueTask.id],
+            requiredFor: [coloredSet.redTask.id, coloredSet.greenTask.id]
           });
         })
     );
