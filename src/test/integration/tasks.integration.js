@@ -2,7 +2,7 @@
 import chai, {expect} from "chai";
 import extend from "lodash/extend";
 import {setUpColored, tearDownColored} from "../data/colored.set";
-import {updateTask} from "../../main/domain/services/task.service";
+import {createTask, updateTask} from "../../main/domain/services/task.service";
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
 
@@ -22,6 +22,23 @@ describe("Tasks", () => {
   }));
 
   afterEach(() => tearDownColored());
+
+  describe("creating", () => {
+
+    it("should add new task to all tasks dependingOn it " +
+      "if it lists itself as requiredFor them", () => runFromColoredAccount(
+      () => createTask({
+        name: "test name",
+        description: "test description",
+        status: "blocked",
+        requiredFor: [coloredSet.redTask.id]
+      }).then((task) => {
+        return Promise.resolve(getTasks()).then((allTasks) => ({ task, allTasks }));
+      }).then(({task, allTasks}) => expect(allTasks.id(coloredSet.redTask.id).dependingOn)
+          .to.include(task._id))
+    ));
+
+  });
 
   describe("updating", () => {
 
