@@ -1,4 +1,4 @@
-/* global describe, before, after, it */
+/* global describe, beforeEach, afterEach, it */
 import request from "supertest";
 import httpStatus from "http-status";
 import chai, {expect} from "chai";
@@ -15,13 +15,13 @@ describe("Tasks", () => {
   let token;
   const coloredSet = {};
 
-  before(() => setUpColored((account) => {
+  beforeEach(() => setUpColored((account) => {
     token = getTokenFor(account);
   }, (set) => {
     extend(coloredSet, set);
   }));
 
-  after(() => tearDownColored());
+  afterEach(() => tearDownColored());
 
   describe("GET /api/wedding/tasks", () => {
 
@@ -113,7 +113,8 @@ describe("Tasks", () => {
           name: "test name",
           description: "test description",
           status: "pending",
-          dependingOn: [coloredSet.blueTask.id]
+          dependingOn: [coloredSet.blueTask.id],
+          requiredFor: [coloredSet.greenTask.id]
         })
         .set("token", token)
         .expect(httpStatus.OK)
@@ -122,8 +123,8 @@ describe("Tasks", () => {
             "name": "test name",
             "description": "test description",
             "status": "pending",
-            "dependingOn": [],
-            "requiredFor": []
+            "dependingOn": [coloredSet.blueTask.id],
+            "requiredFor": [coloredSet.greenTask.id]
           });
         })
     );

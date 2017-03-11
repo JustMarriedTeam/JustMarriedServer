@@ -2,9 +2,11 @@ import Wedding from "../models/wedding.model";
 import Task from "../models/task.model";
 import forEach from "lodash/fp/forEach";
 import filter from "lodash/fp/filter";
+import extend from "lodash/extend";
+import omit from "lodash/omit";
 import find from "lodash/fp/find";
 import {getFromRequestContext} from "../../context";
-import { allAsObjectId } from "../../database";
+import {allAsObjectId} from "../../database";
 
 const taskNotIncludedIn = function (requiredFor) {
   return (taskId) => !find((comparedTaskId) => taskId.equals(comparedTaskId))(requiredFor);
@@ -47,6 +49,8 @@ function updateTask(taskId, task) {
         newRelations: allAsObjectId(task.dependingOn),
         wedding
       });
+
+      extend(updatedTask, omit(task, "id"));
 
       return wedding.saveAsync()
         .then((updatedWedding) => updatedWedding.tasks.id(taskId));

@@ -73,6 +73,24 @@ describe("Tasks", () => {
         .to.include(coloredSet.redTask._id))
     ));
 
+    it("should replace all fields with the ones given", () => runFromColoredAccount(
+      () => updateTask(coloredSet.pinkTask.id, {
+        name: "new red",
+        description: "new red description",
+        status: "pending",
+        requiredFor: [coloredSet.blueTask.id],
+        dependingOn: []
+      })).then((task) => expect(JSON.parse(JSON.stringify(task))).to.eql({
+        id: coloredSet.pinkTask.id,
+        name: "new red",
+        description: "new red description",
+        status: "pending",
+        requiredFor: [coloredSet.blueTask.id],
+        dependingOn: []
+      })
+    ));
+
+
   });
 
 });
