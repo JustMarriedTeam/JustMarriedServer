@@ -5,7 +5,6 @@ import {setUpColored, tearDownColored} from "../data/colored.set";
 import {createTask, updateTask} from "../../main/domain/services/task.service";
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
-import Promise from "bluebird";
 
 chai.config.includeStack = true;
 
