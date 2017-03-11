@@ -1,4 +1,4 @@
-/* global describe, beforeEach, afterEach, it */
+/* global describe, before, after, it */
 import chai, {expect} from "chai";
 import extend from "lodash/extend";
 import {setUpColored, tearDownColored} from "../data/colored.set";
@@ -12,24 +12,23 @@ describe("Tasks", () => {
   let runFromColoredAccount;
   const coloredSet = {};
 
-  beforeEach(() => setUpColored((account) => {
+  before(() => setUpColored((account) => {
     runFromColoredAccount = runFromAccount(account);
   }, (set) => {
     extend(coloredSet, set);
   }));
 
-  afterEach(() => tearDownColored());
+  after(() => tearDownColored());
 
   describe("updating", () => {
 
     it("should remove updated task from all tasks dependingOn it " +
-      "if no longer lists itself as requiredFor them",
-      runFromColoredAccount(
-        updateTask(coloredSet.blackTask.id, extend({}, coloredSet.blackTask, {
-          requiredFor: []
-        })).then(() => expect(coloredSet.redTask.dependingOn)
-          .not.to.include(coloredSet.blackTask.id))
-      ));
+      "if no longer lists itself as requiredFor them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.blackTask.id, extend({}, coloredSet.blackTask, {
+        requiredFor: []
+      })).then((tasks) => expect(tasks.id(coloredSet.redTask.id).dependingOn)
+        .to.include(coloredSet.blackTask._id))
+    ));
 
   });
 

@@ -4,10 +4,10 @@ import forEach from "lodash/fp/forEach";
 import filter from "lodash/fp/filter";
 import includes from "lodash/fp/includes";
 import {getFromRequestContext} from "../../context";
+import { allAsObjectId } from "../../database";
 
-
-const includesTask = function (requiredFor) {
-  return (taskId) => includes(taskId)(requiredFor);
+const taskNotIncludedIn = function (requiredFor) {
+  return (taskId) => !includes(taskId)(requiredFor);
 };
 
 function listTasks() {
@@ -16,8 +16,8 @@ function listTasks() {
 }
 
 const updateRelations = ({taskId, oldRelations, newRelations, wedding}) => {
-  const relationsToRemove = filter(includesTask(newRelations))(oldRelations);
-  const relationsToAdd = filter(!includesTask(newRelations))(oldRelations);
+  const relationsToRemove = filter(taskNotIncludedIn(newRelations))(oldRelations);
+  const relationsToAdd = filter(taskNotIncludedIn(oldRelations))(newRelations);
 
   forEach((noLongerDependentTaskId) => wedding.tasks.id(noLongerDependentTaskId)
     .dependingOn.remove(taskId))(relationsToRemove);
@@ -32,10 +32,22 @@ function updateTask(taskId, task) {
     if (updatedTask) {
       const {dependingOn, requiredFor} = updatedTask;
 
-      updateRelations({oldRelations: requiredFor, newRelations: task.requiredFor, taskId});
-      updateRelations({oldRelations: dependingOn, newRelations: task.dependingOn, taskId});
+      updateRelations({
+        taskId,
+        oldRelations: requiredFor,
+        newRelations: allAsObjectId(task.requiredFor),
+        wedding
+      });
 
-      return wedding.saveAsync();
+      updateRelations({
+        taskId,
+        oldRelations: dependingOn,
+        newRelations: allAsObjectId(task.dependingOn),
+        wedding
+      });
+
+      return wedding.saveAsync()
+        .then((updatedWedding) => updatedWedding.tasks);
     } else {
       throw Error("Task does not exist");
     }

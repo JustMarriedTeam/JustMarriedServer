@@ -3,13 +3,6 @@ import {runInContext, setInContext} from "../../main/context";
 
 export const runFromAccount = (account) =>
   (action) => runInContext(() => {
-
-    setInContext("request", {
-      request: {
-        user: account
-      }
-    });
-
+    setInContext("request", { user: account });
     return Promise.resolve(action());
-
   });

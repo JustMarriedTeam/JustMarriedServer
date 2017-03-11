@@ -3,6 +3,7 @@ import util from "util";
 import Promise from "bluebird";
 import properties from "./properties";
 import logger from "./logger";
+import map from "lodash/fp/map";
 
 mongoose.Promise = Promise;
 Promise.promisifyAll(mongoose);
@@ -30,5 +31,8 @@ mongoose.plugin((schema) => {
     }
   };
 });
+
+export const asObjectId = (id) => new mongoose.Types.ObjectId(id);
+export const allAsObjectId = (idList) => map((id) => asObjectId(id))(idList);
 
 export default mongoose;
