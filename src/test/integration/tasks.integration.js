@@ -54,6 +54,22 @@ describe("Tasks", () => {
         .to.include(coloredSet.greenTask._id))
     ));
 
+    it("should not remove updated task from all tasks dependingOn " +
+      "if it lists itself still requiredFor them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.blackTask.id, extend({}, coloredSet.blackTask, {
+        requiredFor: [coloredSet.redTask.id]
+      })).then((tasks) => expect(tasks.id(coloredSet.redTask.id).dependingOn)
+        .to.include(coloredSet.blackTask._id))
+    ));
+
+    it("should not remove updated task from all tasks requiredFor " +
+      "if it lists itself still depending on them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.redTask.id, extend({}, coloredSet.redTask, {
+        dependingOn: [coloredSet.greenTask.id]
+      })).then((tasks) => expect(tasks.id(coloredSet.greenTask.id).requiredFor)
+        .to.include(coloredSet.redTask._id))
+    ));
+
   });
 
 });
