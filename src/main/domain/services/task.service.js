@@ -2,12 +2,11 @@ import Wedding from "../models/wedding.model";
 import Task from "../models/task.model";
 import forEach from "lodash/fp/forEach";
 import filter from "lodash/fp/filter";
-import includes from "lodash/fp/includes";
 import extend from "lodash/extend";
 import omit from "lodash/omit";
 import find from "lodash/fp/find";
 import {getFromRequestContext} from "../../context";
-import {allAsObjectId} from "../../database";
+import {asObjectId, allAsObjectId} from "../../database";
 
 const taskNotIncludedIn = function (taskList) {
   return (taskId) => !find((comparedTaskId) => taskId.equals(comparedTaskId))(taskList);
@@ -28,10 +27,11 @@ const updateRelations = ({type, taskId, oldRelations, newRelations, wedding}) =>
     .push(taskId))(relationsToAdd);
 };
 
-const removeRelations = ({ type, taskId, wedding }) => {
-  const relationsToRemove = filter(includes({ id: taskId }))(wedding[type]);
+const removeRelations = ({ relationType, taskId, wedding }) => {
+  const relationsToRemove = filter((task) => !!find((comparedTaskId) =>
+    taskId.equals(comparedTaskId))(task[relationType]))(wedding.tasks);
 
-  forEach((noLongerRelatedTaskId) => wedding.tasks.id(noLongerRelatedTaskId)[type]
+  forEach((noLongerRelatedTaskId) => wedding.tasks.id(noLongerRelatedTaskId)[relationType]
     .remove(taskId))(relationsToRemove);
 };
 
@@ -104,15 +104,15 @@ function removeTask(taskId) {
     .then((wedding) => {
 
       removeRelations({
-        taskId,
+        taskId: asObjectId(taskId),
         wedding,
-        type: "dependingOn"
+        relationType: "dependingOn"
       });
 
       removeRelations({
-        taskId,
+        taskId: asObjectId(taskId),
         wedding,
-        type: "requiredFor"
+        relationType: "requiredFor"
       });
 
       return wedding;

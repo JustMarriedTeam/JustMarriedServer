@@ -1,8 +1,9 @@
 /* global describe, beforeEach, afterEach, it */
 import chai, {expect} from "chai";
 import extend from "lodash/extend";
+import forEach from "lodash/fp/forEach";
 import {setUpColored, tearDownColored} from "../data/colored.set";
-import {createTask, updateTask} from "../../main/domain/services/task.service";
+import {createTask, updateTask, removeTask} from "../../main/domain/services/task.service";
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
 
@@ -120,6 +121,32 @@ describe("Tasks", () => {
       })
     ));
 
+
+  });
+
+  describe("deleting", () => {
+
+    it("should remove task", () => runFromColoredAccount(
+      () => removeTask(coloredSet.blackTask.id)
+        .then(getTasks)
+        .then((tasks) => expect(tasks).not.to.include(coloredSet.blackTask))
+    ));
+
+    it("should remove task from all dependingOn of other tasks", () => runFromColoredAccount(
+      () => removeTask(coloredSet.blackTask.id)
+        .then(getTasks)
+        .then((tasks) => forEach((task) =>
+          expect(task.dependingOn).not.to.include(coloredSet.blackTask._id)
+        )(tasks))
+    ));
+
+    it("should remove task from all requiredFor of other tasks", () => runFromColoredAccount(
+      () => removeTask(coloredSet.blackTask.id)
+        .then(getTasks)
+        .then((tasks) => forEach((task) =>
+          expect(task.requiredFor).not.to.include(coloredSet.blackTask._id)
+        )(tasks))
+    ));
 
   });
 
