@@ -221,6 +221,21 @@ paths:
           schema:
             $ref: '#/definitions/Task'
 
+    delete:
+      description: |
+        Deletes an existing `Task`
+      security:
+        - bearer: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Task has been deleted.
+
+
 
 definitions:
 

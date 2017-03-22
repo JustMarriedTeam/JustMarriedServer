@@ -40,6 +40,11 @@ WeddingSchema.method({
   addTask(taskToAdd) {
     this.tasks.push(taskToAdd);
     return this;
+  },
+
+  removeTask(taskId) {
+    this.tasks.id(taskId).remove();
+    return this;
   }
 
 });

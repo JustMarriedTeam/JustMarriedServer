@@ -2,14 +2,15 @@ import Wedding from "../models/wedding.model";
 import Task from "../models/task.model";
 import forEach from "lodash/fp/forEach";
 import filter from "lodash/fp/filter";
+import includes from "lodash/fp/includes";
 import extend from "lodash/extend";
 import omit from "lodash/omit";
 import find from "lodash/fp/find";
 import {getFromRequestContext} from "../../context";
 import {allAsObjectId} from "../../database";
 
-const taskNotIncludedIn = function (requiredFor) {
-  return (taskId) => !find((comparedTaskId) => taskId.equals(comparedTaskId))(requiredFor);
+const taskNotIncludedIn = function (taskList) {
+  return (taskId) => !find((comparedTaskId) => taskId.equals(comparedTaskId))(taskList);
 };
 
 function listTasks() {
@@ -21,10 +22,17 @@ const updateRelations = ({type, taskId, oldRelations, newRelations, wedding}) =>
   const relationsToRemove = filter(taskNotIncludedIn(newRelations))(oldRelations);
   const relationsToAdd = filter(taskNotIncludedIn(oldRelations))(newRelations);
 
-  forEach((noLongerDependentTaskId) => wedding.tasks.id(noLongerDependentTaskId)[type]
+  forEach((unrelatedTaskId) => wedding.tasks.id(unrelatedTaskId)[type]
     .remove(taskId))(relationsToRemove);
-  forEach((newDependentTaskId) => wedding.tasks.id(newDependentTaskId)[type]
+  forEach((relatedTaskId) => wedding.tasks.id(relatedTaskId)[type]
     .push(taskId))(relationsToAdd);
+};
+
+const removeRelations = ({ type, taskId, wedding }) => {
+  const relationsToRemove = filter(includes({ id: taskId }))(wedding[type]);
+
+  forEach((noLongerRelatedTaskId) => wedding.tasks.id(noLongerRelatedTaskId)[type]
+    .remove(taskId))(relationsToRemove);
 };
 
 function updateTask(taskId, task) {
@@ -89,4 +97,27 @@ function createTask(taskToSave) {
     .then(() => savedTask);
 }
 
-export {listTasks, updateTask, createTask};
+function removeTask(taskId) {
+  const actingUser = getFromRequestContext("user.user");
+  return Wedding.findByOwner(actingUser, "tasks")
+    .then((wedding) => wedding.removeTask(wedding.getTask(taskId)))
+    .then((wedding) => {
+
+      removeRelations({
+        taskId,
+        wedding,
+        type: "dependingOn"
+      });
+
+      removeRelations({
+        taskId,
+        wedding,
+        type: "requiredFor"
+      });
+
+      return wedding;
+    })
+    .then((wedding) => wedding.saveAsync());
+}
+
+export {listTasks, updateTask, createTask, removeTask};

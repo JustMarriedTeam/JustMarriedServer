@@ -1,5 +1,6 @@
-import { putTask } from "../../../controllers/tasks.controller";
+import { putTask, deleteTask } from "../../../controllers/tasks.controller";
 
 module.exports = {
-  put: putTask
+  put: putTask,
+  delete: deleteTask
 };

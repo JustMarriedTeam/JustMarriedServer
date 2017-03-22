@@ -1,4 +1,4 @@
-import {createTask, updateTask, listTasks} from "../domain/services/task.service";
+import {createTask, updateTask, removeTask, listTasks} from "../domain/services/task.service";
 import HttpStatus from "http-status";
 
 function getTasks(req, res, done) {
@@ -21,4 +21,11 @@ function putTask(req, res, done) {
     .finally(done);
 }
 
-export {getTasks, putTask, postTask};
+function deleteTask(req, res, done) {
+  removeTask(req.param("taskId"))
+    .then(() => res.status(HttpStatus.OK))
+    .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
+    .finally(done);
+}
+
+export {getTasks, postTask, putTask, deleteTask};

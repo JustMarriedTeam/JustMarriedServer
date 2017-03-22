@@ -106,7 +106,7 @@ describe("Tasks", () => {
 
   });
 
-  describe("PUT /api/wedding/tasks", () => {
+  describe("PUT /api/wedding/tasks/{taskId}", () => {
 
     it("can update a task", () =>
       request(app)
@@ -130,6 +130,15 @@ describe("Tasks", () => {
           });
         })
     );
+
+  });
+
+  describe("DELETE /api/wedding/task/{taskId}", () => {
+
+    it("can delete a task", () => request(app)
+      .delete(`/api/wedding/tasks/${coloredSet.redTask.id}`)
+      .set("token", token)
+      .expect(httpStatus.OK));
 
   });
 
