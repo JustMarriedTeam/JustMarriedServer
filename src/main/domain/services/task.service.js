@@ -100,7 +100,7 @@ function createTask(taskToSave) {
 function removeTask(taskId) {
   const actingUser = getFromRequestContext("user.user");
   return Wedding.findByOwner(actingUser, "tasks")
-    .then((wedding) => wedding.removeTask(wedding.getTask(taskId)))
+    .then((wedding) => wedding.removeTask(taskId))
     .then((wedding) => {
 
       removeRelations({

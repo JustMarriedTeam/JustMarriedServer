@@ -23,7 +23,7 @@ function putTask(req, res, done) {
 
 function deleteTask(req, res, done) {
   removeTask(req.param("taskId"))
-    .then(() => res.status(HttpStatus.OK))
+    .then(() => res.status(HttpStatus.NO_CONTENT).json({}))
     .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
     .finally(done);
 }

@@ -138,7 +138,7 @@ describe("Tasks", () => {
     it("can delete a task", () => request(app)
       .delete(`/api/wedding/tasks/${coloredSet.redTask.id}`)
       .set("token", token)
-      .expect(httpStatus.OK));
+      .expect(httpStatus.NO_CONTENT));
 
   });
 
