@@ -5,7 +5,8 @@ import {
   updateWedding } from "../domain/services/wedding.service";
 import pick from "lodash/fp/pick";
 
-const onlyBasicInformation = pick(["name", "description", "participants", "guests", "owners"]);
+const onlyBasicInformation = pick(["id", "name", "description",
+  "participants", "guests", "owners"]);
 
 function getWedding(req, res, done) {
   getWeddingOfLoggedUser()
