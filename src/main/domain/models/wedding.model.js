@@ -15,12 +15,12 @@ const WeddingSchema = new database.Schema({
 
 WeddingSchema.static({
 
-  findByOwner(owner) {
-    return this.findOneAsync({
+  findByOwner(owner, select = "name description participants guests owners") {
+    return this.findOne({
       owners: {
         $elemMatch: owner
       }
-    });
+    }).select(select).exec();
   },
 
   findTasksBy(owner) {
@@ -39,7 +39,12 @@ WeddingSchema.method({
 
   addTask(taskToAdd) {
     this.tasks.push(taskToAdd);
-    return this.saveAsync();
+    return this;
+  },
+
+  removeTask(taskId) {
+    this.tasks.id(taskId).remove();
+    return this;
   }
 
 });

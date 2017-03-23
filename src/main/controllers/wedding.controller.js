@@ -3,9 +3,15 @@ import HttpStatus from "http-status";
 import {
   getWeddingOfLoggedUser,
   updateWedding } from "../domain/services/wedding.service";
+import pick from "lodash/fp/pick";
+
+const onlyBasicInformation = pick(["id", "name", "description",
+  "participants", "guests", "owners"]);
 
 function getWedding(req, res, done) {
-  getWeddingOfLoggedUser().then((wedding) => res.status(HttpStatus.OK).json(wedding))
+  getWeddingOfLoggedUser()
+    .then((wedding) => onlyBasicInformation(wedding))
+    .then((wedding) => res.status(HttpStatus.OK).json(wedding))
     .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
     .finally(done);
 }

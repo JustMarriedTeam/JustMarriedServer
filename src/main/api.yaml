@@ -140,6 +140,7 @@ paths:
                 $ref: '#/definitions/Account'
 
   /wedding:
+
     get:
        description: |
         Gets a wedding.
@@ -198,6 +199,43 @@ paths:
           schema:
             $ref: '#/definitions/Task'
 
+  /wedding/tasks/{taskId}:
+    put:
+      description: |
+        Updates an existing `Task`
+      security:
+        - bearer: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          type: string
+        - name: task
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        200:
+          description: The updated `Task`
+          schema:
+            $ref: '#/definitions/Task'
+
+    delete:
+      description: |
+        Deletes an existing `Task`
+      security:
+        - bearer: []
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: Task has been deleted.
+
+
 
 definitions:
 
@@ -249,11 +287,23 @@ definitions:
         type: string
       description:
         type: string
+      dependingOn:
+        type: array
+        items:
+          type: string
+      requiredFor:
+        type: array
+        items:
+          type: string
 
   Wedding:
     properties:
       _id:
         type: integer
+      name:
+        type: string
+      description:
+        type: string
       participants:
         type: array
         items:
@@ -262,6 +312,10 @@ definitions:
         type: array
         items:
           - $ref: '#/definitions/User'
+      tasks:
+        type: array
+        items:
+          - $ref: '#/definitions/Task'
 
   Tasks:
     type: array

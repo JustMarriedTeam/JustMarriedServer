@@ -9,7 +9,8 @@ import upperFirst from "lodash/upperFirst";
 export default function (Model) {
 
   const schema = cloneDeep(Model.schema.obj);
-  const Builder = function () {
+  const Builder = function (id) {
+    this._id = id;
     this.obj = {};
   };
 
@@ -23,7 +24,11 @@ export default function (Model) {
   });
 
   Builder.prototype.build = function () {
-    return new Model(this.obj);
+    const props = cloneDeep(this.obj);
+    if (this._id) {
+      props._id = this._id;
+    }
+    return new Model(props);
   };
 
   return Builder;

@@ -1,79 +1,152 @@
-/* global describe, before, after, it */
-import request from "supertest";
-import httpStatus from "http-status";
+/* global describe, beforeEach, afterEach, it */
 import chai, {expect} from "chai";
-import app from "../../main/index";
-import {withoutIdentifiers} from "../utils/comparison.utils";
-import {getTokenFor} from "../utils/auth.utils";
+import extend from "lodash/extend";
+import forEach from "lodash/fp/forEach";
 import {setUpColored, tearDownColored} from "../data/colored.set";
+import {createTask, updateTask, removeTask} from "../../main/domain/services/task.service";
+import {runFromAccount} from "../actions/context.action";
+import {getTasksForAccount} from "../actions/tasks.actions";
 
 chai.config.includeStack = true;
 
 describe("Tasks", () => {
 
-  let token;
+  let runFromColoredAccount;
+  let getTasks;
+  const coloredSet = {};
 
-  before(() => setUpColored((account) => {
-    token = getTokenFor(account);
+  beforeEach(() => setUpColored((account) => {
+    runFromColoredAccount = runFromAccount(account);
+    getTasks = getTasksForAccount(account);
+  }, (set) => {
+    extend(coloredSet, set);
   }));
 
-  after(() => tearDownColored());
+  afterEach(() => tearDownColored());
 
-  describe("GET /api/wedding/tasks", () => {
+  describe("creating", () => {
 
-    it("can get all tasks bound to a wedding", () =>
-      request(app)
-        .get("/api/wedding/tasks")
-        .set("token", token)
-        .expect(httpStatus.OK)
-        .then((res) => {
-          expect(withoutIdentifiers(res.body)).to.deep.equal([
-            {
-              "status": "blocked",
-              "description": "a red task",
-              "name": "red task"
-            },
-            {
-              "status": "done",
-              "description": "a blue task",
-              "name": "blue task"
-            },
-            {
-              "status": "pending",
-              "description": "a green task",
-              "name": "green task"
-            },
-            {
-              "status": "blocked",
-              "description": "a black task",
-              "name": "black task"
-            }
-          ]);
-        })
-    );
+    it("should add new task to all tasks dependingOn it " +
+      "if it lists itself as requiredFor them", () => runFromColoredAccount(
+      () => createTask({
+        name: "test name",
+        description: "test description",
+        status: "blocked",
+        requiredFor: [coloredSet.redTask.id]
+      }).then((task) => {
+        return getTasks().then((allTasks) =>
+          expect(allTasks.id(coloredSet.redTask.id).dependingOn).to.include(task._id));
+      })
+    ));
+
+    it("should add new task to all tasks requiredFor " +
+      "if it lists itself as dependingOn them", () => runFromColoredAccount(
+      () => createTask({
+        name: "test name",
+        description: "test description",
+        status: "blocked",
+        dependingOn: [coloredSet.redTask.id]
+      }).then((task) => {
+        return getTasks().then((allTasks) =>
+          expect(allTasks.id(coloredSet.redTask.id).requiredFor).to.include(task._id));
+      })
+    ));
 
   });
 
-  describe("POST /api/wedding/tasks", () => {
+  describe("updating", () => {
 
-    it("can save a new task", () =>
-      request(app)
-        .post("/api/wedding/tasks")
-        .send({
-          name: "test name",
-          description: "test description",
-          status: "pending"
-        })
-        .set("token", token)
-        .expect(httpStatus.OK)
-        .then((res) => {
-          expect(withoutIdentifiers(res.body)).to.deep.equal({
-            "name": "test name",
-            "description": "test description",
-            "status": "pending"
-          });
-        })
-    );
+    it("should remove updated task from all tasks dependingOn it " +
+      "if no longer lists itself as requiredFor them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.blackTask.id, extend({}, coloredSet.blackTask, {
+        requiredFor: [coloredSet.blackTask.id]
+      })).then(getTasks).then((tasks) => expect(tasks.id(coloredSet.greenTask.id).dependingOn)
+        .not.to.include(coloredSet.blackTask._id))
+    ));
+
+    it("should add updated task to all tasks dependingOn " +
+      "if it lists itself as requiredFor them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.blackTask.id, extend({}, coloredSet.blackTask, {
+        requiredFor: [coloredSet.blueTask.id]
+      })).then(getTasks).then((tasks) => expect(tasks.id(coloredSet.blueTask.id).dependingOn)
+        .to.include(coloredSet.blackTask._id))
+    ));
+
+    it("should remove updated task from all tasks requiredFor " +
+      "if it no longer lists itself as dependingOn them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.redTask.id, extend({}, coloredSet.redTask, {
+        dependingOn: [coloredSet.pinkTask.id]
+      })).then(getTasks).then((tasks) => expect(tasks.id(coloredSet.blackTask.id).requiredFor)
+        .not.to.include(coloredSet.redTask._id))
+    ));
+
+    it("should add updated task from all tasks requiredFor " +
+      "if it lists itself as dependingOn them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.greenTask.id, extend({}, coloredSet.greenTask, {
+        dependingOn: [coloredSet.blueTask.id]
+      })).then(getTasks).then((tasks) => expect(tasks.id(coloredSet.blueTask.id).requiredFor)
+        .to.include(coloredSet.greenTask._id))
+    ));
+
+    it("should not remove updated task from all tasks dependingOn " +
+      "if it lists itself still requiredFor them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.blackTask.id, extend({}, coloredSet.blackTask, {
+        requiredFor: [coloredSet.redTask.id]
+      })).then(getTasks).then((tasks) => expect(tasks.id(coloredSet.redTask.id).dependingOn)
+        .to.include(coloredSet.blackTask._id))
+    ));
+
+    it("should not remove updated task from all tasks requiredFor " +
+      "if it lists itself still depending on them", () => runFromColoredAccount(
+      () => updateTask(coloredSet.redTask.id, extend({}, coloredSet.redTask, {
+        dependingOn: [coloredSet.greenTask.id]
+      })).then(getTasks).then((tasks) => expect(tasks.id(coloredSet.greenTask.id).requiredFor)
+        .to.include(coloredSet.redTask._id))
+    ));
+
+    it("should replace all fields with the ones given", () => runFromColoredAccount(
+      () => updateTask(coloredSet.pinkTask.id, {
+        name: "new red",
+        description: "new red description",
+        status: "pending",
+        requiredFor: [coloredSet.blueTask.id],
+        dependingOn: []
+      })).then((task) => expect(JSON.parse(JSON.stringify(task))).to.eql({
+        id: coloredSet.pinkTask.id,
+        name: "new red",
+        description: "new red description",
+        status: "pending",
+        requiredFor: [coloredSet.blueTask.id],
+        dependingOn: []
+      })
+    ));
+
+
+  });
+
+  describe("deleting", () => {
+
+    it("should remove task", () => runFromColoredAccount(
+      () => removeTask(coloredSet.blackTask.id)
+        .then(getTasks)
+        .then((tasks) => expect(tasks).not.to.include(coloredSet.blackTask))
+    ));
+
+    it("should remove task from all dependingOn of other tasks", () => runFromColoredAccount(
+      () => removeTask(coloredSet.blackTask.id)
+        .then(getTasks)
+        .then((tasks) => forEach((task) =>
+          expect(task.dependingOn).not.to.include(coloredSet.blackTask._id)
+        )(tasks))
+    ));
+
+    it("should remove task from all requiredFor of other tasks", () => runFromColoredAccount(
+      () => removeTask(coloredSet.blackTask.id)
+        .then(getTasks)
+        .then((tasks) => forEach((task) =>
+          expect(task.requiredFor).not.to.include(coloredSet.blackTask._id)
+        )(tasks))
+    ));
 
   });
 
