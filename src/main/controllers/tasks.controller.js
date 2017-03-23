@@ -1,5 +1,6 @@
 import {createTask, updateTask, removeTask, listTasks} from "../domain/services/task.service";
 import HttpStatus from "http-status";
+import omit from "lodash/omit";
 
 function getTasks(req, res, done) {
   listTasks().then((tasks) => res.status(HttpStatus.OK).json(tasks))
@@ -8,7 +9,7 @@ function getTasks(req, res, done) {
 }
 
 function postTask(req, res, done) {
-  createTask(req.body)
+  createTask(omit(req.body, ["_id"]))
         .then((task) => res.status(HttpStatus.OK).json(task))
         .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
         .finally(done);
