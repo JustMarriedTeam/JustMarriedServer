@@ -47,7 +47,7 @@ function createSet() {
     .withDescription("a black task")
     .withStatus(TASK_STATUS.DONE)
     .withDeadlineDate(new Date(2017, 2, 11))
-    .withCompletedDate(new Date(2017, 2, 10))
+    .withCompletionDate(new Date(2017, 2, 10))
     .withRequiredFor([redTaskId, greenTaskId])
     .build();
 
@@ -56,7 +56,7 @@ function createSet() {
     .withDescription("a blue task")
     .withStatus(TASK_STATUS.DONE)
     .withDeadlineDate(new Date(2017, 3, 21))
-    .withCompletedDate(new Date(2017, 3, 4))
+    .withCompletionDate(new Date(2017, 3, ))
     .withRequiredFor([greenTaskId])
     .build();
 

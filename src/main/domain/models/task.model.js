@@ -24,7 +24,7 @@ const TaskSchema = new database.Schema({
     type: Date,
     required: false
   },
-  completedDate: {
+  completionDate: {
     type: Date,
     required: false
   }
