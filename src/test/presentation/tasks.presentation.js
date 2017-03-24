@@ -39,7 +39,8 @@ describe("Tasks", () => {
               "description": "a red task",
               "name": "red task",
               "dependingOn": [blackTask.id, pinkTask.id],
-              "requiredFor": []
+              "requiredFor": [],
+              "deadlineDate": "2018-01-30T23:00:00.000Z"
             },
             {
               "id": blueTask.id,
@@ -47,7 +48,9 @@ describe("Tasks", () => {
               "description": "a blue task",
               "name": "blue task",
               "dependingOn": [],
-              "requiredFor": [greenTask.id]
+              "requiredFor": [greenTask.id],
+              "completedDate": "2017-04-03T22:00:00.000Z",
+              "deadlineDate": "2017-04-20T22:00:00.000Z"
             },
             {
               "id": greenTask.id,
@@ -55,7 +58,8 @@ describe("Tasks", () => {
               "description": "a green task",
               "name": "green task",
               "dependingOn": [blackTask.id],
-              "requiredFor": [redTask.id]
+              "requiredFor": [redTask.id],
+              "deadlineDate": "2017-11-11T23:00:00.000Z"
             },
             {
               "description": "a pink task",
@@ -63,7 +67,7 @@ describe("Tasks", () => {
               "name": "pink task",
               "dependingOn": [greenTask.id, blueTask.id],
               "requiredFor": [redTask.id],
-              "status": "blocked"
+              "status": "blocked",
             },
             {
               "id": blackTask.id,
@@ -71,7 +75,9 @@ describe("Tasks", () => {
               "description": "a black task",
               "name": "black task",
               "dependingOn": [],
-              "requiredFor": [redTask.id, greenTask.id]
+              "requiredFor": [redTask.id, greenTask.id],
+              "completedDate": "2017-03-09T23:00:00.000Z",
+              "deadlineDate": "2017-03-10T23:00:00.000Z"
             }
           ]);
         })
@@ -116,7 +122,8 @@ describe("Tasks", () => {
           description: "test description",
           status: "pending",
           dependingOn: [coloredSet.blueTask.id],
-          requiredFor: [coloredSet.greenTask.id]
+          requiredFor: [coloredSet.greenTask.id],
+          deadlineDate: "2018-03-31T23:00:00.000Z"
         })
         .set("token", token)
         .expect(httpStatus.OK)
@@ -126,7 +133,8 @@ describe("Tasks", () => {
             "description": "test description",
             "status": "pending",
             "dependingOn": [coloredSet.blueTask.id],
-            "requiredFor": [coloredSet.greenTask.id]
+            "requiredFor": [coloredSet.greenTask.id],
+            "deadlineDate": "2018-03-31T23:00:00.000Z"
           });
         })
     );

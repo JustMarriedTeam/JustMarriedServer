@@ -19,7 +19,15 @@ const TaskSchema = new database.Schema({
     required: true
   },
   dependingOn: [{ type: database.Schema.Types.ObjectId, ref: "Task" }],
-  requiredFor: [{ type: database.Schema.Types.ObjectId, ref: "Task" }]
+  requiredFor: [{ type: database.Schema.Types.ObjectId, ref: "Task" }],
+  deadlineDate: {
+    type: Date,
+    required: false
+  },
+  completedDate: {
+    type: Date,
+    required: false
+  }
 });
 
 export { TASK_STATUS, TaskSchema };
