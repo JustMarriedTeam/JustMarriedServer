@@ -287,6 +287,12 @@ definitions:
         type: string
       description:
         type: string
+      deadlineDate:
+        type: string
+        format: date-time
+      completionDate:
+        type: string
+        format: date-time
       dependingOn:
         type: array
         items:
