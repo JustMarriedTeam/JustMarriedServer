@@ -46,27 +46,27 @@ describe("Assignments", () => {
 
   afterEach(() => tearDownMinimal());
 
-  // it("Adds fill wedding assignments as a first assignment", () =>
-  //   request(app)
-  //     .post("/api/accounts")
-  //     .send({
-  //       "login": "kboom@test.com",
-  //       "password": "babelek321A",
-  //       "user": {
-  //         "firstName": "Antoni",
-  //         "lastName": "Leszcz"
-  //       }
-  //     })
-  //     .expect(httpStatus.OK)
-  //     .then((res) => {
-  //       expect(withoutIdentifiers(res.body.assignments)).to.eql([
-  //         {
-  //           "action": "FILL_WEDDING",
-  //           "done": false
-  //         }
-  //       ]);
-  //     })
-  // );
+  it("Adds fill wedding assignments as a first assignment", () =>
+    request(app)
+      .post("/api/accounts")
+      .send({
+        "login": "kboom@test.com",
+        "password": "babelek321A",
+        "user": {
+          "firstName": "Antoni",
+          "lastName": "Leszcz"
+        }
+      })
+      .expect(httpStatus.OK)
+      .then((res) => {
+        expect(withoutIdentifiers(res.body.assignments)).to.eql([
+          {
+            "action": "FILL_WEDDING",
+            "done": false
+          }
+        ]);
+      })
+  );
 
   it("Marks 'FILL_WEDDING' assignment as done when wedding updated", () =>
     request(app)

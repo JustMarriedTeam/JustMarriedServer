@@ -9,6 +9,7 @@ import {setUpColored, tearDownColored} from "../data/colored.set";
 import extend from "lodash/extend";
 
 chai.config.includeStack = true;
+process.env.TZ = "Europe/Warsaw";
 
 describe("Tasks", () => {
 
