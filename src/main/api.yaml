@@ -139,6 +139,19 @@ paths:
               schema:
                 $ref: '#/definitions/Account'
 
+
+  /tasks:
+    get:
+      description: |
+        Gets a list of generic tasks to use as a template
+      security:
+          - bearer: []
+      responses:
+        200:
+          description: List of `Task`s matching the criteria specified
+          schema:
+            $ref: '#/definitions/Tasks'
+
   /wedding:
 
     get:

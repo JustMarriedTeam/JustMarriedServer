@@ -6,6 +6,7 @@ import app from "../../main/index";
 import {withoutIdentifiers} from "../utils/comparison.utils";
 import {getTokenFor} from "../utils/auth.utils";
 import {setUpColored, tearDownColored} from "../data/colored.set";
+import {setUpSystem, tearDownSystem} from "../data/system.set";
 import extend from "lodash/extend";
 
 chai.config.includeStack = true;
@@ -15,14 +16,99 @@ describe("Tasks", () => {
 
   let token;
   const coloredSet = {};
+  const systemSet = {};
 
-  beforeEach(() => setUpColored((account) => {
-    token = getTokenFor(account);
-  }, (set) => {
-    extend(coloredSet, set);
-  }));
+  beforeEach(() => Promise.all([
 
-  afterEach(() => tearDownColored());
+    setUpColored((account) => {
+      token = getTokenFor(account);
+    }, (set) => {
+      extend(coloredSet, set);
+    }),
+
+    setUpSystem(() => null, (set) => {
+      extend(systemSet, set);
+    })
+
+  ]));
+
+  afterEach(() => Promise.all([
+    tearDownColored(),
+    tearDownSystem()
+  ]));
+
+
+  describe("GET /api/tasks", () => {
+
+    it("should return template tasks", () => request(app)
+      .get("/api/tasks")
+      .set("token", token)
+      .expect(httpStatus.OK)
+      .then((res) => {
+        const {systemTask1, systemTask2, systemTask3, systemTask4, systemTask5} = systemSet;
+        expect(res.body).to.deep.include.members([
+          {
+            "dependingOn": [],
+            "description": "a nice task no. 1",
+            "id": systemTask1.id,
+            "name": "system task 1",
+            "requiredFor": [
+              systemTask5.id,
+              systemTask3.id
+            ],
+            "status": "done"
+          },
+          {
+            "dependingOn": [],
+            "description": "a nice task no. 2",
+            "id": systemTask2.id,
+            "name": "system task 2",
+            "requiredFor": [
+              systemTask3.id
+            ],
+            "status": "done"
+          },
+          {
+            "dependingOn": [
+              systemTask1.id
+            ],
+            "description": "a nice task no. 3",
+            "id": systemTask3.id,
+            "name": "system task 3",
+            "requiredFor": [
+              systemTask5.id
+            ],
+            "status": "pending"
+          },
+          {
+            "dependingOn": [
+              systemTask3.id,
+              systemTask2.id
+            ],
+            "description": "a nice task no. 4",
+            "id": systemTask4.id,
+            "name": "system task 4",
+            "requiredFor": [
+              systemTask5.id
+            ],
+            "status": "blocked"
+          },
+          {
+            "dependingOn": [
+              systemTask1.id,
+              systemTask4.id
+            ],
+            "description": "a nice task no. 5",
+            "id": systemTask5.id,
+            "name": "system task 5",
+            "requiredFor": [],
+            "status": "blocked"
+          }
+        ]);
+      })
+    );
+
+  });
 
   describe("GET /api/wedding/tasks", () => {
 
@@ -32,7 +118,7 @@ describe("Tasks", () => {
         .set("token", token)
         .expect(httpStatus.OK)
         .then((res) => {
-          const { blackTask, blueTask, redTask, pinkTask, greenTask } = coloredSet;
+          const {blackTask, blueTask, redTask, pinkTask, greenTask} = coloredSet;
           expect(res.body).to.deep.equal([
             {
               "id": redTask.id,

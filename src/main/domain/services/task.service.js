@@ -17,6 +17,10 @@ function listTasks() {
   return Wedding.findTasksBy(actingUser);
 }
 
+function listTemplateTasks() {
+  return Task.findTemplateTasks();
+}
+
 const updateRelations = ({type, taskId, oldRelations, newRelations, wedding}) => {
   const relationsToRemove = filter(taskNotIncludedIn(newRelations))(oldRelations);
   const relationsToAdd = filter(taskNotIncludedIn(oldRelations))(newRelations);
@@ -120,4 +124,5 @@ function removeTask(taskId) {
     .then((wedding) => wedding.saveAsync());
 }
 
-export {listTasks, updateTask, createTask, removeTask};
+export {listTasks, updateTask, createTask,
+  removeTask, listTemplateTasks};

@@ -30,5 +30,13 @@ const TaskSchema = new database.Schema({
   }
 });
 
+TaskSchema.static({
+
+  findTemplateTasks() {
+    return this.findAsync();
+  }
+
+});
+
 export { TASK_STATUS, TaskSchema };
 export default database.model("Task", TaskSchema);
