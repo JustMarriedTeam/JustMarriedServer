@@ -28,6 +28,16 @@ const TaskSchema = new database.Schema({
     type: Date,
     required: false
   }
+}, {
+
+  toObject: {
+    depopulate: true
+  },
+
+  toJSON: {
+    depopulate: true
+  }
+
 });
 
 TaskSchema.static({

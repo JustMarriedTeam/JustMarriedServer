@@ -18,8 +18,8 @@ const taskNotIncludedIn = function (taskList) {
 };
 
 const groupByRel = (templates) => keyBy(map((template) => ({
-  rel: template.id,
-  task: new Task(omit(template, ["id", "requiredFor", "dependingOn"])),
+  rel: template._id,
+  task: new Task(omit(template, ["_id", "requiredFor", "dependingOn"])),
   dependingOnRels: template.dependingOn,
   requiredForRels: template.requiredFor
 }))(templates), "rel");
@@ -61,7 +61,7 @@ function cloneFromTaskTemplates(taskTemplates) {
   return Wedding.findByOwner(actingUser, "tasks")
     .then((wedding) => wedding.addAllTasks(clonedTasks))
     .then((wedding) => wedding.saveAsync())
-    .then((wedding) => wedding.tasks);
+    .then(() => clonedTasks);
 }
 
 const updateRelations = ({type, taskId, oldRelations, newRelations, wedding}) => {

@@ -168,14 +168,14 @@ describe("Tasks", () => {
         {
           "dependingOn": [],
           "description": "a nice task no. 1",
-          "id": "1",
+          "_id": "1",
           "name": "system task 1",
           "requiredFor": ["2", "3"]
         },
         {
           "dependingOn": ["1"],
           "description": "a nice task no. 2",
-          "id": "2",
+          "_id": "2",
           "name": "system task 2",
           "requiredFor": [
             "3"
@@ -184,7 +184,7 @@ describe("Tasks", () => {
         {
           "dependingOn": ["1", "2"],
           "description": "a nice task no. 3",
-          "id": "3",
+          "_id": "3",
           "name": "system task 3",
           "requiredFor": []
         }]).then((clonedTasks) => {
@@ -204,14 +204,14 @@ describe("Tasks", () => {
     it("should make dependent tasks blocked", () => runFromColoredAccount(
       () => cloneFromTaskTemplates([
         {
-          "id": "1",
+          "_id": "1",
           "name": "pending task",
           "description": "dummy",
           "requiredFor": ["2"],
           "dependingOn": []
         },
         {
-          "id": "2",
+          "_id": "2",
           "name": "blocked task",
           "description": "dummy",
           "dependingOn": ["1"],
@@ -224,7 +224,7 @@ describe("Tasks", () => {
 
     it("should make independent tasks pending", () => runFromColoredAccount(
       () => cloneFromTaskTemplates([{
-        "id": "1",
+        "_id": "1",
         "name": "pending task",
         "description": "dummy",
         "requiredFor": [],
@@ -237,7 +237,7 @@ describe("Tasks", () => {
 
     it("should fail if dependency is missing", () => runFromColoredAccount(
       () => expect(cloneFromTaskTemplates([{
-        "id": "1",
+        "_id": "1",
         "name": "pending task",
         "description": "dummy",
         "requiredFor": ["2"],

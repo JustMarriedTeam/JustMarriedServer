@@ -31,13 +31,15 @@ function deleteTask(req, res, done) {
 }
 
 function getTemplateTasks(req, res, done) {
-  listTemplateTasks().then((tasks) => res.status(HttpStatus.OK).json(tasks))
+  listTemplateTasks()
+    .then((tasks) => res.status(HttpStatus.OK).json(tasks))
     .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
     .finally(done);
 }
 
 function postTemplateTasks(req, res, done) {
-  cloneFromTaskTemplates().then((tasks) => res.status(HttpStatus.OK).json(tasks))
+  cloneFromTaskTemplates(req.body)
+    .then((tasks) => res.status(HttpStatus.OK).json(tasks))
     .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
     .finally(done);
 }
