@@ -3,6 +3,7 @@ import { ParticipantSchema } from "./participant.model";
 import { UserSchema } from "./user.model";
 import { TaskSchema } from "./task.model";
 import { GuestSchema } from "./guest.model";
+import forEach from "lodash/forEach";
 
 const WeddingSchema = new database.Schema({
   name: String,
@@ -44,6 +45,11 @@ WeddingSchema.method({
 
   removeTask(taskId) {
     this.tasks.id(taskId).remove();
+    return this;
+  },
+
+  addAllTasks(tasksToAdd) {
+    forEach(tasksToAdd, (task) => this.addTask(task));
     return this;
   }
 

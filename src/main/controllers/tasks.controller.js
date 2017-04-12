@@ -1,5 +1,5 @@
 import {createTask, updateTask, removeTask,
-  listTasks, listTemplateTasks} from "../domain/services/task.service";
+  listTasks, listTemplateTasks, cloneFromTaskTemplates } from "../domain/services/task.service";
 import HttpStatus from "http-status";
 import omit from "lodash/omit";
 
@@ -36,4 +36,10 @@ function getTemplateTasks(req, res, done) {
     .finally(done);
 }
 
-export {getTasks, postTask, putTask, deleteTask, getTemplateTasks};
+function postTemplateTasks(req, res, done) {
+  cloneFromTaskTemplates().then((tasks) => res.status(HttpStatus.OK).json(tasks))
+    .catch((err) => res.status(HttpStatus.BAD_REQUEST).json(err))
+    .finally(done);
+}
+
+export {getTasks, postTask, putTask, deleteTask, getTemplateTasks, postTemplateTasks};

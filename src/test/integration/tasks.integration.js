@@ -1,11 +1,14 @@
 /* global describe, beforeEach, afterEach, it */
 import chai, {expect} from "chai";
 import extend from "lodash/extend";
+import find from "lodash/fp/find";
+import map from "lodash/fp/map";
 import forEach from "lodash/fp/forEach";
 import {setUpColored, tearDownColored} from "../data/colored.set";
-import {createTask, updateTask, removeTask} from "../../main/domain/services/task.service";
+import {createTask, updateTask, removeTask, cloneFromTaskTemplates} from "../../main/domain/services/task.service";
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
+
 
 chai.config.includeStack = true;
 
@@ -146,6 +149,50 @@ describe("Tasks", () => {
         .then((tasks) => forEach((task) =>
           expect(task.requiredFor).not.to.include(coloredSet.blackTask._id)
         )(tasks))
+    ));
+
+  });
+
+  describe("cloning", () => {
+
+    const mapToIds = map((task) => task.id);
+
+    it("should clone tasks respecting relations", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([
+        {
+          "dependingOn": [],
+          "description": "a nice task no. 1",
+          "id": "1",
+          "name": "system task 1",
+          "requiredFor": ["2", "3"]
+        },
+        {
+          "dependingOn": ["1"],
+          "description": "a nice task no. 2",
+          "id": "2",
+          "name": "system task 2",
+          "requiredFor": [
+            "3"
+          ]
+        },
+        {
+          "dependingOn": ["1", "2"],
+          "description": "a nice task no. 3",
+          "id": "3",
+          "name": "system task 3",
+          "requiredFor": []
+        }]).then((clonedTasks) => {
+          const firstTask = find({name: "system task 1"})(clonedTasks);
+          const secondTask = find({name: "system task 2"})(clonedTasks);
+          const thirdTask = find({name: "system task 3"})(clonedTasks);
+
+          expect(mapToIds(firstTask.requiredFor)).to.eql([secondTask.id, thirdTask.id]);
+          expect(mapToIds(firstTask.dependingOn)).to.be.empty;
+          expect(mapToIds(secondTask.requiredFor)).to.eql([thirdTask.id]);
+          expect(mapToIds(secondTask.dependingOn)).to.eql([firstTask.id]);
+          expect(mapToIds(thirdTask.requiredFor)).to.be.empty;
+          expect(mapToIds(thirdTask.dependingOn)).to.eql([firstTask.id, secondTask.id]);
+        })
     ));
 
   });
