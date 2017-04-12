@@ -82,6 +82,7 @@
     "babel-preset-stage-2": "6.18.0",
     "camelcase": "4.0.0",
     "chai": "^3.4.1",
+    "chai-as-promised": "6.0.0",
     "commitizen": "^2.8.2",
     "coveralls": "^2.11.6",
     "cz-conventional-changelog": "1.2.0",

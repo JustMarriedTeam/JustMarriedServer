@@ -9,6 +9,7 @@ import pick from "lodash/pick";
 import find from "lodash/fp/find";
 import map from "lodash/fp/map";
 import isEmpty from "lodash/isEmpty";
+import size from "lodash/size";
 import {getFromRequestContext} from "../../context";
 import {asObjectId, allAsObjectId} from "../../database";
 
@@ -33,6 +34,14 @@ function listTemplateTasks() {
   return Task.findTemplateTasks();
 }
 
+function hasInconsistentDependencies(tasksByRel) {
+  return !!find(({task, dependingOnRels, requiredForRels}) => {
+    const requiredForMatches = size(task.requiredFor) === size(requiredForRels);
+    const dependingOnMatches = size(task.dependingOn) === size(dependingOnRels);
+    return !requiredForMatches || !dependingOnMatches;
+  })(tasksByRel);
+}
+
 function cloneFromTaskTemplates(taskTemplates) {
   const tasksByRel = groupByRel(taskTemplates);
   forEach(({task, dependingOnRels, requiredForRels}) => {
@@ -42,6 +51,10 @@ function cloneFromTaskTemplates(taskTemplates) {
       requiredFor: map((meta) => meta.task)(pick(tasksByRel, requiredForRels))
     });
   })(tasksByRel);
+
+  if (hasInconsistentDependencies(tasksByRel)) {
+    return Promise.reject(new Error("Inconsistent dependencies"));
+  }
 
   const clonedTasks = map((meta) => meta.task)(tasksByRel);
   const actingUser = getFromRequestContext("user.user");

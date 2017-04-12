@@ -1,5 +1,6 @@
 /* global describe, beforeEach, afterEach, it */
 import chai, {expect} from "chai";
+import chaiAsPromised from "chai-as-promised";
 import extend from "lodash/extend";
 import find from "lodash/fp/find";
 import map from "lodash/fp/map";
@@ -14,7 +15,7 @@ import {
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
 
-
+chai.use(chaiAsPromised);
 chai.config.includeStack = true;
 
 describe("Tasks", () => {
@@ -226,12 +227,22 @@ describe("Tasks", () => {
         "id": "1",
         "name": "pending task",
         "description": "dummy",
-        "requiredFor": ["2"],
+        "requiredFor": [],
         "dependingOn": []
       }]).then((clonedTasks) => {
         const pendingTask = find({name: "pending task"})(clonedTasks);
         expect(pendingTask.status).to.eql("pending");
       })
+    ));
+
+    it("should fail if dependency is missing", () => runFromColoredAccount(
+      () => expect(cloneFromTaskTemplates([{
+        "id": "1",
+        "name": "pending task",
+        "description": "dummy",
+        "requiredFor": ["2"],
+        "dependingOn": []
+      }])).to.be.rejectedWith("Inconsistent dependencies")
     ));
 
   });
