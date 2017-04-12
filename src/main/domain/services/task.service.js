@@ -1,5 +1,5 @@
 import Wedding from "../models/wedding.model";
-import Task from "../models/task.model";
+import Task, { TASK_STATUS } from "../models/task.model";
 import forEach from "lodash/fp/forEach";
 import keyBy from "lodash/keyBy";
 import filter from "lodash/fp/filter";
@@ -8,6 +8,7 @@ import omit from "lodash/omit";
 import pick from "lodash/pick";
 import find from "lodash/fp/find";
 import map from "lodash/fp/map";
+import isEmpty from "lodash/isEmpty";
 import {getFromRequestContext} from "../../context";
 import {asObjectId, allAsObjectId} from "../../database";
 
@@ -36,7 +37,7 @@ function cloneFromTaskTemplates(taskTemplates) {
   const tasksByRel = groupByRel(taskTemplates);
   forEach(({task, dependingOnRels, requiredForRels}) => {
     extend(task, {
-      status: "pending",
+      status: isEmpty(dependingOnRels) ? TASK_STATUS.PENDING : TASK_STATUS.BLOCKED,
       dependingOn: map((meta) => meta.task)(pick(tasksByRel, dependingOnRels)),
       requiredFor: map((meta) => meta.task)(pick(tasksByRel, requiredForRels))
     });

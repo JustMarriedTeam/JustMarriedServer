@@ -5,7 +5,12 @@ import find from "lodash/fp/find";
 import map from "lodash/fp/map";
 import forEach from "lodash/fp/forEach";
 import {setUpColored, tearDownColored} from "../data/colored.set";
-import {createTask, updateTask, removeTask, cloneFromTaskTemplates} from "../../main/domain/services/task.service";
+import {
+  createTask,
+  updateTask,
+  removeTask,
+  cloneFromTaskTemplates
+} from "../../main/domain/services/task.service";
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
 
@@ -193,6 +198,40 @@ describe("Tasks", () => {
           expect(mapToIds(thirdTask.requiredFor)).to.be.empty;
           expect(mapToIds(thirdTask.dependingOn)).to.eql([firstTask.id, secondTask.id]);
         })
+    ));
+
+    it("should make dependent tasks blocked", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([
+        {
+          "id": "1",
+          "name": "pending task",
+          "description": "dummy",
+          "requiredFor": ["2"],
+          "dependingOn": []
+        },
+        {
+          "id": "2",
+          "name": "blocked task",
+          "description": "dummy",
+          "dependingOn": ["1"],
+          "requiredFor": []
+        }]).then((clonedTasks) => {
+          const blockedTask = find({name: "blocked task"})(clonedTasks);
+          expect(blockedTask.status).to.eql("blocked");
+        })
+    ));
+
+    it("should make independent tasks pending", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([{
+        "id": "1",
+        "name": "pending task",
+        "description": "dummy",
+        "requiredFor": ["2"],
+        "dependingOn": []
+      }]).then((clonedTasks) => {
+        const pendingTask = find({name: "pending task"})(clonedTasks);
+        expect(pendingTask.status).to.eql("pending");
+      })
     ));
 
   });
