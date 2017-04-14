@@ -235,14 +235,28 @@ describe("Tasks", () => {
       })
     ));
 
-    it("should fail if dependency is missing", () => runFromColoredAccount(
-      () => expect(cloneFromTaskTemplates([{
+    it("should ignore dependencies if missing", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([{
         "_id": "1",
-        "name": "pending task",
+        "name": "first task",
         "description": "dummy",
-        "requiredFor": ["2"],
-        "dependingOn": []
-      }])).to.be.rejectedWith("Inconsistent dependencies")
+        "requiredFor": ["444", "2"],
+        "dependingOn": ["333"]
+      }, {
+        "_id": "2",
+        "name": "second task",
+        "description": "dummy",
+        "requiredFor": ["888"],
+        "dependingOn": ["555", "1"]
+      }]).then((tasks) => {
+        const firstTask = find({name: "first task"})(tasks);
+        const secondTask = find({name: "second task"})(tasks);
+
+        expect(mapToIds(firstTask.requiredFor)).to.eql([secondTask.id]);
+        expect(mapToIds(firstTask.dependingOn)).to.be.empty;
+        expect(mapToIds(secondTask.requiredFor)).to.be.empty;
+        expect(mapToIds(secondTask.dependingOn)).to.eql([firstTask.id]);
+      })
     ));
 
   });
