@@ -13,6 +13,7 @@ const TaskSchema = new database.Schema({
     required: true
   },
   description: String,
+  icon: String,
   status: {
     type: String,
     enum: values(TASK_STATUS),

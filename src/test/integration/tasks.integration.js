@@ -118,6 +118,7 @@ describe("Tasks", () => {
         name: "new red",
         description: "new red description",
         status: "pending",
+        icon: "newIcon.png",
         requiredFor: [coloredSet.blueTask.id],
         dependingOn: []
       })).then((task) => expect(JSON.parse(JSON.stringify(task))).to.eql({
@@ -125,6 +126,7 @@ describe("Tasks", () => {
         name: "new red",
         description: "new red description",
         status: "pending",
+        icon: "newIcon.png",
         requiredFor: [coloredSet.blueTask.id],
         dependingOn: []
       })
