@@ -4,6 +4,8 @@ import Promise from "bluebird";
 import properties from "./properties";
 import logger from "./logger";
 import map from "lodash/fp/map";
+import get from "lodash/get";
+import merge from "lodash/merge";
 
 mongoose.Promise = Promise;
 Promise.promisifyAll(mongoose);
@@ -22,14 +24,30 @@ if (properties.get("MONGOOSE_DEBUG")) {
 }
 
 mongoose.plugin((schema) => {
-  schema.options.toJSON = {
-    virtuals: true,
-    versionKey: false,
-    transform(doc, ret) {
-      ret.id = ret._id;
-      delete ret._id;
+
+  const toJsonTransform = get(schema.options, "toJSON.transform");
+
+  schema.options = merge({
+
+    toJSON: {
+      virtuals: true,
+      versionKey: false
     }
-  };
+
+  }, schema.options, {
+
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        if (toJsonTransform) {
+          toJsonTransform.apply({}, arguments);
+        }
+      }
+    }
+
+  });
+
 });
 
 export const asObjectId = (id) => new mongoose.Types.ObjectId(id);

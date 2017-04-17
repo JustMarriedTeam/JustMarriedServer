@@ -139,8 +139,18 @@ paths:
               schema:
                 $ref: '#/definitions/Account'
 
-  /wedding:
 
+  /templates/tasks:
+    get:
+      description: |
+        Gets a list of generic tasks to use as a template
+      responses:
+        200:
+          description: List of `Task`s matching the criteria specified
+          schema:
+            $ref: '#/definitions/Tasks'
+
+  /wedding:
     get:
        description: |
         Gets a wedding.
@@ -235,6 +245,25 @@ paths:
         200:
           description: Task has been deleted.
 
+
+  /wedding/clone/tasks:
+
+    post:
+      description: |
+        Creates a new `Task`
+      security:
+        - bearer: []
+      parameters:
+        - name: task
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        200:
+          description: The newly created `Task`
+          schema:
+            $ref: '#/definitions/Task'
 
 
 definitions:

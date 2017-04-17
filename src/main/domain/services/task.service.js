@@ -1,10 +1,14 @@
 import Wedding from "../models/wedding.model";
-import Task from "../models/task.model";
+import Task, { TASK_STATUS } from "../models/task.model";
 import forEach from "lodash/fp/forEach";
+import keyBy from "lodash/keyBy";
 import filter from "lodash/fp/filter";
 import extend from "lodash/extend";
 import omit from "lodash/omit";
+import pick from "lodash/pick";
 import find from "lodash/fp/find";
+import map from "lodash/fp/map";
+import isEmpty from "lodash/isEmpty";
 import {getFromRequestContext} from "../../context";
 import {asObjectId, allAsObjectId} from "../../database";
 
@@ -12,9 +16,39 @@ const taskNotIncludedIn = function (taskList) {
   return (taskId) => !find((comparedTaskId) => taskId.equals(comparedTaskId))(taskList);
 };
 
+const groupByRel = (templates) => keyBy(map((template) => ({
+  rel: template._id,
+  task: new Task(omit(template, ["_id", "requiredFor", "dependingOn"])),
+  dependingOnRels: template.dependingOn,
+  requiredForRels: template.requiredFor
+}))(templates), "rel");
+
+
 function listTasks() {
   const actingUser = getFromRequestContext("user.user");
   return Wedding.findTasksBy(actingUser);
+}
+
+function listTemplateTasks() {
+  return Task.findTemplateTasks();
+}
+
+function cloneFromTaskTemplates(taskTemplates) {
+  const tasksByRel = groupByRel(taskTemplates);
+  forEach(({task, dependingOnRels, requiredForRels}) => {
+    extend(task, {
+      status: isEmpty(dependingOnRels) ? TASK_STATUS.PENDING : TASK_STATUS.BLOCKED,
+      dependingOn: map((meta) => meta.task)(pick(tasksByRel, dependingOnRels)),
+      requiredFor: map((meta) => meta.task)(pick(tasksByRel, requiredForRels))
+    });
+  })(tasksByRel);
+
+  const clonedTasks = map((meta) => meta.task)(tasksByRel);
+  const actingUser = getFromRequestContext("user.user");
+  return Wedding.findByOwner(actingUser, "tasks")
+    .then((wedding) => wedding.addAllTasks(clonedTasks))
+    .then((wedding) => wedding.saveAsync())
+    .then(() => clonedTasks);
 }
 
 const updateRelations = ({type, taskId, oldRelations, newRelations, wedding}) => {
@@ -27,7 +61,7 @@ const updateRelations = ({type, taskId, oldRelations, newRelations, wedding}) =>
     .push(taskId))(relationsToAdd);
 };
 
-const removeRelations = ({ relationType, taskId, wedding }) => {
+const removeRelations = ({relationType, taskId, wedding}) => {
   const relationsToRemove = filter((task) => !!find((comparedTaskId) =>
     taskId.equals(comparedTaskId))(task[relationType]))(wedding.tasks);
 
@@ -120,4 +154,7 @@ function removeTask(taskId) {
     .then((wedding) => wedding.saveAsync());
 }
 
-export {listTasks, updateTask, createTask, removeTask};
+export {
+  listTasks, updateTask, createTask,
+  removeTask, listTemplateTasks, cloneFromTaskTemplates
+};

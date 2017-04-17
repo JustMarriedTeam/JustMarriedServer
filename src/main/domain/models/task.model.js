@@ -13,6 +13,7 @@ const TaskSchema = new database.Schema({
     required: true
   },
   description: String,
+  icon: String,
   status: {
     type: String,
     enum: values(TASK_STATUS),
@@ -28,6 +29,24 @@ const TaskSchema = new database.Schema({
     type: Date,
     required: false
   }
+}, {
+
+  toObject: {
+    depopulate: true
+  },
+
+  toJSON: {
+    depopulate: true
+  }
+
+});
+
+TaskSchema.static({
+
+  findTemplateTasks() {
+    return this.findAsync();
+  }
+
 });
 
 export { TASK_STATUS, TaskSchema };

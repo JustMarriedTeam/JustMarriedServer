@@ -1,12 +1,21 @@
 /* global describe, beforeEach, afterEach, it */
 import chai, {expect} from "chai";
+import chaiAsPromised from "chai-as-promised";
 import extend from "lodash/extend";
+import find from "lodash/fp/find";
+import map from "lodash/fp/map";
 import forEach from "lodash/fp/forEach";
 import {setUpColored, tearDownColored} from "../data/colored.set";
-import {createTask, updateTask, removeTask} from "../../main/domain/services/task.service";
+import {
+  createTask,
+  updateTask,
+  removeTask,
+  cloneFromTaskTemplates
+} from "../../main/domain/services/task.service";
 import {runFromAccount} from "../actions/context.action";
 import {getTasksForAccount} from "../actions/tasks.actions";
 
+chai.use(chaiAsPromised);
 chai.config.includeStack = true;
 
 describe("Tasks", () => {
@@ -109,6 +118,7 @@ describe("Tasks", () => {
         name: "new red",
         description: "new red description",
         status: "pending",
+        icon: "newIcon.png",
         requiredFor: [coloredSet.blueTask.id],
         dependingOn: []
       })).then((task) => expect(JSON.parse(JSON.stringify(task))).to.eql({
@@ -116,6 +126,7 @@ describe("Tasks", () => {
         name: "new red",
         description: "new red description",
         status: "pending",
+        icon: "newIcon.png",
         requiredFor: [coloredSet.blueTask.id],
         dependingOn: []
       })
@@ -146,6 +157,108 @@ describe("Tasks", () => {
         .then((tasks) => forEach((task) =>
           expect(task.requiredFor).not.to.include(coloredSet.blackTask._id)
         )(tasks))
+    ));
+
+  });
+
+  describe("cloning", () => {
+
+    const mapToIds = map((task) => task.id);
+
+    it("should clone tasks respecting relations", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([
+        {
+          "dependingOn": [],
+          "description": "a nice task no. 1",
+          "_id": "1",
+          "name": "system task 1",
+          "requiredFor": ["2", "3"]
+        },
+        {
+          "dependingOn": ["1"],
+          "description": "a nice task no. 2",
+          "_id": "2",
+          "name": "system task 2",
+          "requiredFor": [
+            "3"
+          ]
+        },
+        {
+          "dependingOn": ["1", "2"],
+          "description": "a nice task no. 3",
+          "_id": "3",
+          "name": "system task 3",
+          "requiredFor": []
+        }]).then((clonedTasks) => {
+          const firstTask = find({name: "system task 1"})(clonedTasks);
+          const secondTask = find({name: "system task 2"})(clonedTasks);
+          const thirdTask = find({name: "system task 3"})(clonedTasks);
+
+          expect(mapToIds(firstTask.requiredFor)).to.eql([secondTask.id, thirdTask.id]);
+          expect(mapToIds(firstTask.dependingOn)).to.be.empty;
+          expect(mapToIds(secondTask.requiredFor)).to.eql([thirdTask.id]);
+          expect(mapToIds(secondTask.dependingOn)).to.eql([firstTask.id]);
+          expect(mapToIds(thirdTask.requiredFor)).to.be.empty;
+          expect(mapToIds(thirdTask.dependingOn)).to.eql([firstTask.id, secondTask.id]);
+        })
+    ));
+
+    it("should make dependent tasks blocked", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([
+        {
+          "_id": "1",
+          "name": "pending task",
+          "description": "dummy",
+          "requiredFor": ["2"],
+          "dependingOn": []
+        },
+        {
+          "_id": "2",
+          "name": "blocked task",
+          "description": "dummy",
+          "dependingOn": ["1"],
+          "requiredFor": []
+        }]).then((clonedTasks) => {
+          const blockedTask = find({name: "blocked task"})(clonedTasks);
+          expect(blockedTask.status).to.eql("blocked");
+        })
+    ));
+
+    it("should make independent tasks pending", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([{
+        "_id": "1",
+        "name": "pending task",
+        "description": "dummy",
+        "requiredFor": [],
+        "dependingOn": []
+      }]).then((clonedTasks) => {
+        const pendingTask = find({name: "pending task"})(clonedTasks);
+        expect(pendingTask.status).to.eql("pending");
+      })
+    ));
+
+    it("should ignore dependencies if missing", () => runFromColoredAccount(
+      () => cloneFromTaskTemplates([{
+        "_id": "1",
+        "name": "first task",
+        "description": "dummy",
+        "requiredFor": ["444", "2"],
+        "dependingOn": ["333"]
+      }, {
+        "_id": "2",
+        "name": "second task",
+        "description": "dummy",
+        "requiredFor": ["888"],
+        "dependingOn": ["555", "1"]
+      }]).then((tasks) => {
+        const firstTask = find({name: "first task"})(tasks);
+        const secondTask = find({name: "second task"})(tasks);
+
+        expect(mapToIds(firstTask.requiredFor)).to.eql([secondTask.id]);
+        expect(mapToIds(firstTask.dependingOn)).to.be.empty;
+        expect(mapToIds(secondTask.requiredFor)).to.be.empty;
+        expect(mapToIds(secondTask.dependingOn)).to.eql([firstTask.id]);
+      })
     ));
 
   });
