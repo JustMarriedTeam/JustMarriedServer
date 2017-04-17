@@ -9,7 +9,6 @@ import pick from "lodash/pick";
 import find from "lodash/fp/find";
 import map from "lodash/fp/map";
 import isEmpty from "lodash/isEmpty";
-import size from "lodash/size";
 import {getFromRequestContext} from "../../context";
 import {asObjectId, allAsObjectId} from "../../database";
 
