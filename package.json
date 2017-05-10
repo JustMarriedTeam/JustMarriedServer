@@ -16,6 +16,7 @@
     "start": "node dist/index.js",
     "debug": "DEBUG=app:* gulp nodemon --env=development",
     "build": "gulp --env=$env",
+    "build:dev": "env=development npm run build",
     "eslint": "eslint \"src/main/**/*.js\"",
     "lint": "npm run eslint",
     "lint:watch": "npm run lint -- --watch",
