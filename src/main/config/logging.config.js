@@ -3,10 +3,10 @@ import logger from "morgan";
 import properties from "../properties";
 import winstonInstance from "../logger";
 
-const env = properties.get("env");
+const expressLogging = properties.get("EXPRESS_LOGGING");
 
 function configureLogging(app) {
-  if (env === "development") {
+  if (expressLogging) {
     app.use(logger("dev"));
     expressWinston.requestWhitelist.push("body");
     expressWinston.responseWhitelist.push("body");
@@ -18,11 +18,9 @@ function configureLogging(app) {
     }));
   }
 
-  if (env !== "test") {
-    app.use(expressWinston.errorLogger({
-      winstonInstance
-    }));
-  }
+  app.use(expressWinston.errorLogger({
+    winstonInstance
+  }));
 }
 
 export { configureLogging };

@@ -20,11 +20,10 @@ function connectDatabase() {
 function launchServer() {
   app = require("./app.js"); // eslint-disable-line
   if (!module.parent) {
-    const port = properties.get("port");
-    const env = properties.get("env");
+    const port = properties.get("PORT");
     logger.info(`Starting server on ${port} port`);
     app.listen(port, () => {
-      logger.info(`server started on port ${port} (${env})`);
+      logger.info(`server started on port ${port}`);
     });
   }
 }

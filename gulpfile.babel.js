@@ -1,3 +1,4 @@
+/* global process */
 import gulp from "gulp";
 import rename from "gulp-rename";
 import {log} from "gulp-util";
@@ -21,7 +22,7 @@ const plugins = gulpLoadPlugins();
 const options = extend(
   {},
   defaultConfig,
-  pick(extend({}, process.ENVIRONMENT, minimist(process.argv)), ...keys(defaultConfig))
+  pick(extend({}, process.env.ENVIRONMENT, minimist(process.argv)), ...keys(defaultConfig))
 );
 
 const config = {

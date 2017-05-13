@@ -1,11 +1,7 @@
 {
-  "env": "production",
   "MONGOOSE_DEBUG": false,
-  "logLevel": "warn",
-  "authRedirectUrl": "http://localhost:3000/redirect.html?token=%s",
-  "protocol": "https",
-  "host": "just-married-server.herokuapp.com",
-  "domain": true,
-  "session.remote": true
+  "LOG_LEVEL": "error",
+  "EXPRESS_LOGGING": false,
+  "DOMAIN": true,
+  "REMOTE_SESSION": true
 }
-
