@@ -10,7 +10,7 @@ import merge from "lodash/merge";
 mongoose.Promise = Promise;
 Promise.promisifyAll(mongoose);
 
-const dbUrl = properties.get("dbUrl");
+const dbUrl = properties.get("DB_URL");
 mongoose.connect(dbUrl, {server: {socketOptions: {keepAlive: 1}}});
 mongoose.connection.on("error", () => {
   throw new Error(`unable to connect to database: ${dbUrl}`);

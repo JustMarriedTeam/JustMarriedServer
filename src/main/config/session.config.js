@@ -5,24 +5,14 @@ const MemcachedStore = require("connect-memjs")(session);
 
 function configureSession(app) {
   app.use(session({
-    secret: properties.get("session.secret"),
+    secret: properties.get("SESSION_SECRET"),
     resave: false,
     saveUninitialized: false,
-    ...((useRemote) => {
-
-      if (useRemote) {
-        return {
-          store: new MemcachedStore({
-            servers: properties.get("memcached.servers").split(","),
-            username: properties.get("memcached.username"),
-            password: properties.get("memcached.password")
-          })
-        };
-      } else {
-        return {};
-      }
-
-    })(properties.get("session.remote"))
+    store: new MemcachedStore({
+      servers: properties.get("MEMCACHED_SERVERS").split(","),
+      username: properties.get("MEMCACHED_USERNAME"),
+      password: properties.get("MEMCACHED_PASSWORD")
+    })
   }));
 }
 

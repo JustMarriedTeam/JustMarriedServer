@@ -1,10 +1,10 @@
 import logger from "./logger";
 import properties from "./properties";
 
-const protocol = properties.get("protocol");
-const host = properties.get("host");
-const domain = properties.get("domain");
-const port = properties.get("port");
+const protocol = properties.get("PROTOCOL");
+const host = properties.get("HOST");
+const domain = properties.get("DOMAIN");
+const port = properties.get("PORT");
 
 logger.info(
     `

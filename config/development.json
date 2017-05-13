@@ -2,6 +2,5 @@
   "MONGOOSE_DEBUG": true,
   "LOG_LEVEL": "verbose",
   "EXPRESS_LOGGING": true,
-  "DOMAIN": false,
-  "REMOTE_SESSION": false
+  "DOMAIN": false
 }
