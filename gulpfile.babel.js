@@ -12,8 +12,8 @@ import keys from "lodash/keys";
 import extend from "lodash/extend";
 
 const defaultConfig = {
-  env: "production",
-  logLevel: "production"
+  ENVIRONMENT: "production",
+  LOG_LEVEL: "production"
 };
 
 const plugins = gulpLoadPlugins();
@@ -21,7 +21,7 @@ const plugins = gulpLoadPlugins();
 const options = extend(
   {},
   defaultConfig,
-  pick(extend({}, process.env, minimist(process.argv)), ...keys(defaultConfig))
+  pick(extend({}, process.ENVIRONMENT, minimist(process.argv)), ...keys(defaultConfig))
 );
 
 const config = {
@@ -45,7 +45,7 @@ const config = {
     testDir: "build/test"
   },
   env: {
-    file: options.env !== "local" ? `./config/${options.env}.json` : ".env.json"
+    file: options.ENVIRONMENT !== "local" ? `./config/${options.ENVIRONMENT}.json` : ".env.json"
   }
 };
 
