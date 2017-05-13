@@ -17,6 +17,7 @@ function connectDatabase() {
   require('./database'); // eslint-disable-line
 }
 
+
 function launchServer() {
   app = require("./app.js"); // eslint-disable-line
   if (!module.parent) {

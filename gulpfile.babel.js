@@ -117,7 +117,7 @@ gulp.task("nodemon", ["copyResources", "compile"], () =>
       delay: 2500,
       debug: true,
       verbose: true,
-      poll: 1000,
+      legacyWatch: true,
       watch: config.src.main.baseDir,
       tasks: ["copyNonJs", "yamlToJson", "compile"]
     })
