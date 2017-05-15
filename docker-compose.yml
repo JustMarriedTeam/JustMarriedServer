@@ -25,8 +25,6 @@ services:
     networks:
       backnet:
         ipv4_address: 172.10.1.4
-    ports:
-      - 11212:11211
 
   server:
     image: justmarried/jmserver:development-latest
@@ -52,7 +50,7 @@ services:
       - HOST=192.168.99.100
       - PORT=2701
       - JWT_SECRET=0a6b944d-d2fb-46fc-a85e-0295c986cd9f
-      - MEMCACHED_SERVERS=172.10.1.4:11212
+      - MEMCACHED_SERVERS=172.10.1.4:11211
       - MEMCACHED_USERNAME=memcached
       - MEMCACHED_PASSWORD=
       - SESSION_SECRET=secret
