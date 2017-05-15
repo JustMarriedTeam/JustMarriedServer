@@ -6,7 +6,9 @@ ENV ENVIRONMENT=development
 
 COPY containers/develop/develop.entrypoint.sh /develop.entrypoint.sh
 VOLUME /app
+WORKDIR /app
 
 EXPOSE 2701
+
 ENTRYPOINT ["/develop.entrypoint.sh"]
 CMD ["run", "serve"]

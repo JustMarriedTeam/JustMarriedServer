@@ -5,6 +5,5 @@ function exit_with_error {
 	exit 1
 }
 
-cd app
 npm install || exit_with_error "Could not install dependencies!"
 npm ${@} || exit_with_error "Could not launch npm ${@}!"

@@ -12,9 +12,6 @@
   "scripts": {
     "clean": "gulp clean",
     "serve": "gulp serve",
-
-
-
     "debug": "ENVIRONMENT=development DEBUG=app:* gulp nodemon",
     "build": "gulp",
     "build:dev": "ENVIRONMENT=development npm run build",

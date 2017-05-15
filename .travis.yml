@@ -1,10 +1,26 @@
 language: node_js
 node_js:
 - '6.9'
+sudo: required
 services:
-  - mongodb
-before_script: npm run lint
-script: npm run test
+  - docker
+before_script:
+  - docker-compose up
+script:
+  - ./run.tests.sh
+after_script:
+  - docker-compose down
+before_deploy:
+  - ./build.sh
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD" registry.heroku.com
+deploy:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      docker tag justmarried/jmserver:production-latest registry.heroku.com/just-married-server
+      docker push USER/REPO;
+    else
+      docker tag justmarried/jmserver:production-latest registry.heroku.com/just-married-sta-server
+      docker push USER/REPO;
+    fi
 branches:
   only:
   - master
