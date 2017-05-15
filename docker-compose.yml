@@ -1,7 +1,7 @@
 #
 # This compose file is responsible for bootstrapping everything needed to run JustMarriedServer.
 #
-version: "3"
+version: "2"
 
 services:
 
