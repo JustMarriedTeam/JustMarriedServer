@@ -46,7 +46,7 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
-.idea
+/.idea
 
-build
-dist
+/build
+/dist
