@@ -17,11 +17,11 @@ after_success:
   - ./build.sh
   - docker login -u="gurgul.grzegorz@gmail.com" -e="gurgul.grzegorz@gmail.com" -p="85c2a94d-47f7-4139-b98c-8a357ab9d129" registry.heroku.com
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      docker tag justmarried/jmserver:production-latest registry.heroku.com/just-married-server/web;
-      docker push registry.heroku.com/just-married-server/web;
+      docker login -u AWS -p ${AWS_DOCKER_REPO_PASSWORD} -e none https://585734593719.dkr.ecr.eu-central-1.amazonaws.com
+      docker tag just-married/jmserver:production-latest 585734593719.dkr.ecr.eu-central-1.amazonaws.com/just-married/jmserver:latest;
+      docker push 585734593719.dkr.ecr.eu-central-1.amazonaws.com/just-married/jmserver:latest;
     else
-      docker tag justmarried/jmserver:production-latest registry.heroku.com/just-married-sta-server/web;
-      docker push registry.heroku.com/just-married-sta-server/web;
+      echo "Doing nothing for now";
     fi
 branches:
   only:
