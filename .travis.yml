@@ -7,7 +7,7 @@ services:
 git:
   submodules: true
 before_script:
-  - docker-compose up -d
+  - docker-compose up -d server
 script:
   - ./run.tests.sh
 after_script:
