@@ -9,6 +9,7 @@ git:
 before_script:
   - docker-compose up -d server
 script:
+  - ./run.build.sh
   - ./run.tests.sh
 after_script:
   - docker-compose down

@@ -11,15 +11,15 @@
   },
   "scripts": {
     "clean": "gulp clean",
+    "build": "gulp build",
+    "test": "mocha --opts .mocharc",
     "serve": "gulp serve",
     "debug": "ENVIRONMENT=development DEBUG=app:* gulp nodemon",
-    "build": "gulp",
     "build:dev": "ENVIRONMENT=development npm run build",
     "dist": "gulp dist",
     "eslint": "eslint \"src/main/**/*.js\"",
     "lint": "npm run eslint",
     "lint:watch": "npm run lint -- --watch",
-    "test": "npm run build && mocha --opts .mocharc ",
     "test:watch": "npm run test -- --watch --env=test",
     "test:check-coverage": "npm run test && istanbul check-coverage",
     "report-coverage": "coveralls < ./coverage/lcov.info"
