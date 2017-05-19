@@ -4,6 +4,8 @@ node_js:
 sudo: required
 services:
   - docker
+git:
+  submodules: true
 before_script:
   - docker-compose up -d
 script:
