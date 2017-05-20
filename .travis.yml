@@ -13,6 +13,8 @@ jobs:
     - stage: test
       script:
         - docker-compose up -d server
+        - ifconfig
+        - ip addr
         - ./wait_for.sh localhost:2701 -t 60
         - ./run.tests.sh
         - docker-compose down
