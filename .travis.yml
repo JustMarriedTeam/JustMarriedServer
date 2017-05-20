@@ -5,6 +5,9 @@ services:
 - docker
 git:
   submodules: true
+cache:
+  directories:
+  - node_modules
 jobs:
   include:
     - stage: test
