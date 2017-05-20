@@ -10,7 +10,6 @@ jobs:
   include:
     - stage: test
       script:
-        - ./run.build.sh
         - docker-compose up
         - ./run.tests.sh
         - docker-compose down
