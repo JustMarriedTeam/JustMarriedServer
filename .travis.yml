@@ -8,18 +8,24 @@ git:
   submodules: true
 before_script:
 - docker-compose up -d server
-script:
-- ./run.build.sh
-- ./run.tests.sh
 after_script:
 - docker-compose down
-after_success:
-- ./build.sh
-- docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}
-- if [ "$TRAVIS_BRANCH" == "master" ]; then docker tag just-married/jmserver:production-latest
-  justmarried/just-married-server:latest; docker push justmarried/just-married-server:latest;
-  else echo "Doing nothing for now"; fi
-- docker logout
+jobs:
+  include:
+    - stage: compile
+      script: ./run.build.sh
+    - stage: test
+      script: ./run.tests.sh
+    - stage: package
+      scripts: ./do.package.sh
+    - stage: publish
+      script: ./do.publish.sh
+      env:
+        - DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}
+        - DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}
+        - BRANCH=${TRAVIS_BRANCH}
+    - stage: deploy
+      script: ./do.deploy.sh
 branches:
   only:
   - master
