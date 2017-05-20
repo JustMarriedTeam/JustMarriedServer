@@ -13,6 +13,7 @@ jobs:
     - stage: test
       script:
         - docker-compose up -d
+        - ./wait_for_it localhost:2701 --echo "Environment started"
         - ./run.tests.sh
         - docker-compose down
     - stage: publish
