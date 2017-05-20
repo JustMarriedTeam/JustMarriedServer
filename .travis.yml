@@ -7,10 +7,6 @@ services:
 - docker
 git:
   submodules: true
-before_script:
-- docker-compose up -d server
-after_script:
-- docker-compose down
 jobs:
   include:
     - stage: prepare cache
@@ -19,10 +15,13 @@ jobs:
       script: ./run.build.sh
     - stage: test
       script: ./run.tests.sh
+      install: skip
     - stage: package
       scripts: ./do.package.sh
+      install: skip
     - stage: publish
       script: ./do.publish.sh
+      install: skip
       env:
         - DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}
         - DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}
