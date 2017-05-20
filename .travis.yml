@@ -7,9 +7,8 @@ services:
 git:
   submodules: true
 before_install:
-  - docker-compose pull
   - docker-compose build
-  - docker-compose start
+  - docker-compose up
 jobs:
   include:
     - stage: compile
