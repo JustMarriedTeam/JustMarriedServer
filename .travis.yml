@@ -1,5 +1,5 @@
 sudo: required
-cache: bundler
+install: true
 services:
 - docker
 git:
