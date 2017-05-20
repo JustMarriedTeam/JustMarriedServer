@@ -3,27 +3,28 @@ node_js:
 - '6.9'
 sudo: required
 services:
-  - docker
+- docker
 git:
   submodules: true
 before_script:
-  - docker-compose up -d server
+- docker-compose up -d server
 script:
-  - ./run.build.sh
-  - ./run.tests.sh
+- ./run.build.sh
+- ./run.tests.sh
 after_script:
-  - docker-compose down
+- docker-compose down
 after_success:
-  - ./build.sh
-  - docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      docker tag just-married/jmserver:production-latest justmarried/just-married-server:latest;
-      docker push justmarried/just-married-server:latest;
-    else
-      echo "Doing nothing for now";
-    fi
-  - docker logout
+- ./build.sh
+- docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}
+- if [ "$TRAVIS_BRANCH" == "master" ]; then docker tag just-married/jmserver:production-latest
+  justmarried/just-married-server:latest; docker push justmarried/just-married-server:latest;
+  else echo "Doing nothing for now"; fi
+- docker logout
 branches:
   only:
   - master
   - develop
+env:
+  matrix:
+  - secure: m7dN50K4wdANztZ46aSrKFo2cMWsUmhJqEhVJrkWL4zdpNfJ5vg1QSxS26NzaSYTBoKKrtPJz17rEVFrj03TkbIOlhncw04IFdmVlL8OOjLXdCY0yn0YedqFLb4Ub1tCzqhrF5/9fNbxzgYXm94O1fiV5c1tthDAX2SdqIRNgpf2Bisje1GE7K0QIkEGXlR3x05H7tqLjmyqBeL4rWrUgd+uuxEC64eO2Y3+idKNHwpQPZGDB86QzW2y30FbcMYVv9sZft4lmeKGxPMbkKoTogVW9VW0u8zoj1xH9xNjzy7EhQaKD8VNWELymCV//u4vKsNCf6Mlo3pigKTseggcpEK4+D02/GZcuwgxKNmePe7Vn/vdIst5BiWJ7PltY3wobT3btg39ZXQc76e3prKdpesdZK67HJS01TIsFhuQ4cCuNA6EaC/a8M9f+bUpJDvVOYzlf6JZSusQ0SmUxL9tLDEmcaJX8OkZuUqsj3FCW2VBwyve+Bo9ZUBRZa5k+5uA9hNuB3AIulE7cW4L0oJ9bpXziENeCqd3eJwngF3DwpxRiTebLVA2aGyMFKDs+M5QnBCEF9oSSQfuKiyzxur1hHIxMRlpcHwMXrhJ75TbdUh8eZePMXGjverOKNELdc1SgxCjbwzvU45m83RbBAFGJnH7Yu4VqPrBgj19hBJGT8I=
+  - secure: KAly1mYOQRLWx63qM2SU6dd9FzUOo4kuiCHFMfM26HoJg1IISpdDuVUHwVIlw2uUGSOnLqLfiGYxgVLZTTLuYUcfG24U7/QA84mZ7SFf3Y3FeoK/xaaz/uqlfMfPytdEIJdyckxlI9SI/ttglESeGkLs4QddcqhxnAeWfDlU1sqm3oxC9gi6D66YETeY7oDuPMZ4gHO51W87+ohvHGbsQ5MCBlw0h5ujPK7KzPyrRI4lbbOzuYsTvbnRQXI4zN6FMTrTHGzMaDp7/1caZaRCsv1IefXBGKF9HohOYJvWonyqfbjh8v/FfxaXks2frCHr6B87U/ZaS9ZBHaJrzb+scD5ofzmwAZO5XYPmPjic6+89HtQygF3l2h4HDlkwC3Qj0kAUqqDrxS9UdsJXrnetXeJZvzFp9tWqBDjlWOFrgyTVaFL20EQClZhHwRTBCr+cLEdBfyDyzVR/dfgOyu+vXLSQSGr+vyfnoKaQa3/poZ+2AuGL8kQYKXQ5kzzgKTBcDTZEmLbN8qST+8i5aV3ZxuYI12Bf9wxe5O/reci/jRfko3vK7L78X+aU4HREZpUywhJtvZGKNeIKoTMwi0Rxw2wjpmA9D/WOekjtiZ8nvn8+ty7InPOreLEYVFMj/f6TG4fRahabfj8Ye6etmcRnB77pyUzoDvJZ2S2CR733nh4=
