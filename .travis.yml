@@ -6,8 +6,6 @@ git:
   submodules: true
 jobs:
   include:
-    - stage: prepare cache
-      script: true
     - stage: compile
       script: ./run.build.sh
     - stage: test
