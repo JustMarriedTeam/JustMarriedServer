@@ -15,13 +15,14 @@ after_script:
   - docker-compose down
 after_success:
   - ./build.sh
-  - docker login -u AWS -p ${AWS_DOCKER_REPO_PASSWORD} -e none https://585734593719.dkr.ecr.eu-central-1.amazonaws.com
+  - docker login -u ${DOCKER_REGISTRY_USERNAME} -p ${DOCKER_REGISTRY_PASSWORD}
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
-      docker tag just-married/jmserver:production-latest 585734593719.dkr.ecr.eu-central-1.amazonaws.com/just-married/jmserver:latest;
-      docker push 585734593719.dkr.ecr.eu-central-1.amazonaws.com/just-married/jmserver:latest;
+      docker tag just-married/jmserver:production-latest justmarried/just-married-server:latest;
+      docker push justmarried/just-married-server:latest;
     else
       echo "Doing nothing for now";
     fi
+  - docker logout
 branches:
   only:
   - master
