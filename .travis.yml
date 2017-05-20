@@ -9,19 +9,22 @@ git:
 jobs:
   include:
     - stage: test
-    - script: ./run.build.sh
-    - script: docker-compose up
-    - script: ./run.tests.sh
-    - script: docker-compose down
+      script:
+        - ./run.build.sh
+        - docker-compose up
+        - ./run.tests.sh
+        - docker-compose down
     - stage: publish
-    - script: ./do.package.sh
-    - script: ./do.publish.sh
+      script:
+        - ./do.package.sh
+        - ./do.publish.sh
       env:
         - DOCKER_REGISTRY_USERNAME=${DOCKER_REGISTRY_USERNAME}
         - DOCKER_REGISTRY_PASSWORD=${DOCKER_REGISTRY_PASSWORD}
         - BRANCH=${TRAVIS_BRANCH}
     - stage: deploy
-      script: ./do.deploy.sh
+      script:
+        - ./do.deploy.sh
 branches:
   only:
   - master
