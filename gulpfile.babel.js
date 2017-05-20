@@ -125,7 +125,7 @@ gulp.task("nodemon", ["copyResources", "compile"], () =>
 
 gulp.task("compile", ["mainCompile", "testCompile"]);
 gulp.task("copyResources", ["copyNonJs", "copyEnvProps", "yamlToJson"]);
-gulp.task("build", ["copyResources", "compile"]);
+gulp.task("build", ["clean", "copyResources", "compile"]);
 gulp.task("serve", ["clean"], () => runSequence("nodemon"));
 gulp.task("default", ["clean"], () =>
     runSequence(["dist"])
