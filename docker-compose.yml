@@ -31,7 +31,6 @@ services:
     build:
       context: .
       dockerfile: containers/develop/Dockerfile
-    command: ${COMMAND}
     labels:
       - jmserver
     ports:

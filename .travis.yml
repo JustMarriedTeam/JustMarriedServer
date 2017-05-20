@@ -12,7 +12,7 @@ jobs:
   include:
     - stage: test
       script:
-        - (export COMMAND="run test" && docker-compose up server)
+        - docker-compose run server run test
     - stage: publish
       script:
         - ./do.package.sh
