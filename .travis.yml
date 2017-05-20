@@ -1,6 +1,8 @@
 language: bash
 sudo: required
 install: true
+before_script: ./run.local.sh
+after_script: ./stop.local.sh
 services:
 - docker
 git:
