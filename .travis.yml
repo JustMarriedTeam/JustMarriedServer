@@ -2,6 +2,7 @@ language: node_js
 node_js:
 - '6.9'
 sudo: required
+cache: bundler
 services:
 - docker
 git:
@@ -12,6 +13,8 @@ after_script:
 - docker-compose down
 jobs:
   include:
+    - stage: prepare cache
+      script: true
     - stage: compile
       script: ./run.build.sh
     - stage: test
