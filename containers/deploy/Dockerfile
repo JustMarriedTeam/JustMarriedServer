@@ -4,8 +4,13 @@ MAINTAINER gurgul.grzegorz@gmail.com
 ARG ARTIFACT
 ENV ARTIFACT=${ARTIFACT:-/artifacts/jmserver-production-latest.tar}
 
+ENV PROTOCOL=${PROTOCOL:-https}
+ENV HOST=${HOST:-localhost}
+ENV PORT=${PORT:-80}
+ENV DOMAIN=${DOMAIN:-true}
+
 ADD ${ARTIFACT} /app
 WORKDIR /app
 
-EXPOSE 2701
+EXPOSE 80
 ENTRYPOINT ["node", "index.js"]
