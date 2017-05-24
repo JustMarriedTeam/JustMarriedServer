@@ -12,5 +12,5 @@ ENV DOMAIN=${DOMAIN:-true}
 ADD ${ARTIFACT} /app
 WORKDIR /app
 
-EXPOSE 80
+EXPOSE ${PORT}
 ENTRYPOINT ["node", "index.js"]
