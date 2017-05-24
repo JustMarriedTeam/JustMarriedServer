@@ -3,9 +3,6 @@ import { format } from "util";
 import properties from "../properties";
 import HttpStatus from "http-status";
 
-// this can be removed - get redirect url from session
-const authRedirectUrl = properties.get("authRedirectUrl");
-
 function releaseToken(req, res) {
   const token = jwtManager.releaseToken(req.user);
   res.status(HttpStatus.OK).json(token);
@@ -14,7 +11,7 @@ function releaseToken(req, res) {
 function redirectWithToken(req, res) {
   const token = jwtManager.releaseToken(req.user);
   res.cookie("authToken", token.token);
-  res.redirect(format(authRedirectUrl, token.token));
+  res.redirect(format("abc", token.token));
 }
 
 export { releaseToken, redirectWithToken };
