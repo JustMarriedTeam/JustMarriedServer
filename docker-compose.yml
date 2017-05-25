@@ -5,7 +5,7 @@ version: "2"
 
 services:
 
-  db:
+  mongo:
     image: mongo:3.4.3
     networks:
       default:
@@ -33,7 +33,7 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - db
+      - mongo
       - memcached
     networks:
       default:

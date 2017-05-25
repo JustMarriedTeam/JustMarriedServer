@@ -7,6 +7,7 @@ import logger from "./logger";
 import map from "lodash/fp/map";
 import get from "lodash/get";
 import merge from "lodash/merge";
+import sleep from "sleep";
 
 mongoose.Promise = Promise;
 Promise.promisifyAll(mongoose);
@@ -24,6 +25,7 @@ function reconnect() {
   if(initialConnectionAttempts <= dbConnectMaxTries) {
     initialConnectionAttempts++;
     logger.info(`Trying to establish initial connection with Mongo at ${dbUrl} - ${initialConnectionAttempts} try...`);
+    sleep.msleep(dbConnectRetryTime);
     mongoose.connect(dbUrl, {
         server: {
           // Mongoose internal reconnect options work only if the first connection was successful.
