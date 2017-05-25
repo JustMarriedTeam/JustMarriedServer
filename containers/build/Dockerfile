@@ -20,4 +20,4 @@ COPY / /app
 
 VOLUME ${OUTPUT_DIR}
 
-ENTRYPOINT ["/build.entrypoint.sh"]
+CMD ["/build.cmd.sh"]

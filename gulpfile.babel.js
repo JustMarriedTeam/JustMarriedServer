@@ -110,7 +110,7 @@ gulp.task("dist", ["build"], () =>
 gulp.task("nodemon", ["copyResources", "compile"], () =>
     plugins.nodemon({
       execMap: {
-        js: "node-inspector & node --debug-brk=5860"
+        js: "node-inspector & node --debug"
       },
       script: path.join(config.build.mainDir, "index.js"),
       ext: "js yaml",

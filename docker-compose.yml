@@ -39,6 +39,7 @@ services:
       default:
         ipv4_address: 172.10.1.3
     environment:
+      - LOG_LEVEL=verbose
       - AUTH_REDIRECT_URL=http://localhost:3000/redirect.html?token=%s
       - PROTOCOL=http
       - HOST=localhost
