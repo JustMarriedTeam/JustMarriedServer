@@ -1,17 +1,23 @@
 # This dockerfile creates a container the application is built in
 FROM node:6.10.3
 
-ARG ENVIRONMENT
-ARG VERSION
+ARG OUTPUT_DIR
+ARG ARTIFACT_NAME
 
-ENV ENVIRONMENT=${ENVIRONMENT:-production}
-ENV VERSION=${VERSION:-latest}
 ENV OUTPUT_DIR=${OUTPUT_DIR:-/artifacts}
+ENV ARTIFACT_NAME=${ARTIFACT_NAME:-jmserver}
 
-ENV ARTIFACT_NAME="jmserver-${ENVIRONMENT}-${VERSION}"
+COPY containers/build/build.cmd.sh /build.cmd.sh
+RUN chmod +x /build.cmd.sh
 
-COPY containers/build/build.entrypoint.sh /build.entrypoint.sh
+# Make a separate layer out of package.json to ensure dependencies are reinstalled only if package.json changes
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install
+RUN mkdir /app && cp -a /tmp/node_modules /app/
+
+WORKDIR /app
 COPY / /app
+
 VOLUME ${OUTPUT_DIR}
 
 ENTRYPOINT ["/build.entrypoint.sh"]

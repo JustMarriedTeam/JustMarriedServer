@@ -7,8 +7,6 @@ function exit_with_error {
 
 echo "Building artifact <${ARTIFACT_NAME}>"
 
-cd app
-npm install || exit_with_error "Could not install dependencies!"
 npm run dist || exit_with_error "Could not build project!"
 tar -cvf ${OUTPUT_DIR}/${ARTIFACT_NAME}.tar node_modules -C dist . || exit_with_error "Could not save artifact!"
 
