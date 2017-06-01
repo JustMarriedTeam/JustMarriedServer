@@ -2,7 +2,7 @@ FROM node:6.10.3
 MAINTAINER gurgul.grzegorz@gmail.com
 
 ARG ARTIFACT
-ENV ARTIFACT=${ARTIFACT:-/artifacts/jmserver-production-latest.tar}
+ENV ARTIFACT=${ARTIFACT:-/artifacts/jmserver.tar}
 
 ENV PROTOCOL=${PROTOCOL:-https}
 ENV HOST=${HOST:-localhost}
