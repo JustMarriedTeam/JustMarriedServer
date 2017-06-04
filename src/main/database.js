@@ -22,51 +22,54 @@ let wasConnectedBefore = false;
 let initialConnectionAttempts = 0;
 
 function reconnect() {
-  if(initialConnectionAttempts <= dbConnectMaxTries) {
+  if (initialConnectionAttempts <= dbConnectMaxTries) {
     initialConnectionAttempts++;
-    logger.info(`Trying to establish initial connection with Mongo at ${dbUrl} - ${initialConnectionAttempts} try...`);
+    logger.info(`Trying to establish initial connection with Mongo at 
+      ${dbUrl} - ${initialConnectionAttempts} try...`);
     sleep.msleep(dbConnectRetryTime);
     mongoose.connect(dbUrl, {
-        server: {
-          // Mongoose internal reconnect options work only if the first connection was successful.
-          // This is why we have to keep wasConnectedBefore variable to do this manually but only if this is an
-          // initial connection.
-          autoReconnect: true,
-          reconnectInterval: dbConnectRetryTime,
-          reconnectTries: dbConnectMaxTries,
-          socketOptions: {
-            keepAlive: 1
-          }
+      server: {
+        // Mongoose internal reconnect options work only if the first connection was successful.
+        // This is why we have to keep wasConnectedBefore variable to do this manually but only
+        // if this is aa initial connection.
+        autoReconnect: true,
+        reconnectInterval: dbConnectRetryTime,
+        reconnectTries: dbConnectMaxTries,
+        socketOptions: {
+          keepAlive: 1
         }
-      }).catch(() => {});
+      }
+    }).catch(() => {
+    });
   } else {
-    throw `Could not connect to ${dbUrl} in ${dbConnectMaxTries} * ${dbConnectRetryTime} ms. Shutting down.`;
+    throw new Error(`Could not connect to ${dbUrl} in 
+      ${dbConnectMaxTries} * ${dbConnectRetryTime} ms. Shutting down.`);
   }
 }
 
-db.on('connected', () => {
+db.on("connected", () => {
   wasConnectedBefore = true;
-  console.log(`Mongoose connection open to ${dbUrl}`);
+  logger.info(`Mongoose connection open to ${dbUrl}`);
 });
 
 db.on("error", () => {
-  logger.error('Lost connection to the database. Retrying...');
+  logger.error("Lost connection to the database. Retrying...");
   mongoose.disconnect();
 });
 
-db.on('reconnected', () => {
+db.on("reconnected", () => {
   logger.info(`Mongoose connection ${dbUrl} reconnected!`);
 });
 
-db.on('disconnected', () => {
+db.on("disconnected", () => {
   logger.info(`Mongoose connection ${dbUrl} disconnected`);
   if (!wasConnectedBefore) {
     reconnect();
   }
 });
 
-process.on('SIGINT', function () {
-  db.close(function () {
+process.on("SIGINT", () => {
+  db.close(() => {
     logger.info(`Mongoose connection ${dbUrl} disconnected through app termination`);
   });
 });

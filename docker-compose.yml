@@ -29,7 +29,7 @@ services:
       dockerfile: containers/develop/Dockerfile
     ports:
       - 2701:2701
-      - 5860:5860
+      - 5858:5858
     volumes:
       - ./:/app
     depends_on:
@@ -40,7 +40,6 @@ services:
         ipv4_address: 172.10.1.3
     environment:
       - LOG_LEVEL=verbose
-      - AUTH_REDIRECT_URL=http://localhost:3000/redirect.html?token=%s
       - PROTOCOL=http
       - HOST=localhost
       - PORT=2701

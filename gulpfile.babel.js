@@ -110,14 +110,13 @@ gulp.task("dist", ["build"], () =>
 gulp.task("nodemon", ["copyResources", "compile"], () =>
     plugins.nodemon({
       execMap: {
-        js: "node-inspector & node --debug"
+        js: "node --debug"
       },
       script: path.join(config.build.mainDir, "index.js"),
       ext: "js yaml",
       delay: 2500,
       debug: true,
       verbose: true,
-      legacyWatch: true,
       watch: config.src.main.baseDir,
       tasks: ["copyNonJs", "yamlToJson", "compile"]
     })
