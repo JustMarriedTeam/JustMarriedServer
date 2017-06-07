@@ -5,14 +5,14 @@ version: "2"
 
 services:
 
-  mongo:
+  db:
     image: mongo:3.4.3
     networks:
       default:
         ipv4_address: 172.10.1.2
     volumes:
       - ./tmp/database/data:/data
-      - ./tmp/database/dump:/dump
+      - ./JustMarriedTools/database/dump:/dump
     ports:
       - 27017:27017
 
@@ -33,7 +33,7 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - mongo
+      - db
       - memcached
     networks:
       default:
